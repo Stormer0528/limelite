@@ -1,0 +1,24 @@
+- content_for :header_content do
+  h2.page-header
+    span.text
+      = link_to customers_path(@customer), class: "breadcrumb primary" do
+        = class_icon "customer", icon_options: "large"
+
+      = link_to customer_path(@customer), class: "breadcrumb" do
+        span.link-text
+          = @customer.name
+      '
+      = link_to customer_invoice_path(@customer, @invoice), class: "breadcrumb" do
+        span.link-text
+          b Invoice:&nbsp;
+          '
+          = @invoice.number
+      span.breadcrumb style="display: flex; align-items: center;"
+        = class_icon "payment", icon_options: "tiny"
+        | &nbsp;
+        b Payment:&nbsp;
+        '
+        = @payment.id
+
+
+== render 'form'

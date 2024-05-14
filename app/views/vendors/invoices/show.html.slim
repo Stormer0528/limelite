@@ -1,0 +1,45 @@
+scss:
+  body {
+    margin-top: 95px;
+  }
+
+  body main.container.with-breadcrumb {
+    padding-top: 0;
+  }
+
+  h5.page-header {
+    margin: 1.0933333333rem 0 0;
+  }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "vendor", icon_options: "medium"
+    span.text
+      = link_to vendors_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Vendors
+      '
+      = link_to vendor_path(@vendor), class: "breadcrumb" do
+        span.link-text
+          = @vendor.name
+      '
+      span.breadcrumb
+        b Invoice:&nbsp;
+
+        '
+        = @invoice.number
+
+= render partial: "top_links"
+
+= render partial: "invoices/info_card",
+         locals: {form_path: vendor_invoice_path(@vendor, @invoice)}
+
+- if @invoice.entry
+  = render partial: "invoices/entry"
+
+  = render partial: "invoices/payments",
+           locals: {form_url: vendor_invoice_payments_path(@vendor, @invoice)}
+
+= render partial: "shared/state_change_log", locals: {model: @invoice}
+
+= render partial: "fab"

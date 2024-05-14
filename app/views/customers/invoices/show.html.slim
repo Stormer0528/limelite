@@ -1,0 +1,32 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "customer", icon_options: "medium"
+    span.text
+      = link_to customers_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Customers
+      '
+      = link_to customer_path(@customer), class: "breadcrumb" do
+        span.link-text
+          = @customer.name
+      '
+      span.breadcrumb
+        b Invoice:&nbsp;
+
+        '
+        = @invoice.number
+
+= render partial: "top_links"
+
+= render partial: "invoices/info_card",
+         locals: {form_path: customer_invoice_path(@customer, @invoice)}
+
+- if @invoice.entry
+  = render partial: "invoices/entry"
+
+/ = render partial: "invoices/payments",
+/            locals: {form_url: customer_invoice_payments_path(@customer, @invoice)}
+
+= render partial: "shared/state_change_log", locals: {model: @invoice}
+
+= render partial: "fab"

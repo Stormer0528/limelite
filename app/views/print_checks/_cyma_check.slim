@@ -1,0 +1,35 @@
+.cyma
+  .primary-wrapper
+    .row.primary-row
+      .col.s7
+        .check-amount-text style="top:#{@printer_settings.amount_text_offset_y * 5}pt; left: #{@printer_settings.amount_text_offset_x * 5}pt"
+          = "* #{check.amount.to_i.to_words.titleize} Dollars and #{check.amount_cents} Cents *"
+      .col.s2
+        .check-date-alt style="top:#{@printer_settings.date_offset_y * 5}pt; left: #{@printer_settings.date_offset_x * 5}pt"
+          = (check.date || Date.today).to_formatted_s(:std)
+      .col.s3
+        .check-amount-alt style="top:#{@printer_settings.amount_offset_y * 5}pt; left: #{@printer_settings.amount_offset_x * 5}pt"
+          = check.amount.format
+
+  .pay-to-wrapper
+    .row.pay-to-row
+      .col.s9
+        .check-payee style="top:#{@printer_settings.payee_offset_y * 5}pt; left: #{@printer_settings.payee_offset_x * 5}pt"
+          = check.payee
+          br /
+          - unless check.address&.attention.blank?
+            = check.address.attention
+            br /
+          - unless check.address&.department.blank?
+            = check.address.department
+            br /
+          = check.address&.line1
+          br /
+          - unless check.address&.line2.blank?
+            = check.address.line2
+            br /
+          = "#{check.address&.city}, #{check.address&.state} #{check.address&.zip}"
+
+= render partial: "voucher_receipt", locals: {voucher_number: 1, check: check, offset: @printer_settings.voucher1_offset_y, hide_check_no: true}
+= render partial: "voucher_receipt", locals: {voucher_number: 2, check: check, offset: @printer_settings.voucher2_offset_y, hide_check_no: true}
+

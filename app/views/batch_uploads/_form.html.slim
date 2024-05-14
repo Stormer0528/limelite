@@ -1,0 +1,47 @@
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+
+= simple_form_for(@batch_upload, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  .page-header
+    h2 Upload Invoices
+    .row
+      hr /
+
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @batch_upload }
+
+  .row
+    .col.sm12
+      h4 1. Upload Files
+  .row
+    .col.s12
+      .filestack-btn[data-inputId="batch_upload::file_upload_urls"
+                      data-name="batch_upload[files_attributes][][url]"
+                      data-multiple="true"
+                      data-apikey="#{get_client_and_api_key[1]}"
+                      data-policy="#{get_fresh_policy_and_signature[1]}"
+                      data-signature="#{get_fresh_policy_and_signature[0]}"]
+
+  .row
+    .col.s12
+      h4 2. How Many Invoices Are Included?
+  .row
+    .col.sm3
+      = f.input :total_invoices, label: "Total Invoices"
+    .col.sm3
+      = f.input :critical_invoices, label: "Critical Invoices"
+  .row
+    .col.s12
+      h4
+        small Additional Notes
+  .row
+    .col.s12
+      = f.input :notes
+
+
+  = render partial: 'shared/form_footer', locals: { \
+    f:f,
+    back_path: local_assigns[:back_path],
+    show_path: local_assigns[:show_path] ,
+    delete_path: local_assigns[:delete_path]}
+    / submit_partial: "invoices/state_btn"}

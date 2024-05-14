@@ -1,0 +1,11 @@
+li style="border: 1px solid #999; border-radius: 4px; padding: 8px; margin: 8px 0;  display: grid; grid-template-columns: repeat(4, minmax(min-content, 1fr)); grid-column-gap: 4px; align-items: flex-end;"
+
+  span style="font-weight: normal;"
+      b Name:&nbsp;
+      = item&.display_name
+
+  span style="font-weight: normal;"
+    b Account Number:&nbsp;
+    = item.account_number
+
+  a target="_blank" href="#{base_name}/#{item.class.name.tableize}/#{item.slug}" View #{item.class.name}

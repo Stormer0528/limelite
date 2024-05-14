@@ -1,0 +1,32 @@
+mutation runApAgingReport(
+  $startDate: String
+  $endDate: String
+  $daysPerPeriod: Int
+  $showActiveColumns: Boolean
+  $showActiveRows: Boolean
+  $periods: Int
+) {
+  createApAgingReport(
+    start_date: $startDate
+    end_date: $endDate
+    days_per_period: $daysPerPeriod
+    show_active_columns: $showActiveColumns
+    show_active_rows: $showActiveRows
+    periods: $periods
+  ) {
+    persisted
+    valid
+    errors
+    periodNames
+    vendorsByPeriod
+    periodsByVendor
+    startDate
+    endDate
+    daysPerPeriod
+    showActiveColumns
+    showActiveRows
+    periods
+    pdfUrl
+    xlsxUrl
+  }
+}

@@ -1,0 +1,92 @@
+def parse_num(num)
+  num.gsub(/[\$\,]/, "").to_f
+end
+
+def format_date(date)
+  case
+  when date.is_a?(Date)
+    date.to_formatted_s(:std_alt)
+  when date.is_a?(String)
+    Date.parse(date).to_formatted_s(:std_alt)
+  else
+    ""
+  end
+end
+
+def number_to_letter(n=1)
+  (n - 1).to_i.to_s(27).tr("0-9a-q", "A-Z")
+end
+
+def multi_style(length: nil, array: @fund_codes, style:)
+  ary_length = length || array.length
+  Array.new(ary_length, style)
+end
+
+wb = xlsx_package.workbook
+wb.styles do |s|
+  # Style Definitions
+  left_align = s.add_style alignment: {horizontal: :left}
+  title_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  currency = wb.styles.add_style num_fmt: 43
+  bold_title_cell = s.add_style b: true, bg_color: "D8D8D8", alignment: {horizontal: :left}
+  bold_subtitle_cell = s.add_style b: true, bg_color: "EE", alignment: {horizontal: :left}
+  bold_total_cell = s.add_style b: true, num_fmt: 7, border: {style: :double, color: "00", edges: [:bottom]}
+  border = s.borders[s.cellXfs[bold_total_cell].borderId]
+  border.prs << Axlsx::BorderPr.new(name: :top, color: Axlsx::Color.new(rgb: '000000'), style: :thin)
+
+  wb.add_worksheet(name: "Bank Register") do |sheet|
+    # Header
+    sheet.add_row [@current_org.name.upcase], style: [title_cell]
+    sheet.merge_cells("A1:I1")
+
+    sheet.add_row ["BANK REGISTER"], style: [title_cell]
+    sheet.merge_cells("A2:I2")
+
+    sheet.add_row ["FOR #{@bank_account.name.upcase} (#{@bank_account.object_code})" ], style: [title_cell]
+    sheet.merge_cells("A3:I3")
+
+    # Date Range
+    start_date = @start_date || @items.to_a.keep_if(&:date).sort_by(&:date).first.date.to_s
+    end_date   = @end_date   || @items.to_a.keep_if(&:date).sort_by(&:date).last.date.to_s
+
+    sheet.add_row ["#{format_date(start_date)} - #{format_date(end_date)}"], style: title_cell
+    sheet.merge_cells("A4:I4")
+    sheet.add_row
+
+    sheet.add_row [ "Type", "State", "No.", "Date", "Payee", "Memo", "Reconciled", "Debit", "Credit", *(@fund_codes*2).sort],
+       style: [*([bold_title_cell] * 9), *multi_style(length: @fund_codes.length * 2, style: bold_title_cell)]
+
+    # Merge fund code rows for credit/debit
+    current_row = sheet.rows.length
+    10.step(10 + @fund_codes.length * 2, 2) do |i|
+      sheet.merge_cells "#{number_to_letter i}#{current_row}:#{number_to_letter i + 1}#{current_row}"
+    end
+
+    subtitles = ["debit", "credit"] * @fund_codes.length
+    sheet.add_row ["", "", "", "", "", "", "", "", "", *subtitles],
+                  style: [*([bold_subtitle_cell] * 9), *multi_style(length: @fund_codes.length * 2, style: bold_subtitle_cell)]
+
+    @items.each do |item|
+      items_totals = @fund_codes.sort.map do |code|
+        item.entry_items_fund_code_totals[code] || [0, 0]
+      end.flatten
+
+      sheet.add_row [
+        (item.name || item.type)&.demodulize&.titleize,
+        item.aasm_state&.titleize,
+        item.number,
+        item.date&.to_formatted_s(:std),
+        item.payee,
+        item.memo,
+        item.reconciled? && "Reconciled",
+        item['amount_in_cents'] >= 0 ? item.amount.to_f : 0,
+        item['amount_in_cents'] < 0 ? item.amount.to_f : 0,
+        *items_totals
+      ], types: [nil, nil, :string, nil, nil, nil, nil, nil, nil, :float, :float],
+         style: [nil, nil, left_align, nil, nil, nil, nil, currency, currency, *multi_style(length: @fund_codes.length * 2, style: currency)]
+    end
+
+    # Column Widths
+    sheet.column_info.first.width = 8
+  end
+end

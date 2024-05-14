@@ -1,0 +1,131 @@
+scss:
+  .purchase-order.row {
+    border: 1px solid #B0BEC5;
+    background: #eceff1;
+    border-radius: 3px;
+    padding: 0 0 1rem;
+
+    h5.title {
+      margin: .5rem 0 .5rem;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      grid-column-gap: .25rem;
+    }
+  }
+
+.card
+  .card-content
+    span.card-title
+      .row
+        .col.s6
+          b Invoice #:
+          '
+          = @invoice.number
+        .col.s6
+          b Amount:
+          '
+          = number_to_currency @invoice.amount, precision: 2
+
+    .row
+      .col.s6
+        b #{@invoice.invoiceable_type}:
+        '
+        = @invoice.invoiceable.name
+      .col.s6
+        b #{@invoice.invoiceable_type} ID:
+        '
+        = @invoice.invoiceable.visible_id
+
+    .row
+      .col.s6
+        b Invoice Date:
+        '
+        = @invoice.date&.to_formatted_s(:std)
+      .col.s6
+      b Due Date:
+      '
+      = @invoice.due_date&.to_formatted_s(:std)
+
+    - if @invoice&.file_url.present?
+      .row
+        .col.s3 style="display: flex; justify-content: space-between; align-items: center"
+          b File Upload:
+          .btn-group
+            = link_to fs_link(@invoice.file_url), class: 'btn btn-flat', target: "_blank" do
+                i.material-icons.medium description
+                '  View
+
+        .col.s3
+        .col.s6
+          b Approved With:
+          '
+          = @invoice.notes
+
+      - if @invoice.final_payment_url
+        .row
+          .col.s3 style="display: flex; justify-content: space-between; align-items: center"
+            b Final Payment:
+            .btn-group
+              = link_to fs_link(@invoice.final_payment_url), class: 'btn btn-flat', target: "_blank" do
+                  i.material-icons.medium description
+                  '  View
+
+      - if (@account_objects.length() > 0 and @addresses.length() > 0) or @invoice.address or @invoice.account_object
+        .row
+          .col.s6
+            b Bank Account:
+            '
+            = @invoice.account_object.nil? ? @account_objects[0].display_name : @invoice.account_object.display_name
+
+          .col.s6
+            .address-type
+              b Address Type:
+              '
+              = @invoice.address.nil? ? @addresses[0].name : @invoice.address.name
+
+            .address-text
+              b Address:
+              '
+              = @invoice.address.nil? ? @addresses[0].to_text : @invoice.address.to_text
+
+    - if @invoice.description&.present?
+      .divider
+    .row
+      - if @invoice.description&.present?
+        .col.s6
+          h5 Description
+    .row
+      - if @invoice.description&.present?
+        .col.s6
+          = @invoice.description
+      - if @invoice.paid?
+        .col.s6
+          h3.green-text style="margin: 0; display: flex;"
+            i.material-icons.small style="position: relative; top: .25em; margin-right: .5rem;" check_circle
+            | PAID
+    - if @invoice.purchase_order
+      .purchase-order.row
+          .col.s12
+            h5.title
+              = class_icon("purchase_order")
+              | Purchase Order
+          .col.s3
+            b Number:&nbsp;
+            = link_to @invoice.purchase_order.number, vendor_purchase_order_path(@vendor, @invoice.purchase_order)
+          .col.s3
+            b Amount:&nbsp;
+            ' #{@invoice.purchase_order.total&.format}
+          - @invoice.purchase_order.date
+            .col.s3
+              b Date:&nbsp;
+              ' #{@invoice.purchase_order.date&.to_formatted_s(:std)}
+
+          - if @invoice.purchase_order.date_needed
+            .col.s3
+              b Date Needed:&nbsp;
+              ' #{@invoice.purchase_order.date_needed&.to_formatted_s(:std)}
+  / Approval Btns
+  = render partial: "shared/approval_footer",
+           locals: {form_path: form_path,
+           model: @invoice, hide_draft: true}

@@ -1,0 +1,7 @@
+h2.page-header
+  i.medium.material-icons playlist_add
+  '  Create Payment
+  .pull-right.right-align
+    = link_to 'Back', vendor_invoice_payments_path(@vendor, @invoice), class: "waves-effect waves-teal btn-flat"
+
+== render 'form'

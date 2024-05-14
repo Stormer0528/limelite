@@ -1,0 +1,452 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require react-virtualized/styles
+ *= require material_icons
+ *= require_tree .
+ */
+
+@import "materialize/components/color-variables";
+$primary-color: #26383c !default;
+$secondary-color: #70a91e !default;
+$dropdown-hover-bg-color: color("grey", "lighten-4") !default;
+
+@import "materialize";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+.well {
+  padding: 1em 2em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.well > .row {
+  margin-bottom: 0;
+}
+
+body {
+  // margin: 85px 0 0;
+  margin: 125px 0 0;
+  display: flex;
+  min-height: 98vh;
+  min-height: calc(100vh - 125px);
+  flex-direction: column;
+
+  & main.container {
+    width: 80%;
+    // width: 90%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.no-breadcrumb {
+    margin: 0;
+  }
+}
+
+main {
+  flex: 1 0 auto;
+
+  &.with-breadcrumb,
+  &.container.with-breadcrumb {
+    margin-top: 35px;
+    padding-top: 1rem;
+  }
+}
+
+.flash-messages:empty {
+  height: 0;
+}
+
+.activator .material-icons {
+  cursor: pointer;
+}
+
+.page-header {
+  & > i.material-icons {
+    color: #7a92a9;
+    margin-right: 0.35em;
+
+    &.medium {
+      font-size: 1em;
+    }
+  }
+
+  .action-btns {
+    float: right;
+    position: relative;
+    top: 0.25em;
+  }
+}
+
+h1 h2,
+h3,
+h4,
+h5,
+h6 {
+  i.material-icons {
+    display: inline-block;
+    position: relative;
+    top: 0.5rem;
+  }
+}
+
+h5 > i.material-icons {
+  display: inline-block;
+  position: relative;
+  top: 0.15rem;
+}
+
+.chip.message {
+  width: 100%;
+}
+
+// Address
+.address {
+  display: flex;
+  flex-wrap: wrap;
+
+  .line-1,
+  .line-2,
+  .line-3 {
+    width: 100%;
+  }
+
+  .line-3 {
+    display: flex;
+
+    .city,
+    .state {
+      display: inline-block;
+      margin-right: 0.25em;
+    }
+  }
+}
+
+.text-label {
+  display: inline-block;
+  top: -0.5em;
+  position: relative;
+
+  > .material-icons {
+    position: relative;
+    top: 0.25em;
+    left: -0.25em;
+  }
+}
+
+h5.card-title {
+  i.material-icons {
+    top: 0.15em;
+  }
+  + .divider {
+    margin-bottom: 1em;
+  }
+}
+
+.divider.spaced {
+  margin: 1.5em 0;
+}
+
+.material-icons {
+  &.flip-horizontal {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+    transform: scale(-1, 1);
+  }
+}
+
+.flip-vertical {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  transform: scale(1, -1);
+}
+
+:root .flip-horizontal,
+:root .flip-vertical {
+  filter: none;
+}
+
+.normal-text {
+  font-size: 1rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+
+  .pull-right {
+    text-align: right;
+    flex-grow: 2;
+    align-self: flex-end;
+  }
+
+  .material-icons {
+    top: 0;
+  }
+}
+
+li.tab > a > .material-icons {
+  position: relative;
+  top: 0.25em;
+  left: -0.25em;
+}
+
+#payment-form {
+  .account-label {
+    margin-right: 1.5em;
+  }
+}
+
+#payment-breakdown-section {
+  .collapsible-body {
+    padding-top: 0.75em;
+    padding-bottom: 0.25em;
+
+    .row {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+table.condensed {
+  td,
+  th {
+    padding: 0 5px;
+  }
+}
+
+.collapsible-header.active {
+  background-color: #f5f5f5;
+}
+
+.collapsible-header h5 {
+  display: flex;
+  margin-top: 0;
+  align-items: baseline;
+  justify-content: baseline;
+  position: relative;
+  width: 100%;
+
+  .right-align {
+    position: absolute;
+    right: -5px;
+    top: 0;
+  }
+
+  .material-icons {
+    position: inherit;
+    top: inherit;
+  }
+}
+
+// Login Box
+.login-box.card {
+  position: absolute;
+  width: 80vw;
+  left: 10vw;
+  top: 25vh;
+
+  .card-action .activator .material-icons {
+    position: relative;
+    top: -5px;
+  }
+}
+span.version {
+  color: #fff;
+}
+
+// Side Nav
+.user-view .circle {
+  border: 1px solid color("light-green", "lighten-1");
+
+  & > b {
+    text-align: center;
+    display: block;
+    font-size: 2em;
+    margin-top: 0.75em;
+  }
+}
+
+.row.compact {
+  margin-top: -0.75em;
+}
+
+span.muted {
+  color: #90a4ae;
+}
+
+ul.collapsible.no-shadow {
+  box-shadow: none !important;
+}
+
+.sidenav li > a {
+  height: auto;
+}
+
+// Checkboxes
+p.disabled-checkbox {
+  label {
+    font-weight: bold;
+    color: black;
+
+    &.checkbox-label::before {
+      border-right-color: $secondary-color !important;
+      border-bottom-color: $secondary-color !important;
+    }
+  }
+}
+
+// Statements
+.Statements--ShowView {
+  margin-bottom: 250px;
+}
+
+.sidenav {
+  z-index: 9999;
+}
+
+// MUI Fix
+.MuiList-root {
+  max-width: 250px;
+
+  & > .MuiButtonBase-root {
+    width: 100%;
+    width: calc(100% + 0px);
+    max-width: 250px;
+    padding: 5px 8px;
+    align-items: flex-start;
+    align-content: flex-start;
+    text-align: left;
+  }
+}
+
+.alt-breadcrumb {
+  position: fixed;
+  z-index: 996;
+  width: 100vw;
+  top: 65px;
+  left: 0;
+  text-align: center;
+  justify-content: center;
+  background: #fcfcfc;
+  padding: 0.65em 0 0.5em;
+  border-bottom: 1px solid #eeeeee;
+  box-shadow: 0 -3px 10px -5px rgba(33, 33, 33, 0.11) inset;
+
+  h2.page-header {
+    text-align: center;
+    font-size: 1.75rem;
+    // margin-top: 0;
+    margin: 0;
+    justify-content: center;
+    line-height: 1rem;
+    font-weight: 200;
+    color: #795548;
+
+    & > i.material-icons {
+      // color: #cfd8dc;
+      color: #d7ccc8;
+    }
+
+    .breadcrumb {
+      color: rgba(0, 0, 0, 0.87);
+    }
+  }
+}
+
+.breadcrumb:before {
+  color: #b0bec5;
+  margin: 3px 10px 0 8px;
+}
+
+// Remove margin from collablsilbe headers
+.collapsible-header {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 0;
+  }
+}
+
+// Account Element Modal
+.account-elements-modal {
+  .header {
+    margin-bottom: 1em;
+  }
+  .collection .collection-item.avatar {
+    min-height: 3.5rem;
+    padding-left: 72px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+}
+
+#bank-info {
+  display: flex;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-width: 1px 0;
+  padding: 0 0.125rem;
+
+  .name {
+    font-weight: bold;
+  }
+
+  .number {
+    flex-grow: 1;
+    text-align: right;
+  }
+}
+
+section.ledger {
+  font-size: 0.85rem;
+
+  .type-cell {
+    display: flex;
+    justify-content: space-between;
+    place-content: center;
+
+    .material-icons {
+      position: relative;
+      top: 0.125rem;
+    }
+  }
+
+  .balance {
+    font-size: 1.25rem;
+  }
+
+  .entry-row {
+    background: #f5f5f5;
+
+    .account-object-code {
+      text-align: right;
+    }
+  }
+
+  .item-row td {
+    border-bottom: 1px solid #757575;
+  }
+
+  // .entry-row + .item-row + td,
+  .entry-row + .item-row td {
+    border-top: 1px solid #757575;
+  }
+}
+
+.form-inputs {
+  margin-bottom: 100px;
+}

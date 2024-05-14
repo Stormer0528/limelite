@@ -1,0 +1,102 @@
+css:
+  div.page-header {
+    background: #eee;
+    margin: -8px -8px 0;
+    padding: 0 8px;
+  }
+
+  div.page-header > h4 {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+  }
+
+  footer.footer {
+    display: flex;
+    position: absolute;
+    bottom: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: -8px;
+    border-top: 1px solid #ddd;
+    padding: 8px;
+    width: 100%;
+    background: linear-gradient(to bottom, #F5F5F5, #e0e0e0);
+  }
+
+javascript:
+  function validateForm () {
+    var year = #{@fiscal_year.year};
+    var date = document.getElementById('entry_import_date');
+
+    var start = new Date('#{@fiscal_year.year}-07-01');
+    var end = new Date('#{@fiscal_year.year+1}-06-30');
+    var current = new Date(date.value);
+
+    if (current < start || current > end ) {
+      var res = confirm("The Date you entered is outside the current fiscal year parameters. Are you sure you want to post?");
+      if (res == false) { return false; }
+    }
+
+    return true;
+  }
+
+.page-header
+  h4
+    = class_icon "entry", icon_options: "small"
+    | Upload Entries
+  .row
+    hr /
+
+= form_tag({action: "create"}, multipart: true , html: {class: "dirty-check"}) do |f|
+  - if @entry_import.errors.any?
+    .card.validation-errors
+      .card-content
+        span.card-title.card-title style="display:flex;"
+          i.material-icons style="margin-right: .25em;" report_problem
+          ' There Were Some Errors With Your Upload:
+        ul.browser-default
+          - @entry_import.errors.each do |field, error|
+            li
+              b.orange-text.text-darken-4 #{field}
+              '  #{error}
+
+  .row
+    .col.s12
+      h5
+        ' 1. Download The Template
+        br
+        small style="margin-left: 1.5rem; font-size: 12px;"
+          | Use&nbsp;
+          = link_to "this excel template", root_url + "JEUploadTemplate.xlsx", { target: '_blank' }
+          '&nbsp;to format your entry import
+
+  .row
+    .col.s12
+      h5 2. Set Up the Entry
+  = fields_for :entry_import do |ei|
+    .row
+      .col.s4
+        label
+          | Entry Date
+          = date_field_tag "entry_import[date]"
+      .col.s4
+        label
+          | Entry Type
+          = select_tag "entry_import[entry_type]",
+            options_for_select(Entry::TYPES, "Payroll")
+      .col.s4
+        = render partial: "shared/file_stack_btn", locals: {input_id: "entry_import-file_url", input_name: "entry_import[file_url]", input_value: nil}
+
+
+    .row
+      .col.s12
+        h5 3. Upload the File
+
+    .row
+      .col.s3
+        label Upload File
+        = file_field_tag "entry_import[file_upload]"
+
+    footer.footer
+        = submit_tag "Send For Approval", class:"btn btn-primary", onclick: "return validateForm();"

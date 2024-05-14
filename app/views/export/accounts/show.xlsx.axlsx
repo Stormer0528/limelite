@@ -1,0 +1,19 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+
+  # Style Definitions
+  header_title_cell  = s.add_style :fg_color => "00", :b => true, :sz => 18, :alignment => { :horizontal=> :center }
+  total_row_cell = s.add_style :fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+  currency = s.add_style num_fmt: 7
+
+  wb.add_worksheet(name: "ACCOUNTS") do |sheet|
+    sheet.add_row ["Chart Of Accounts"], style: header_title_cell
+    sheet.merge_cells "A1:J1"
+    sheet.add_row
+    sheet.add_row ["String", "Name", "Fund", "Resource", "Year", "Goal", "Function", "Object", "School"], style: total_row_cell
+    @accounts.each do |acc|
+      sheet.add_row [acc.number, acc.name, acc.account_fund_code, acc.account_resource_code, acc.account_year_code, acc.account_goal_code, acc.account_function_code, acc.account_object_code, acc.account_location_code], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string]
+    end
+
+  end
+end

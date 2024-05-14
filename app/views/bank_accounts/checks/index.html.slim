@@ -1,0 +1,27 @@
+h1 Listing checks
+
+table
+  thead
+    tr
+      th Account
+      th Amount
+      th Date
+      th Memo
+      th
+      th
+      th
+
+  tbody
+    - @checks.each do |check|
+      tr
+        td = check.account
+        td = check.amount
+        td = check.date
+        td = check.memo
+        td = link_to 'Show', check
+        td = link_to 'Edit', edit_check_path(check)
+        td = link_to 'Destroy', check, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Check', new_check_path

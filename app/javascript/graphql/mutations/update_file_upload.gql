@@ -1,0 +1,7 @@
+mutation updateFileUpload($fileUpload: FileUploadUpdateAttributes) {
+  fileUpload: updateFileUpload(fileUpload: $fileUpload) {
+    id
+    fileType
+    description
+  }
+}

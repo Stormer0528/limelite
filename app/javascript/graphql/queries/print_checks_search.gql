@@ -1,0 +1,19 @@
+query bankAccountChecks($startDate: String, $endDate: String, $bankAccountId: ID) {
+  bankItemSearch(
+    start_date: $startDate
+    end_date: $endDate
+    bank_account_id: $bankAccountId
+    reconciled: false
+    aasm_state: "approved"
+    type: "Check"
+  ) {
+    ... on Check {
+      id
+      amount
+      memo
+      date
+      number
+      payee
+    }
+  }
+}

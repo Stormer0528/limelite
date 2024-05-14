@@ -1,0 +1,11 @@
+mutation createBatchUploadInvoice($file: BatchInvoiceUploadFile, $id: ID) {
+  createInvoiceFromBatchFile(file: $file, id: $id) {
+    success
+    errorMessages
+    invoice {
+      aasmState
+      fileUrl
+      path
+    }
+  }
+}

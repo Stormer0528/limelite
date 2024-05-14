@@ -1,0 +1,30 @@
+  #vendor-1099-report
+    h3 style="text-align:center" #{@report.organization.name} 1099 Vendor List
+    h4 style="text-align:center" = "#{@report.start_date.to_formatted_s(:long)} THROUGH #{@report.end_date.to_formatted_s(:long)}".upcase
+    table.report-table.condensed
+      thead
+        tr
+          th Fund Code
+          th Vendor Name
+          th Phone Number
+          th Vendor Number
+          th Amount
+      tbody
+        - @report.data["vendors"].each do |vendor|
+          - address = vendor.dig("address")
+          - address_combined = [ \
+            address&.dig("attention"),
+            address&.dig("department"),
+            address&.dig("line1"),
+            address&.dig("line2"),
+            [address&.dig('city'), address&.dig('state'), address&.dig('zip')].any? && \
+            "#{address&.dig('city')}, #{address&.dig('state')} #{address&.dig('zip')}" \
+            ].filter {|e| e.present? }.join("<br />")
+
+          tr
+            td = vendor["code"]
+            td = vendor["vendor_name"]
+            td = vendor["phone"]
+            td = vendor["vendor_number"]
+            td = vendor["amount"]
+            td = raw address_combined

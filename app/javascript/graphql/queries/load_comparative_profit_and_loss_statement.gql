@@ -1,0 +1,35 @@
+query {
+  comparative_profit_and_loss_statement {
+    data
+    persisted
+    valid
+    errors
+    startDate
+    endDate
+    pdfUrl
+    xlsxUrl
+    colspanWidth
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+  }
+}

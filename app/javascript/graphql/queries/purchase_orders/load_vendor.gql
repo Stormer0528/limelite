@@ -1,0 +1,46 @@
+query vendor($slug: String!) {
+	vendor: vendorBySlug(slug: $slug) {
+		vendorId: id
+		slug
+		organizationId
+		defaultPoNumber
+	}
+
+	vendorPermissions: permissions(model_class: "Vendor") {
+		index
+		create
+		edit
+		view
+		show
+		update
+		delete
+		save_draft
+		send_for_approval
+		reverse_approval
+		approve
+		deny
+	}
+
+	purchaseOrderPermissions: permissions(model_class: "PurchaseOrder") {
+		index
+		create
+		edit
+		view
+		show
+		update
+		delete
+		save_draft
+		send_for_approval
+		reverse_approval
+		approve
+		deny
+	}
+
+	filestack {
+		clientName
+		security {
+			signature
+			policy
+		}
+	}
+}

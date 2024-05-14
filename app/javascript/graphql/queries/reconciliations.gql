@@ -1,0 +1,36 @@
+query reconciliations(
+$slug: String
+$statementableId: ID
+$statementableType: String
+$endingBefore: String
+$endingAfter: String
+) {
+	reconciliations: statementSearch(
+	statementable_slug: $slug
+	statementable_id: $statementableId
+	statementable_type: $statementableType
+	ending_before: $endingBefore
+	ending_after: $endingAfter
+	) {
+		id
+		startedAt
+		endedAt
+		creatorName
+		approverName
+		approved
+		endingBalance
+		permissions {
+			show
+		}
+		statementable {
+			... on CreditCard {
+				name
+				slug
+			}
+			... on BankAccount {
+				name
+				slug
+			}
+		}
+	}
+}

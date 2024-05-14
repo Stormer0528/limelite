@@ -1,0 +1,18 @@
+- content_for :head do
+  = javascript_pack_tag 'render_batch_uploads', defer: true, charset: 'utf-8'
+
+#batch-upload-root
+
+/ - content_for :header_content do
+/   h2.page-header
+/     = class_icon "batch_upload", icon_options: "medium"
+/     span.text
+/       = link_to batch_uploads_path, class: "breadcrumb primary" do
+/         span.link-text
+/           '  Batch Upload
+/       '
+/       span.breadcrumb
+/         '
+/         ' New
+
+/ == render 'form', locals: {back_path: batch_uploads_path}

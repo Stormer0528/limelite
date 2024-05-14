@@ -1,0 +1,63 @@
+table.responsive-table.bordered.condensed
+  thead
+    tr
+      - unless local_assigns[:hide_vendor]
+        th vendor
+      - unless local_assigns[:hide_invoice]
+        th Invoice #
+      - unless local_assigns[:hide_po]
+        th PO #
+      - unless local_assigns[:hide_final]
+        th Final
+      - unless local_assigns[:hide_date]
+        th Date
+      - unless local_assigns[:hide_amount]
+        th Amount
+      - unless local_assigns[:hide_entry]
+        th Entry
+      - unless local_assigns[:hide_check_status]
+        th.center-align Check Status
+      - unless local_assigns[:hide_total]
+        th Total
+      th Check
+      th
+
+  tbody
+    - payments.each do |payment|
+      tr
+        - unless local_assigns[:hide_vendor]
+          td = payment.vendor.name.try(:truncate, 27)
+        - unless local_assigns[:hide_invoice]
+          td = payment.invoice_number
+        - unless local_assigns[:hide_po]
+          td = payment.purchase_order_number
+        - unless local_assigns[:hide_final]
+          td = disabled_checkbox '', payment.final_pay
+        - unless local_assigns[:hide_date]
+          td = payment&.date&.to_formatted_s(:std)
+        - unless local_assigns[:hide_amount]
+          td = number_to_currency payment.amount, precision: 2
+        - unless local_assigns[:hide_entry]
+          td
+            = link_to payment.entry, class: 'btn waves-effect waves-light btn-flat light-blue-text icon-btn'  do
+              i.material-icons style="top:0;" receipt
+              '  &nbsp; Entry
+        - unless local_assigns[:hide_check_status]
+          td style="color:#{state_color payment.check.aasm_state}"
+            .center-align
+              b = payment&.check&.aasm_state&.humanize&.titleize
+        - unless local_assigns[:hide_total]
+          td = number_to_currency payment.total_amount, precision: 2
+        td
+          - if payment.check && policy(payment.check).show?
+            = link_to bank_account_check_path(payment.check.bank_account, payment.check),
+              class: 'btn waves-effect waves-light btn-flat green-text icon-btn'  do
+                i.material-icons style="top:0;" assignment_turned_in
+                '  &nbsp; #{payment.check.number}
+        td.actions
+          .btn-group
+          - if policy(payment).show?
+            = link_to vendor_invoice_payment_path(@vendor, @invoice, payment),
+                      class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn'  do
+              i.material-icons find_in_page
+

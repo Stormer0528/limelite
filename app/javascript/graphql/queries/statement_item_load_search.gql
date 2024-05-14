@@ -1,0 +1,34 @@
+query findStatementItems($ids: String) {
+  bankItemSearch(ids: $ids) {
+    ... on Deposit {
+      id
+      bank_account_id
+      amount
+      memo
+      type
+      date
+      amount_in_cents
+    }
+    ... on Check {
+      id
+      bank_account_id
+      amount
+      memo
+      type
+      date
+      number
+      amount_in_cents
+    }
+    ... on AccountTransfer {
+      id
+      bank_account_id
+      amount
+      memo
+      type
+      date
+      amount_in_cents
+      isFromAccountItem
+      isToAccountItem
+    }
+  }
+}

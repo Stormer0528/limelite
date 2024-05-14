@@ -1,0 +1,6 @@
+mutation updateCheckFile(
+  $id: ID!
+  $fileUrl: String
+) {
+  updateCheckFile(id: $id, fileUrl: $fileUrl)
+}

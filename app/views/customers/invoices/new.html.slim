@@ -1,0 +1,20 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "customer", icon_options: "medium"
+    span.text
+      = link_to customers_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Customers
+      '
+      = link_to customer_path(@customer), class: "breadcrumb" do
+        span.link-text
+          = @customer.name
+      '
+      = link_to customer_path(@customer, anchor: "invoices"), class: "breadcrumb" do
+        span.link-text Invoices
+      '
+      span.breadcrumb
+        '
+        ' New
+
+== render partial: 'form', locals: { back_path: customer_path(@customer, anchor: "invoices") }

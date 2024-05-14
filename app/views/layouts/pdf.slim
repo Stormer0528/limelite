@@ -1,0 +1,15 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="x-ua-compatible" content="ie=edge"
+
+    = stylesheet_link_tag    'pdf', media: 'all'
+
+    / Top level Js
+    = yield(:head)
+
+  body
+    / This view is for testing css in html view.
+    = yield
+

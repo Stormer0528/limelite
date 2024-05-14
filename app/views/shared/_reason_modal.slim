@@ -1,0 +1,21 @@
+.modal#reason-modal style="text-align: left"
+  .modal-content
+    h4 Approval Log
+    .row
+      .col.s12
+        .divider
+    .row
+      .col.s6
+        b Date:&nbsp;
+        = DateTime.now.to_formatted_s(:long)
+      .col.s6
+        b Approver:&nbsp;
+        = @current_user.full_name
+      .col.s12 id="state-type"
+        b Reason For Denial:
+      .input-field.col.s12
+        textarea.materialize-textarea name="state_change_log[reason]" id="reason-text"
+  .modal-footer
+    .divider
+    a.btn.btn-flat.modal-close Cancel
+    = f.button :submit, value: "Deny", class: "btn btn-flat modal-action red-text denial"

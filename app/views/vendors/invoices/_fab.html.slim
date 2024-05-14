@@ -1,0 +1,13 @@
+/ Floating Action Button
+.fixed-action-btn
+    = link_to edit_vendor_invoice_path(@vendor, @invoice), class: "btn-floating btn-large green" do
+      i.large.material-icons tooltip="Edit" mode_edit
+
+    ul
+      li
+        / = link_to new_vendor_invoice_payment_path(@vendor, @invoice), class: "btn-floating orange" do
+        /   i.material-icons tooltip="New Invoice" list
+        / a.btn-floating.mobile-fab-tip href="#" + Payment
+        = link_to "/vedors/#{@vendor.slug}/purchase_orders/new", class: "btn-floating red" do
+          i.material-icons tooltip="New Purchase Order" assignment
+        a.btn-floating.mobile-fab-tip href="#" + PO

@@ -1,0 +1,9 @@
+tr class="#{local_assigns[:table_row]}"
+  td.spacer
+    td.account-code-cell
+      b #{acc_obj["code"]}
+    td.account-code-cell
+      b #{acc_obj["description"]}
+    - @report.data["titles"].each do |code|
+      td.account-name-cell #{acc_obj[code.downcase]}
+    td.account-balance-cell = acc_obj["balance"]

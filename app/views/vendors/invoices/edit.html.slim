@@ -1,0 +1,27 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "vendor", icon_options: "medium"
+    span.text
+      = link_to vendors_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Vendors
+      '
+      = link_to vendor_path(@vendor), class: "breadcrumb" do
+        span.link-text
+          = @vendor.name
+      '
+      = link_to vendor_invoice_path(@vendor,@invoice), class: "breadcrumb" do
+        span.link-text
+          b Invoice:&nbsp;
+
+          '
+          = @invoice.number
+      '
+      span.breadcrumb
+        '
+        ' Edit
+
+== render partial: 'form', locals: { \
+          back_path: vendor_invoice_path(@vendor, @invoice),
+          delete_path: vendor_invoice_path(@vendor, @invoice, method: :delete),
+         }

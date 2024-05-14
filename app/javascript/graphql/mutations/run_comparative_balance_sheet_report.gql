@@ -1,0 +1,47 @@
+mutation runComparativeBalanceSheetReport(
+  $id: ID
+  $organization_id: ID
+  $end_date: String
+  $account: AccountCodeInputObject
+) {
+  createComparativeBalanceSheet(
+    id: $id
+    organization_id: $organization_id
+    end_date: $end_date
+    account: $account
+  ) {
+    accountFundCode
+    accountFundName
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+    data
+    startDate
+    endDate
+    updatedAt
+    errors
+    organizationName
+    persisted
+    valid
+    xlsxUrl
+    pdfUrl
+  }
+}

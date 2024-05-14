@@ -1,0 +1,33 @@
+.card-action.state-btns
+  .left
+    h5 class="current_state #{model.aasm_state.dasherize}"
+      b Status:
+      '
+      = model.aasm_state.titleize
+  .center
+    - if model.aasm_state.to_s == "approved"
+      b.green-text Posted on #{model.state_change_logs.order(created_at: :desc).first&.updated_at&.to_formatted_s(:long)} by #{model.state_change_logs.order(created_at: :desc).first&.user&.full_name}
+  .right
+    = simple_form_for(model, url: form_path, wrapper: :materialize_form,
+      html: {class: "no-footer"}) do |f|
+      = f.input :id, as: :hidden
+      = render partial: "shared/state_btn",
+        locals: { f:f, model: model, hide_draft: true}
+
+      = render "shared/reason_modal", f: f
+
+- content_for :bottom_javascript do
+  javascript:
+    $(document).ready(function(){
+      $('.state-btns').delegate('i.btn', 'click', (e) => {
+        const src = e.originalEvent.srcElement;
+
+        if (src.matches('i.btn')) {
+          const btn = src.querySelector('input[type="submit"]');
+
+          if (btn) {
+            btn.click();
+          }
+        }
+      })
+    })

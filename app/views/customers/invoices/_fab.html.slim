@@ -1,0 +1,16 @@
+/ Floating Action Button
+.fixed-action-btn
+    = link_to edit_customer_invoice_path(@customer, @invoice), class: "btn-floating btn-large green" do
+      i.large.material-icons tooltip="Edit" mode_edit
+
+    ul
+      li
+        = link_to customer_path(@customer), class: "btn-floating blue" do
+          = class_icon 'customer'
+
+        a.btn-floating.mobile-fab-tip href="#" Customer
+
+        = link_to new_customer_invoice_payment_path(@customer, @invoice), class: "btn-floating orange" do
+          = class_icon 'payment'
+
+        a.btn-floating.mobile-fab-tip href="#" + Payment

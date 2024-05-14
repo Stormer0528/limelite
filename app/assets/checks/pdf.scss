@@ -1,0 +1,428 @@
+@import "materialize";
+
+.page-break {
+   display:block; clear:both; page-break-after:always !important;
+ }
+
+.check {
+  position: relative;
+  height: 3.5in;
+  width: 8.5in;
+}
+
+.cyma{
+  position: relative;
+  height: 3.5in;
+  width: 8.5in;
+}
+
+// MICR settings
+.micr-check {
+  position: relative;
+  height: 3.5in;
+  width: 8.5in;
+}
+
+.micr-check .row,
+.check .row {
+  margin-bottom: 0;
+}
+
+// check rows
+.micr-check .org-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:8.5in;
+}
+
+.micr-check .row.org-row {
+  padding-top: 0.325in;
+}
+
+.micr-check .payee-wrapper {
+    position: absolute;
+    top: 1.325in;
+    width: 8.5in;
+}
+
+.micr-check .row.payee-row {
+}
+
+.micr-check .amount-text-row-wrapper {
+    position: absolute;
+    top: 1.65in;
+    width: 8.5in;
+}
+
+.micr-check .row.amount-text-row {
+}
+
+.micr-check .address-wrapper {
+    position: absolute;
+    top: 2in;
+    width: 8.5in;
+}
+
+.micr-check .row.address-row {
+}
+
+.micr-check .memo-wrapper {
+    position: absolute;
+    top: 2.5625in;
+    width: 8.5in; 
+}
+
+.micr-check .row.memo-row {
+}
+
+.micr-check .footer-wrapper {
+    position: absolute;
+    top: 3.075in;
+    width: 8.5in;
+}
+
+.micr-check .row.check-footer {
+
+  .micr-label {
+    font-family: "GnuMICR";
+    font-size: 12.2pt;
+    text-align: right;
+    padding-right: 2.875in;
+  }
+}
+
+
+
+// chck sections
+
+.micr-check .check-org {
+  font-size: 85%;
+  line-height: 100%;
+  text-transform: uppercase;
+  padding-top: 0.125in;
+}
+
+.micr-check .check-fractional {
+  font-size: 65%;
+  text-transform: uppercase;
+  padding-top: 0.125in;
+  line-height: 100%;
+}
+
+.micr-check .check-number {
+  font-size: 120%;
+  padding-right: 1rem;
+}
+
+.micr-check .check-date {
+}
+
+.micr-check .check-pay-to {
+  font-size: 85%;
+  line-height: 100%;
+  text-transform: uppercase;
+  padding-left: 1.25rem;
+}
+
+.micr-check .check-amount-text {
+    padding-left: 1.25rem;
+}
+
+.micr-check .check-address {
+    padding-left: 1in;
+    line-height: 100%;
+}
+
+.micr-check .check-signature {
+  font-size: 120%;
+}
+
+.micr-check .check-authorized-signature {
+  font-size: 65%;
+  text-transform: uppercase;
+  line-height: 100%;
+}
+
+.micr-check .memo {
+  font-size: 85%;
+  padding-left: 1.25rem;
+  text-transform: uppercase;
+}
+
+.micr-check .check-memo {
+}
+
+.check-payee,
+.check-amount,
+.check-amount-alt,
+.check-amount-text,
+.check-address,
+.check-memo,
+.check-date,
+.check-date-alt {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 90%;
+}
+
+// Voucher settings
+.check .date-wrapper {
+    position: absolute;
+    top: 0.85in;
+    width: 8.5in;
+}
+
+.check .row.check-date-row {
+}
+
+.check .payee-wrapper {
+    position: absolute;
+    top: 1.35in;
+    width: 8.5in;
+}
+
+.check .row.payee-row {
+}
+
+.check .amount-text-wrapper {
+    position: absolute;
+    top: 1.725in;
+    width: 8.5in;
+}
+
+.check .row.amount-text-row {
+}
+
+.check .address-wrapper {
+    position: absolute;
+    top: 2in;
+    width: 8.5in;
+}
+
+.check .row.address-row {
+}
+
+.check .memo-wrapper {
+    position: absolute;
+    top: 2.75in;
+    width: 8.5in;
+}
+
+.check .alt-memo-wrapper {
+    position: absolute;
+    top: 2.7in;
+    width: 8.5in;
+}
+
+.check .row.memo-row {
+}
+
+.check .check-amount,
+.check .check-date {
+  padding-right: 0.375in;
+}
+
+.check .check-payee {
+  padding-left: 1in;
+}
+
+.check .check-amount-text {
+  padding-left: 0.5in;
+}
+
+.check .check-memo,
+.check .check-address {
+  padding-left: 1in;
+  line-height: 100%;
+}
+
+
+//Receipt
+
+.voucher-1 {
+  height: 3.5in;
+  width: 8.5in;
+}
+
+.voucher-2 {
+  height: 3.75in;
+  width: 8.5in;
+}
+
+.check-receipt {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 90%;
+  padding-top: 0.5in;
+}
+
+.check-receipt .row {
+  padding-left: 1.25rem;
+}
+
+//CYMA Settings
+
+.cyma .primary-wrapper {
+  position: absolute;
+  top: 1in;
+  width: 8.5in;
+  padding-left: 0.5in;
+}
+
+.cyma .row.primary-row {
+}
+
+.cyma .pay-to-wrapper {
+  position: absolute;
+  top: 2in;
+  width: 8.5in;
+  padding-left: 0.75in;
+}
+
+.cyma .row.pay-to-row {
+}
+
+.cyma .check-amount-text {
+}
+
+.cyma .check-date-alt {
+}
+
+.cyma .check-amount-alt {
+}
+
+.cyma .check-payee {
+}
+
+//
+#profit_and_loss_statement {
+  font-family: "Times New Roman", serif;
+
+  h1.title {
+    text-align: center;
+    font-size: 1.35em;
+    font-weight: bold;
+    margin-bottom: 0.35em;
+  }
+
+  h2.subtitle {
+    text-align: center;
+    font-size: 1.15rem;
+    margin: 0 0 1em;
+  }
+
+  h3.subsubtitle {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 300;
+    margin: -0.5rem 0 1em;
+  }
+
+  table.report-table {
+    thead {
+      display: table-header-group;
+    }
+    tfoot {
+      display: table-row-group;
+    }
+    tr {
+      page-break-inside: avoid;
+    }
+  }
+
+  table.report-table tr.fund-row,
+  table.report-table tr.total-row {
+    font-weight: bold;
+  }
+
+  table.report-table tr.total-row td {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  table.report-table tr.total-total-row td {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  table.report-table tr .spacer {
+    width: 1.5rem;
+  }
+
+  table.report-table tr th.account-balance-cell,
+  table.report-table tr td.account-balance-cell {
+    text-align: right;
+  }
+
+  table.report-table.condensed thead {
+    border-bottom: 2pt solid black;
+  }
+
+  table.report-table.condensed tr td,
+  table.report-table.condensed tr th {
+    padding: 0 0.5rem !important;
+  }
+
+  table.report-table.condensed {
+    font-family: "Times New Roman", serif;
+    font-weight: normal;
+  }
+
+  table.header p {
+    margin: 0;
+  }
+}
+
+// Bank Ledger
+//------------------------------------------------------------------------------
+section#bank-info {
+  display: block;
+  border: none;
+  border-top: 1pt solid #999;
+  border-bottom: 1pt solid #999;
+
+  .name {
+    display: block;
+    float: left;
+    min-width: 45%;
+  }
+
+  .number {
+    display: block;
+    float: right;
+    min-width: 45%;
+  }
+}
+
+section#ledger {
+  h5 {
+    width: 100%;
+
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+  .balances {
+    .initial-balance {
+      display: "inline-block";
+      text-align: right;
+      padding-top: 0.5em;
+    }
+
+    .balance {
+      display: "inline-block";
+      float: right;
+    }
+  }
+}
+
+table {
+  table {
+    word-break: break-word;
+  }
+  tr {
+    page-break-inside: avoid !important;
+  }
+}

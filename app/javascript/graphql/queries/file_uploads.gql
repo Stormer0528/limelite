@@ -1,0 +1,35 @@
+query fileUploads(
+  $creatorId: ID
+  $uploadableId: ID
+  $uploadableType: String
+  $fileType: String
+  $description: String
+  $unarchived: Boolean
+) {
+  fileUploadSearchConnection(
+    creator_id: $creatorId
+    uploadable_id: $uploadableId
+    uploadable_type: $uploadableType
+    file_type: $fileType
+    description: $description
+    unarchived: $unarchived
+  ) {
+    fileUploads: nodes {
+      id
+      description
+      fileType
+      url
+      updatedAt
+      uploadableId
+      uploadableType
+      creator {
+        firstName
+        lastName
+      }
+      organization {
+        name
+      }
+      apDownloaded
+    }
+  }
+}

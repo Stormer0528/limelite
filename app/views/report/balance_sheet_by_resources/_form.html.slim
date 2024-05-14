@@ -1,0 +1,11 @@
+= simple_form_for(@report_balance_sheet_by_resource) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :start_date
+    = f.input :end_date
+    = f.input :data
+    = f.association :organization
+
+  .form-actions
+    = f.button :submit

@@ -1,0 +1,28 @@
+.valign-wrapper
+  .card.grey.lighten-3.hoverable.login-box
+    .card-content
+      span.card-title.grey-text.text-darken-4
+        | Forgot Your Password?
+        = image_tag 'LOGO-1.png', size: '183x55', class: 'logo pull-right'
+
+      = simple_form_for resource,
+        as: resource_name, url: password_path(resource_name),
+        html: { method: :post, class: 'ui form attached fluid segment' } do |f|
+        - if f.error_notification
+          = render partial: 'shared/validation_errors', locals: { f:f, resource: resource }
+
+        = f.input :email, required: true, autofocus: true, hint: 'email'
+
+        .form-actions
+          = f.button  :submit, "Send me reset password instructions",
+                      class: 'btn waves-effect waves-light'
+
+    .card-action.blue-grey.lighten-4
+            h6.activator
+              | Need Help?
+              i class="material-icons right" more_vert
+    .card-reveal
+      span.card-title.grey-text.text-darken-4
+        | Account Help
+        i.material-icons.right close
+      = render "devise/shared/links"

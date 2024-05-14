@@ -1,0 +1,22 @@
+= content_for :page_title
+  '&nbsp; :: Organizations > New
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Organization", icon_options: "medium"
+    span.text
+      = link_to organizations_path, class: "breadcrumb" do
+        span.link-text
+          '  Organizations
+      '
+      span.breadcrumb
+        '
+        ' New
+
+
+h4.page-header
+  = class_icon "Organization", icon_options: "small"
+  span.text
+    '  New Organization
+
+== render partial: 'form', locals: { back_path: organizations_path }

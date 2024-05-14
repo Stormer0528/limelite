@@ -1,0 +1,67 @@
+/ Payments
+ul.collapsible data-collapsible="expandable"
+  li#payments.active
+    .collapsible-header.active
+      h5
+        i.material-icons payment
+        b  Payments
+
+    .collapsible-body
+      - if @invoice.payments.count < 1
+        .empty-message.center-align style="display: flex; justify-content: center; align-items: center; border: 1px solid #bdbdbd; padding: .5rem; background-color: #fcfcfc; margin-top: -1rem; border-radius: 4px;"
+          i.material-icons info_outline
+          em There are no payments yet for this invoice
+
+        - if @invoice.aasm_state == 'approved'
+          h5 style="margin-top: 1.5rem; margin-bottom: 1em;"
+            i.material-icons attach_money
+            | Pay with Payment Process
+          = simple_form_for(@payment,
+            url: form_url,
+            wrapper: :materialize_form) do |f|
+
+            .row
+              .col.s6
+                = simple_fields_for :account do |a|
+                  = a.input :cash_account,
+                    collection: @account_objects,
+                    label_method: :display_name,
+                    value_method: :id,
+                    include_blank: false
+              .col.s3
+                = f.association :address,
+                  collection: @addresses,
+                  label_method: :name,
+                  include_blank: false
+              .col.s3
+                .right-align
+                  = f.button :submit, "Create Check",
+                    class: "btn waves-effect waves-light btn-flat green-text icon-btn"
+
+      - else
+        .row
+          .col.s12
+            = render  partial: 'payments_list',
+                      locals: { payments: @invoice.becomes(Invoice).payments.order(date: :desc),
+                        hide_vendor: true, hide_invoice: true, hide_total: true, hide_po: true }
+        .row
+          .col.s2.offset-s5.right-align
+            b Total:
+          .col.s4
+            = number_to_currency @invoice.amount_paid, precision: 2
+        .row
+          .col.s2.offset-s5.right-align
+            b Remaining:
+          .col.s4
+            = number_to_currency @invoice.amount_remaining, precision: 2
+
+- if @invoice.payments.first&.check && policy(@invoice.payments.first&.check).view?
+  ul.collapsible data-collapsible="expandable"
+    li#check
+      .collapsible-header
+        h5
+          = class_icon :check
+          b  Check
+
+      .collapsible-body
+        = render partial: "check", locals: {check: @invoice.payments.first&.check, form_path: ""}

@@ -1,0 +1,56 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+  def parse_num(num)
+    num.gsub(/[$,]/, "").to_f
+  end
+
+  # Style Definitions
+  header_title_cell  = s.add_style fg_color: "00", b: true, sz: 16, alignment: {horizontal: :center}
+  title_cell         = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  header_border_cell = s.add_style sz: 11, b: true,
+                                   border: {style: :thin, color: "00", edges: [:top, :bottom, :left, :right]}
+  wrap_text_cell     = s.add_style alignment: {wrap_text: true}
+  currency_with_sign = wb.styles.add_style num_fmt: 44, alignment: {vertical: :center}
+  default_cell = wb.styles.add_style alignment: {horizontal: :left, vertical: :center}
+
+  wb.add_worksheet(name: "Vendor List") do |sheet|
+    sheet.add_row ["#{@current_org.name} Vendor List"], style: [header_title_cell]
+    sheet.merge_cells("A1:D1")
+    sheet.add_row ["#{@report.start_date.to_formatted_s(:long)} THROUGH #{@report.end_date.to_formatted_s(:long)}".upcase],
+                  style: [title_cell]
+    sheet.merge_cells("A2:D2")
+    sheet.add_row
+    sheet.add_row [
+      "Fund Code",
+      "Vendor Name",
+      "Phone Number",
+      "Vendor Number",
+      "Amount",
+      "Address"
+    ], style: header_border_cell
+
+    @report.vendors.each do |vendor|
+      address = vendor.dig("address")
+      address_combined = [
+        address&.dig("attention"),
+        address&.dig("department"),
+        address&.dig("line1"),
+        address&.dig("line2"),
+        "#{address&.dig('city')}, #{address&.dig('state')} #{address&.dig('zip')}"
+      ].filter {|e| e.present? }.join("\n")
+
+      sheet.add_row [
+        vendor["code"],
+        vendor["vendor_name"],
+        vendor["phone"],
+        vendor["vendor_number"],
+        parse_num(vendor["amount"]),
+        address_combined
+      ],
+                    style: [default_cell, default_cell, default_cell, default_cell, currency_with_sign, wrap_text_cell],
+                    types: [:string, :string, :string, :string, :float, :string]
+    end
+
+    sheet.column_info.first.width = 15
+  end
+end

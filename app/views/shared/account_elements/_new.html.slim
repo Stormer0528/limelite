@@ -1,0 +1,20 @@
+- form_path = local_assigns[:form_path] || 'shared/account_elements/form'
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon class_name, icon_options: "medium"
+    span.text
+      = link_to send("#{element_name.pluralize}_path"), class: "breadcrumb" do
+        span.link-text
+          | Account #{class_name.pluralize}
+    '
+    span.breadcrumb
+      ' New
+
+h2.page-header
+  = class_icon class_name, icon_options: "medium"
+  span.text
+    '  New Account #{class_name}
+
+
+== render partial: form_path, locals: {item: item, back_path: send("#{element_name.pluralize}_path")}

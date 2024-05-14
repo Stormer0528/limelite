@@ -1,0 +1,17 @@
+/ Floating Action Button
+- if policy(@customer).edit?
+  .fixed-action-btn
+      = link_to edit_customer_path(@customer), class: "btn-floating btn-large green" do
+        i.large.material-icons tooltip="Edit" mode_edit
+
+      ul
+        li
+          -if policy(@customer.invoices.new).create?
+            = link_to new_customer_invoice_path(@customer), class: "btn-floating orange" do
+              = class_icon 'Invoice'
+            a.btn-floating.mobile-fab-tip href="#" + Invoice
+- else
+  .fixed-action-btn
+    -if policy(@customer.invoices.new).create?
+      = link_to new_customer_invoice_path(@customer), class: "btn-floating btn-large orange" do
+        = class_icon 'Invoice'

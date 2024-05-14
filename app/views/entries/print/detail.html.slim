@@ -1,0 +1,12 @@
+javascript:
+  $(document).ready(function(){
+    window.print();
+  })
+
+
+section#bank-info
+  .name
+    = @current_org.name
+
+section#ledger
+  == render partial: "entries/print/detail_index"

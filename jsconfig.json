@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "baseUrl": "./app/javascript",
+    "paths": {
+      "@shared/*": ["./components/shared/*"],
+      "@components/*": ["./components/*"],
+      "searchable_table/*": ["./components/searchable_table/*"],
+      "@columns/*": ["./components/searchable_table/components/defaults/*"],
+      "searchable_table_infinite/*": [
+        "./components/searchable_table_infinite/*"
+      ],
+      "@graphql/*": ["./graphql/*"],
+      "@actions/*": ["./actions/*"],
+      "@selectors/*": ["./selectors/*"],
+      "@packs/*": ["./packs/*"],
+      "@reduders/*": ["./reduders/*"],
+      "@utils/*": ["./utils.js"]
+    }
+  },
+  "exclude": ["node_modules", "public/packs"]
+}

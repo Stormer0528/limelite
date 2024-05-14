@@ -1,0 +1,38 @@
+query loadStatementVersion($reconciliationId: ID!, $versionId: ID!) {
+  revision: statementVersion(id: $reconciliationId, versionId: $versionId) {
+    aasmState
+    adjustmentAmount
+    adjustmentAmountInCents
+    adjustmentDate
+    associatedItems
+    approved
+    approverName
+    creatorName
+    editPath
+    endedAt
+    endingBalance
+    exportPath
+    fileUrl
+    id
+    path
+    startedAt
+    startingBalance
+    startingBalanceInCents
+    account: statementable {
+      __typename
+      ... on CreditCard {
+        name
+      }
+      ... on BankAccount {
+        name
+      }
+    }
+    permissions {
+      show
+      edit
+      delete
+    }
+
+    auditVersion
+  }
+}

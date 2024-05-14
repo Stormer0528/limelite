@@ -1,0 +1,36 @@
+query {
+  comparativeBalanceSheet {
+    accountFundCode
+    accountFundName
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+    data
+    endDate
+    updatedAt
+    errors
+    organizationName
+    persisted
+    valid
+    xlsxUrl
+    pdfUrl
+  }
+}

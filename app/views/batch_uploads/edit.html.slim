@@ -1,0 +1,16 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "batch_upload", icon_options: "medium"
+    span.text
+      = link_to batch_uploads_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Batch Upload
+      = link_to batch_uploads_path, class: "breadcrumb" do
+        span.link-text
+          '  <b>ID:</b> #{@batch_upload.id}
+      '
+      span.breadcrumb
+        '
+        ' New
+
+== render 'form', locals: {back_path: batch_uploads_path}

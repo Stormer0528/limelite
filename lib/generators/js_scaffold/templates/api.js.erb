@@ -1,0 +1,65 @@
+<% @dir_depth = @name.split("/").length + 1 %>
+<% @dir_dots = "../" * @dir_depth %>
+// Graphql
+import {authenticityToken} from "<%= @dir_dots %>utils";
+import {ApolloClient} from "apollo-client";
+import {createHttpLink} from "apollo-link-http";
+import {InMemoryCache} from "apollo-cache-inmemory";
+
+import introspectionQueryResultData from "<%= @dir_dots %>fragments.json";
+import {IntrospectionFragmentMatcher} from "apollo-cache-inmemory";
+
+import <%= @file_name.singularize.upcase %>_QUERY from "<%= @dir_dots %>graphql/queries/<%= @file_name.tableize %>/load_<%= @file_name.singularize %>.gql";
+import CREATE_<%= @file_name.singularize.upcase %>_MUTATION from "<%= @dir_dots %>graphql/mutations/<%= @file_name.tableize %>/create_<%= @file_name.singularize %>.gql";
+import UPDATE_<%= @file_name.singularize.upcase %>_MUTATION from "<%= @dir_dots %>graphql/mutations/<%= @file_name.tableize %>/update_<%= @file_name.singularize %>.gql";
+
+// Set up client for graphql
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
+const client = new ApolloClient({
+  link: createHttpLink({
+    uri: "/graphql",
+    headers: {
+      "X-CSRF-Token": authenticityToken(),
+    },
+    credentials: "same-origin",
+  }),
+  cache: new InMemoryCache({fragmentMatcher}),
+});
+
+// <%= @file_name.titleize %> API
+export default {
+  fetch<%= @file_name.singularize.camelize.capitalize %>: async (slug) => {
+    const {data = {}, data: {<%= file_name.singularize.camelize(:lower)%> = {}}} = await client.query({
+      query: <%= @file_name.singularize.upcase %>_QUERY,
+      variables: {slug},
+      options: {},
+    });
+
+    console.log("<%= @file_name.singularize.titleize %>", data);
+
+    return { <%= @file_name.singularize.camelize(:lower) %> };
+  },
+  create<%= @file_name.singularize.camelize.capitalize %>: async ({<%= @file_name.singularize.camelize %>, stateAction = "save_draft", reason = ""}) => {
+    const {data: {create<%= @file_name.singularize.camelize.capitalize %>: response} = {}} = await client.mutate({
+      mutation: CREATE_<%= @file_name.singularize.upcase %>_MUTATION,
+      variables: {<%= @file_name.camelize %>, stateAction, reason},
+    });
+
+    console.log("Create <%= @file_name.singularize.titleize %>", response);
+
+    return response;
+  },
+  update<%= @file_name.singularize.camelize.capitalize %>: async ({<%= @file_name.singularize.camelize %>, stateAction = "save_draft", reason = ""}) => {
+    const {data: {update<%= @file_name.camelize.capitalize %>: response} = {}} = await client.mutate({
+      mutation: UPDATE_<%= @file_name.singularize.upcase %>_MUTATION,
+      variables: {<%= @file_name.singularize.camelize %>, stateAction, reason},
+    });
+
+    console.log("Update <%= @file_name.singularize.titleize %>", response);
+
+    return response;
+  },
+};

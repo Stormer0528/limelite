@@ -1,0 +1,7 @@
+mutation createFileUpload($fileUpload: FileUploadAttributes) {
+	fileUpload: createFileUpload(fileUpload: $fileUpload) {
+		id
+		fileType
+		description
+	}
+}

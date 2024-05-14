@@ -1,0 +1,13 @@
+h5.page-header
+  .pull-right.right-align
+    = link_to customer_path(@customer), class: "waves-effect waves-teal btn-flat" do
+      = class_icon 'customer'
+      '  Customer
+    '  |
+    = link_to customer_path(@customer, anchor: :invoices), class: "waves-effect waves-teal btn-flat" do
+      i.material-icons list
+      '  Invoices
+    '  |
+    = link_to edit_customer_invoice_path(@customer, @invoice), class: "waves-effect waves-teal btn-flat" do
+      i.material-icons mode_edit
+      '  Edit

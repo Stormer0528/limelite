@@ -1,0 +1,27 @@
+h1 Listing report_balance_sheet_by_resources
+
+table
+  thead
+    tr
+      th Start date
+      th End date
+      th Data
+      th Organization
+      th
+      th
+      th
+
+  tbody
+    - @report_balance_sheet_by_resources.each do |report_balance_sheet_by_resource|
+      tr
+        td = report_balance_sheet_by_resource.start_date
+        td = report_balance_sheet_by_resource.end_date
+        td = report_balance_sheet_by_resource.data
+        td = report_balance_sheet_by_resource.organization
+        td = link_to 'Show', report_balance_sheet_by_resource
+        td = link_to 'Edit', edit_report_balance_sheet_by_resource_path(report_balance_sheet_by_resource)
+        td = link_to 'Destroy', report_balance_sheet_by_resource, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Balance sheet by resource', new_report_balance_sheet_by_resource_path

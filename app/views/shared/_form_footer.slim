@@ -1,0 +1,15 @@
+.card-action.right-align.form-footer
+  - unless local_assigns.empty?
+      .pull-left
+        - if local_assigns[:back_path]
+          = link_to local_assigns[:back_path] do
+            i.material-icons keyboard_backspace
+            '   Back
+        - if local_assigns[:show_path]
+          = link_to 'View', local_assigns[:show_path]
+  .pull-right
+    - if local_assigns[:submit_partial]
+      = render partial: local_assigns[:submit_partial],
+        locals: { f:f, model: model, delete_path: local_assigns[:delete_path] }
+    - else
+      = f.button :submit

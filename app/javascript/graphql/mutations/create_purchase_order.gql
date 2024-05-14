@@ -1,0 +1,14 @@
+mutation createPurchaseOrder(
+  $purchaseOrder: PurchaseOrderAttributes
+  $stateAction: String
+  $reason: String
+) {
+  createPurchaseOrder(
+    purchaseOrder: $purchaseOrder
+    stateAction: $stateAction
+    reason: $reason
+  ) {
+    path
+    errors
+  }
+}

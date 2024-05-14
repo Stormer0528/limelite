@@ -1,0 +1,109 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+  def parse_num(num)
+    num.gsub(/[\$\,]/, "").to_f
+  end
+
+  # @report.run_report
+  # Style Definitions
+  header_title_cell  = s.add_style :fg_color => "00", :b => true, :sz => 18, :alignment => { :horizontal=> :center }
+  title_cell = s.add_style :fg_color => "00", :b => true, :sz => 14, :alignment => { :horizontal=> :center }
+  subtitle_cell = s.add_style :fg_color => "00", :sz => 12, :alignment => { :horizontal=> :center }
+  title_row_cell = s.add_style :bg_color => "f5f5f5",:fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom, :left, :right] }
+  subtitle_row_cell = s.add_style :bg_color => "F0",:fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }, :border => { :style => :thin, :color =>"CC", :edges => [:top, :bottom]}
+  summary_title_row_cell = s.add_style :bg_color => "DDEBF7",:fg_color => "00", :b => true, :sz => 12, :alignment => { horizontal: :center, vertical: :center }, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+  total_row_cell = s.add_style :fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+
+  bottom_total_row_cell = s.add_style :fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }, :border => { :style => :double, :color =>"00", :edges => [:bottom] }
+  bottom_total_row_currency_cell = s.add_style :fg_color => "00", :b => true, :sz => 12,:num_fmt => 7, :alignment => { :horizontal=> :right }, :border => { :style => :double, :color =>"00", :edges => [:bottom] }
+  invoice_number_cell = s.add_style alignment: {horizontal: :left}, format_code: "0000"
+  currency = wb.styles.add_style :num_fmt => 7
+  dark_currency = wb.styles.add_style :num_fmt => 7, :bg_color => "F0",:fg_color => "00", :sz => 12
+  dark_title = wb.styles.add_style :bg_color => "F0",:fg_color => "00", :sz => 12
+  total_row_cell = s.add_style b:true, border: {color: "00", style: :thin, edges: [:top, :bottom]}
+  total_row_currency_cell = s.add_style num_fmt: 7, b:false, border: {color: "00", style: :thin, edges: [:top, :bottom]}
+  after_total_row_cell = s.add_style b:true, border: {color: "00", style: :double, edges: [:top]}
+
+  wb.add_worksheet(name: "AP AGING SUMMARY") do |sheet|
+    sheet.add_row [@current_org.name.titlecase], style: header_title_cell
+    sheet.merge_cells "A1:G1"
+
+    sheet.add_row ["A/P AGING SUMMARY"], style: title_cell
+    sheet.merge_cells "A2:G2"
+
+    sheet.add_row ["#{@report.start_date.to_formatted_s(:std)} to #{@report.end_date.to_formatted_s(:std)}"], style: subtitle_cell
+    sheet.merge_cells "A3:G3"
+    sheet.add_row
+
+    sheet.add_row ["Vendor Name", "Current", "1-30", "31-60", "61-90", "91 and Over", "Total"], style: summary_title_row_cell, height: 25
+
+    vendor_total_rows = []
+    @report.data["periods_by_vendor"].values.each do|vendor|
+      next unless vendor["total_balance"] > 0.0
+
+      sheet.add_row [vendor["name"], vendor["periods"]["current"], vendor["periods"]["1-30"], vendor["periods"]["31-60"], vendor["periods"]["61-90"], vendor["periods"]["91 and over"], vendor["total_balance"]],
+                    style: [dark_title, *Array.new(vendor["periods"]&.values&.length, dark_currency), dark_currency]
+      vendor_total_rows << sheet.rows.length
+
+      vendor["balance_by_account"].each do |account|
+        account.map do |account_title, totals|
+          sheet.add_row [account_title, *totals], style: [nil, *Array.new(totals&.length, currency)]
+        end
+      end
+    end
+
+    periods = @report.data["periods_by_vendor"].values.first["periods"].keys
+    period_rows = periods.map.with_index {|_p, i| (66 + i).chr }
+    total_total_formula = "=SUM(#{vendor_total_rows.map {|c| (period_rows.length + 66).chr + c.to_s }.join(',')})"
+
+    sheet.add_row ["Total", *period_rows.map {|r| "=SUM(#{vendor_total_rows.map{|c| r.to_s + c.to_s }.join(',')})" }, total_total_formula], style: [total_row_cell, *Array.new(periods.length + 1, total_row_currency_cell)]
+    sheet.add_row ["", "", "", "", "", "", ""], style: after_total_row_cell
+
+    sheet.column_info.last.width = 18
+  end
+
+  wb.add_worksheet(name: "AP AGING DETAIL") do |sheet|
+    sheet.add_row [@current_org.name.titlecase], style: header_title_cell
+    sheet.merge_cells "A1:I1"
+
+    sheet.add_row ["A/P AGING DETAIL"], style: title_cell
+    sheet.merge_cells "A2:I2"
+
+    sheet.add_row ["#{@report.start_date.to_formatted_s(:std)} to #{@report.end_date.to_formatted_s(:std)}"], style: subtitle_cell
+    sheet.merge_cells "A3:I3"
+    sheet.add_row
+
+    sheet.add_row ["Date", "Transaction Type", "Num", "Vendor", "Due Date", "Days", "Amount", "Open Balance"], style: title_row_cell
+
+    total_amounts = []
+    total_opened = []
+    @report.period_names.map(&:to_s).each do |key|
+     # section title
+     sheet.add_row [key.to_s.titleize, "", "", "", "", "", "", ""], style: total_row_cell
+     sheet.merge_cells "A#{sheet.rows.count}:H#{sheet.rows.count}"
+
+     @report.data["vendors_by_period"][key].each do |code, invoices|
+       sheet.add_row ["#{code} - #{invoices.first['fund_name']}", "", "","", "", "", "", ""], style: subtitle_row_cell
+       sheet.merge_cells "A#{sheet.rows.count}:H#{sheet.rows.count}"
+
+       invoices.each do |invoice|
+         if invoice["balance"] != 0.0
+          sheet.add_row [invoice["date"], invoice["transaction_type"], invoice["number"], invoice["name"], invoice["due_date"], invoice["past_due"], invoice["amount"], invoice["open_balance"]], style: [nil, nil, invoice_number_cell, nil, nil, nil, currency, currency]
+         end
+       end
+     end
+
+     # Total Row
+     amount_total = @report.data["vendors_by_period"][key].values.flatten.reduce(Money.new 0) {|s, t| s + Money.from_amount(t["amount"])}
+     open_total =  @report.data["vendors_by_period"][key].values.flatten.reduce(Money.new 0) {|s, t| s + Money.from_amount(t["open_balance"])}
+     total_amounts << amount_total
+     total_opened << open_total
+     sheet.add_row ["Total for #{key} days past due", "", "", "", "", "", amount_total.to_f, open_total.to_f], style: [total_row_cell , total_row_cell, total_row_cell, total_row_cell, total_row_cell, total_row_cell, total_row_currency_cell, total_row_currency_cell, total_row_currency_cell, total_row_currency_cell]
+     sheet.merge_cells "A#{sheet.rows.count}:B#{sheet.rows.count}"
+    end
+
+    sheet.add_row ["TOTAL", "", "", "", "", "", total_amounts.inject(Money.new(0)){|s, t| s + t}.to_f, total_opened.inject(Money.new(0)){|s, t| s + t}.to_f], style: [bottom_total_row_cell , bottom_total_row_cell, bottom_total_row_cell, bottom_total_row_cell, bottom_total_row_cell, bottom_total_row_cell, bottom_total_row_currency_cell, bottom_total_row_currency_cell, bottom_total_row_currency_cell, bottom_total_row_currency_cell]
+
+    sheet.column_info.first.width = 20
+  end
+end

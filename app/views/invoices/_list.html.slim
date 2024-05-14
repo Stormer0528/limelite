@@ -1,0 +1,31 @@
+table.responsive-table.bordered
+  thead
+    tr
+      th Invoice&nbsp;#
+      th Invoice Date
+      th Due Date
+      th Remaining
+      th Total Amount
+      th
+
+  tbody
+    - invoices.each do |invoice|
+      - next unless invoice&.id
+      tr
+        td = link_to invoice.number, vendor_invoice_path(@vendor, invoice)
+        td = invoice.date&.to_formatted_s(:std)
+        td = invoice.due_date
+        td = number_to_currency invoice.amount_remaining, precision: 2
+        td = number_to_currency invoice.amount, precision: 2
+        td.actions
+          .btn-group
+            = link_to vendor_invoice_path(@vendor, invoice),
+                      class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn' do
+              i.material-icons find_in_page
+            = link_to edit_vendor_invoice_path(@vendor, invoice),
+                      class: 'btn waves-effect waves-light btn-flat green-text icon-btn' do
+              i.material-icons edit
+            = link_to vendor_invoice_path(@vendor, invoice),
+                      class: 'btn waves-effect waves-light btn-flat red-text icon-btn',
+                      data: { confirm: 'Are you sure?' }, method: :delete do
+              i.material-icons delete

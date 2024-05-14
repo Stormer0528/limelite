@@ -1,0 +1,19 @@
+query BatchUploads($aasmState: String) {
+  batchUploads(aasm_state: $aasmState) {
+    id
+    path
+    editPath
+    aasmState
+    createdAt
+    updatedAt
+    creatorName
+    userGroupName
+    totalFiles
+    approvedFiles
+    permissions {
+      view
+      edit
+      delete
+    }
+  }
+}

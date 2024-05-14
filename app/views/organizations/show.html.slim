@@ -1,0 +1,60 @@
+= content_for :page_title
+  '&nbsp; :: Organizations > #{@organization.name}
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Organization", icon_options: "medium"
+    span.text
+      = link_to organizations_path, class: "breadcrumb" do
+        span.link-text
+          '  Organizations
+      '
+      span.breadcrumb = @organization.name
+
+/ ORGANIZATION INFO
+.card
+  .card-content
+    span.card-title style="display: flex; border-bottom: 1px solid #ccc; margin-bottom: 1em;"
+      = class_icon "organization", icon_options: "small"
+      = @organization.name
+
+      .pull-right style="flex-grow: 1; display: flex; justify-content: flex-end; margin-bottom: .5em"
+        .btn-group
+          = link_to organizations_path,
+                    class: 'btn waves-effect waves-light btn-flat light-blue-text icon-btn' do
+            i.material-icons format_list_bulleted
+          = link_to edit_organization_path(@organization),
+                    class: 'btn waves-effect waves-light btn-flat green-text icon-btn' do
+            i.material-icons edit
+    .row
+      .col.s6
+        strong Name: &nbsp;
+        = @organization.name
+      .col.s3
+        strong Alias: &nbsp;
+        = @organization.alias
+      .col.s3
+        strong Subdomain: &nbsp;
+        = @organization.subdomain
+    .row
+      .col.s6
+        strong Description: &nbsp;
+        = @organization.description
+      .col.s3
+        strong Email: &nbsp;
+        = @organization.email
+      .col.s3
+        strong Phone: &nbsp;
+        - if @organization.phone
+          = number_to_phone @organization.phone, area_code: true
+
+/ ADDRESSES
+- if @organization.addresses.map(&:empty?).reject {|v| v}.length > 0
+  h4 style="border-bottom: 1px solid #ccc; display: flex;"
+    span style="position:relative; top: -.15em"
+      = class_icon "Address", icon_options: "small"
+    '  &nbsp;&nbsp;Addresses
+
+  = render partial: "shared/address/address",
+           collection: @organization.addresses,
+           as: :address_model

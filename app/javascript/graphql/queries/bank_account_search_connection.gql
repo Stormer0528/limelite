@@ -1,0 +1,104 @@
+query findBankItems(
+  $start_date: String
+  $end_date: String
+  $min_amount: String
+  $max_amount: String
+  $bank_account_id: ID
+  $reconciled: Boolean
+  $approved: Boolean
+  $aasm_state: String
+  $type: String
+  $number: String
+  $memo: String
+  $cursor: String
+  $first: Int
+  $vendor_id: ID
+) {
+  bankItemConnection(
+    include_payment: true
+    start_date: $start_date
+    end_date: $end_date
+    min_amount: $min_amount
+    max_amount: $max_amount
+    bank_account_id: $bank_account_id
+    reconciled: $reconciled
+    approved: $approved
+    aasm_state: $aasm_state
+    number: $number
+    memo: $memo
+    type: $type
+    vendor_id: $vendor_id
+    after: $cursor
+    first: $first
+  ) {
+    edges {
+      node {
+        __typename
+        ... on Deposit {
+          id
+          bankAccountId
+          amount
+          memo
+          number
+          type
+          date
+          credit
+          debit
+          aasmState
+          entryId
+          editPath
+          path
+          reconciled
+          permissions {
+            show
+            edit
+          }
+        }
+        ... on Check {
+          id
+          bankAccountId
+          amount
+          memo
+          type
+          date
+          payee
+          number
+          credit
+          debit
+          aasmState
+          entryId
+          editPath
+          path
+          reconciled
+          permissions {
+            show
+            edit
+          }
+        }
+        ... on AccountTransfer {
+          id
+          bankAccountId
+          amount
+          memo
+          type
+          date
+          credit
+          debit
+          aasmState
+          entryId
+          editPath
+          path
+          reconciled
+          permissions {
+            show
+            edit
+          }
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

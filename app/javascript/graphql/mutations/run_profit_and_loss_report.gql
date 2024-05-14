@@ -1,0 +1,52 @@
+mutation runProfitAndLossReport(
+  $id: ID
+  $organization_id: ID
+  $start_date: String
+  $end_date: String
+  $account: AccountCodeInputObject
+) {
+  createProfitAndLossStatement(
+    id: $id
+    organization_id: $organization_id
+    start_date: $start_date
+    end_date: $end_date
+    account: $account
+  ) {
+    startDate
+    endDate
+    data
+    accountFundId
+    accountFundName
+    accountFundCode
+    organizationName
+    colspanWidth
+    url
+    pdfUrl
+    xlsxUrl
+    errors
+    valid
+    persisted
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+  }
+}

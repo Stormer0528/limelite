@@ -1,0 +1,6 @@
+li style="border: 1px solid #999; border-radius: 4px; padding: 8px; margin: 8px 0;  display: grid; grid-template-columns: repeat(4, minmax(min-content, 1fr)); grid-column-gap: 4px; align-items: flex-end;"
+  span style="font-weight: normal;"
+    b Date:&nbsp;
+    = item&.created_at&.to_date&.to_formatted_s(:std_alt)
+
+  a target="_blank" href="#{base_name}/batch_uploads/#{item.id}/edit" View Upload

@@ -1,0 +1,19 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Entries") do |sheet|
+  sheet.add_row ["Type", "State", "No.", "Date", "Payee", "Memo", "Reconciled", "Debit", "Credit"]
+  sheet.add_row ["Account Object Code","Account Title", "Debit", "Credit"]
+  sheet["A1:E1"].each {|c| c.b = true }
+
+  @items.each do |item|
+    sheet.add_row [
+      (item.name || item.type)&.demodulize&.titleize,
+      item.aasm_state&.titleize,
+      item.date&.to_formatted_s(:std),
+      item.payee,
+      item.memo,
+      item.reconciled? && "Reconciled" || "",
+      item.type == "Credit" ? item.amount.format : "",
+      item.type == "Debit" ? "" : item.amount.format
+    ]
+  end
+end

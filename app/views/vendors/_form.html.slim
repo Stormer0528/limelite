@@ -1,0 +1,144 @@
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+  css:
+    a.add-btn i.material-icons {
+      top: 0;
+      left: 0;
+    }
+
+= simple_form_for(@vendor, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @vendor, model: Vendor }
+
+  .form-inputs
+    .card
+      .card-content
+        span.card-title Vendor Information
+        .row
+          .col.s2
+            = f.input :title
+          .col.s3
+            = f.input :first_name
+          .col.s2
+            = f.input :middle_name
+          .col.s3
+            = f.input :last_name
+          .col.s2
+            = f.input :suffix
+        .row
+          .col.s12
+            = f.input :company
+
+        .row
+          .col.s4
+            label Logo Image:
+            .filestack-image-btn[data-inputId="vendor::logo_url"
+                            data-name="vendor[logo_url]"
+                            data-value="#{@vendor.logo_url}"
+                            data-apikey="#{get_client_and_api_key[1]}"
+                            data-policy="#{get_fresh_policy_and_signature[1]}"
+                            data-signature="#{get_fresh_policy_and_signature[0]}"]
+        .row
+          .col.s6
+            = f.input :email
+          .col.s6
+            = f.input :website
+
+    .card
+      .card-content
+        .row
+          .col.s6
+            span.card-title
+              '  Phone Numbers
+          .col.s6
+            label Primary Phone Number
+            = f.input_field :primary_phone,
+                as: :select,
+                collection: ['Home', 'Mobile', 'Work'],
+                class:'browser-default'
+        .row
+          .col.s6
+            = f.simple_fields_for :home_phone do |home|
+              = home.input :number, as: :tel, label: 'Home'
+          .col.s6
+            = f.simple_fields_for :mobile_phone do |mobile|
+              = mobile.input :number, as: :tel, label: 'Mobile'
+          .col.s6
+            = f.simple_fields_for :work_phone do |work|
+              = work.input :number, as: :tel, label: 'Work'
+          .col.s6
+            = f.simple_fields_for :fax_phone do |fax|
+              = fax.input :number, as: :tel, label: 'Fax'
+
+    .card
+      .card-content
+        span.card-title Account #
+        .row
+          .col.s6
+            = f.input :account_number, label: "Account Number"
+          .col.s6
+            = f.input :active, as: :boolean
+
+    h4 style="display: flex; "
+      | Addresses
+      div style="flex-grow: 1; justify-content: flex-end; display: flex;"
+        = link_to_add_association f, :addresses, partial:  'shared/address/form', class: "btn btn-flat btn-outline add-btn",
+        data: {:"association-insertion-node" => "#addresses", :"association-insertion-method" => "append"} do
+          i.material-icons add
+    hr
+    #addresses
+      = f.simple_fields_for :addresses do |address|
+        = render partial: 'shared/address/form', locals: { f: address }
+
+        .links
+
+
+    .card-panel
+      = f.input :payment_terms
+
+    .card-panel
+      = f.input :notes
+
+    h4 style="display: flex; "
+      i.material-icons receipt
+      '  Tax Information
+      div style="flex-grow: 1; justify-content: flex-end; display: flex;"
+        = link_to_add_association f, :ten_ninety_nines, partial:  '1099_form', class: "btn btn-flat btn-outline add-btn",
+        data: {:"association-insertion-node" => "#ten_ninety_nines", :"association-insertion-method" => "append"} do
+          i.material-icons add
+    hr
+    #ten_ninety_nines
+      = f.simple_fields_for :ten_ninety_nines do |ten_ninety_nine|
+        = render partial: '1099_form', locals: { f: ten_ninety_nine }
+
+    .card
+      .card-content
+        span.card-title
+          i.material-icons
+          '  Starting Balance Info
+        .row
+          .col.s4
+            = f.input :starting_balance,
+              icon: "attach_money",
+              placeholder: "0.00"
+          .col.s4
+            = f.input :start_date, as: :string, label: "Start Date",
+              wrapper: :materialize_date
+          .col.s4
+            = f.input :end_date, as: :string, label: "End Date",
+              wrapper: :materialize_date
+
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @vendor.aasm_state.titleize
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @vendor,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "shared/state_btn"}
+
+  = render "shared/reason_modal", f: f

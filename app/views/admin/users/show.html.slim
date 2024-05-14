@@ -1,0 +1,33 @@
+= content_for :page_title
+  '&nbsp; :: Admin > Users > #{@user.full_name} > Edit
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "user", icon_options: "medium"
+    span.text
+      = link_to admin_users_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Users
+      '
+      span.breadcrumb
+        = @user.full_name.titleize
+
+h2.page-header
+  - unless !@user&.avatar_url&.present?
+    img.circle.responsive-img src="#{fs_avatar_link @user.avatar_url, h: 65, w: 65, f: :crop}"
+  - else
+    = class_icon "user", icon_options: "medium"
+  span.text
+    | &nbsp;
+    = @user.full_name.titleize
+  .pull-right
+    = link_to edit_admin_user_path(@user), class: "btn btn-flat" do
+      i.material-icons edit
+      '  Edit
+
+== render partial: 'users/form',
+            locals: { admin: true, back_path: admin_users_path,
+              form_path: edit_admin_user_path(@user),
+              readonly: true,
+              edit_path: edit_admin_user_path(@user) \
+            }

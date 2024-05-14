@@ -1,0 +1,18 @@
+mutation runVendor1099Report($start_date: String, $end_date: String) {
+  createVendor1099Report(start_date: $start_date, end_date: $end_date) {
+    valid
+    persisted
+    pdfUrl
+    xlsxUrl
+    organizationName
+    startDate
+    endDate
+    vendors {
+      name
+      address
+      ssnEin
+      type
+      yearAmount
+    }
+  }
+}

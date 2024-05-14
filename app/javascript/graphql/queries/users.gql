@@ -1,0 +1,44 @@
+query users(
+  $name: String
+  $email: String
+  $admin: Boolean
+  $archived: Boolean
+  $role: String
+  $organization_id: ID
+  $type: String
+) {
+  users: adminUsers(
+    name: $name
+    email: $email
+    admin: $admin
+    archived: $archived
+    role: $role
+    organization_id: $organization_id
+    type: $type
+  ) {
+    id
+    slug
+    firstName
+    lastName
+    fullName
+    initials
+    email
+    avatarUrl
+    backOffice
+    admin
+    archived
+    url
+    editUrl
+    organizationAssignments {
+      id
+      organizationId
+      role
+      type
+    }
+    permissions {
+      edit
+      view
+      delete
+    }
+  }
+}

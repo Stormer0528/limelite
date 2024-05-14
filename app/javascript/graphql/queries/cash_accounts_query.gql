@@ -1,0 +1,7 @@
+{
+  cashAccounts {
+    id
+    name
+    code
+  }
+}

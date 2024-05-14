@@ -1,0 +1,23 @@
+= content_for :page_title
+  '&nbsp; :: Credit Cards > #{@credit_card.name} > Edit
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "credit_card", icon_options: "medium"
+    span.text
+      = link_to credit_cards_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Credit Cards
+      '
+      = link_to credit_card_path(@credit_card), class: "breadcrumb" do
+        span.link-text
+          = @credit_card.name
+      '
+      span.breadcrumb
+        '
+        ' Edit
+
+
+== render partial: 'form', locals: { \
+  back_path: credit_card_path(@credit_card),
+  delete_path: credit_cards_path }

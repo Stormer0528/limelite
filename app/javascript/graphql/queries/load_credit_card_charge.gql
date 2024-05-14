@@ -1,0 +1,101 @@
+query loadCreditCardCharge($creditCardSlug: String!, $chargeId: ID!) {
+  charge: creditCardCharge(
+    creditCardSlug: $creditCardSlug
+    chargeId: $chargeId
+  ) {
+    id
+    aasmState
+    amountInCents
+    amount
+    creditCardId
+    creatorId
+    date
+    number
+    fileUrl
+    memo
+
+    entry {
+      id
+      organizationId
+      entryType
+      date
+      aasmState
+      entryItems {
+        id
+        accountId
+        accountName
+        amount
+        debit
+        credit
+        type
+        memo
+        payableName
+        payableType
+        payableId
+        functionCode
+        fundCode
+        goalCode
+        locationCode
+        objectCode
+        resourceCode
+        yearCode
+        valid
+      }
+    }
+
+    permissions {
+      create
+      edit
+      view
+      show
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+
+    approvedAt
+    approver
+
+    stateChangeLogs {
+      loggableType
+      fromState
+      toState
+      createdAt
+      reason
+      user {
+        fullName
+      }
+    }
+  }
+
+  creditCard(slug: $creditCardSlug) {
+    id
+    path
+    startedAt
+    endedAt
+    balance
+    number
+    name
+    slug
+    number
+    description
+    startedAt
+    endedAt
+    pseudo
+    lastStatementBalance
+
+    permissions {
+      view
+      edit
+    }
+  }
+
+  creditCards {
+    name
+    slug
+  }
+}

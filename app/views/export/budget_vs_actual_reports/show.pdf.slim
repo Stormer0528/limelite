@@ -1,0 +1,169 @@
+#profit_and_loss_statement
+  table.header
+    tbody
+      tr
+        td style="width: 25%"
+          p Fiscal Year: #{@report.end_date&.year}
+          p Report Date: #{Date.today.to_formatted_s(:std)}
+        td
+          h1.title = @current_org.name
+          h2.subtitle style="font-weight: bold" #{@report.subtitle}
+          h3.subsubtitle style="font-weight: bold" From #{@report.start_date&.to_formatted_s(:std)} To #{@report.end_date&.to_formatted_s(:std)}
+        td style="width: 25%"
+  table.report-table.condensed
+    thead
+      tr
+        th colspan="2" Fund / Resource
+
+        - filter_string = @report.account_search_params.map {|k,v| next if !v&.present?; "#{k.gsub(/_code/, '').titleize}: #{v.join(", ")}" }.compact.join(", ")
+        th colspan="#{@report.colspan_width - 2}" #{filter_string}
+      tr
+        th.spacer &nbsp;
+        th Object
+        th Description
+        - @report.data["account_funds"].each do |fund|
+          th.account-balance-cell #{fund["code"]}
+        th.account-balance-cell Balance
+        th.account-balance-cell Budget
+        th.account-balance-cell $ Variance
+        th.account-balance-cell % Variance
+    tbody
+      tr.fund-row
+        td colspan="#{@report.colspan_width}" REVENUES
+      - @report.data["revenue"].each do |account_range, acc_obj|
+        - acc_obj["accounts"].select{|a| a["balance"] != "$0.00" && a["budget"] != "$0.00" }.each do |account|
+          tr
+            td.spacer
+            td.account-code-cell #{account["code"]}
+            td.account-name-cell #{account["name"]}
+            - account["account_funds"].values.each do |fund_balance|
+              td.account-balance-cell #{fund_balance}
+            td.account-balance-cell #{account["balance"]}
+            td.account-balance-cell #{account["budget"]}
+            td.account-balance-cell #{account["dollar_variance"]}
+            td.account-balance-cell #{account["percentage_variance"].to_f.round(2)}%
+
+          / Undlerlying Accounts
+          - account["accounts"].each do |acc|
+            tr
+              td
+              td
+              td = acc["number"]
+
+              - account["account_funds"].values.each do |fund_balance|
+                td
+
+              td.account-balance-cell = acc["balance"]
+              td.account-balance-cell = acc["budget"]
+              td.account-balance-cell = acc["variance"]
+              td.account-balance-cell #{acc["percentage"]}%
+
+        tr.total-row
+          td.spacer
+          td #{account_range}
+          td #{acc_obj["title"]}
+          - acc_obj["funds_balances"].values.each do |balance|
+            td.account-balance-cell #{balance}
+          td.account-balance-cell
+            = acc_obj["total_balance"]
+          td.account-balance-cell
+            = acc_obj["total_budget"]
+          td.account-balance-cell
+            = acc_obj["total_account_balance"]
+          td.account-balance-cell
+            = acc_obj["total_account_percentage"].to_f.round(2)
+            |%
+      tr.total-total-row
+        td.spacer
+        td colspan="2"
+          b = "Total Revenue".titleize
+        - @report.data["revenue_range_totals"].values.each do |bal|
+          td.account-balance-cell
+            b = bal
+        td.account-balance-cell
+          b = @report.data["revenue_total"]
+        td.account-balance-cell
+          b = @report.data["revenue_budget_total"]
+        td.account-balance-cell
+          b = @report.data["revenue_account_balance_total"]
+        td.account-balance-cell
+          b
+            = @report.data["revenue_account_balance_percentage"]&.to_f&.round(2)
+            |%
+      / Expenditures
+      tr.fund-row
+        td colspan="#{@report.colspan_width}"s EXPENDITURES
+      - @report.data["expenditures"].each do |account_range, acc_obj|
+        - acc_obj["accounts"].select{|a| a["balance"] != "$0.00" && a["budget"] != "$0.00" }.each do |account|
+          tr
+            td.spacer
+            td.account-code-cell #{account["code"]}
+            td.account-name-cell #{account["name"]}
+            - account["account_funds"].values.each do |fund_balance|
+              td.account-balance-cell #{fund_balance}
+            td.account-balance-cell #{account["balance"]}
+            td.account-balance-cell #{account["budget"]}
+            td.account-balance-cell #{account["dollar_variance"]}
+            td.account-balance-cell #{account["percentage_variance"].to_f.round(2)}%
+
+            / Undlerlying Accounts
+            - account["accounts"].each do |acc|
+              tr
+                td
+                td
+                td = acc["number"]
+
+                - account["account_funds"].values.each do |fund_balance|
+                  td
+
+                td.account-balance-cell = acc["balance"]
+                td.account-balance-cell = acc["budget"]
+                td.account-balance-cell = acc["variance"]
+                td.account-balance-cell #{acc["percentage"]}%
+
+        tr.total-row
+          td.spacer
+          td #{account_range}
+          td #{acc_obj["title"]}
+          - acc_obj["funds_balances"].values.each do |balance|
+            td.account-balance-cell #{balance}
+          td.account-balance-cell
+            = acc_obj["total_balance"]
+          td.account-balance-cell
+            = acc_obj["total_budget"]
+          td.account-balance-cell
+            = acc_obj["total_account_balance"]
+          td.account-balance-cell
+            = acc_obj["total_account_percentage"]&.to_f&.round(2)
+            |%
+      tr.total-total-row
+        td.spacer
+        td colspan="2"
+          b = "Total Expenses".titleize
+        - @report.data["expenditures_range_totals"].values.each do |bal|
+          td.account-balance-cell
+            b = bal
+        td.account-balance-cell
+          b = @report.data["expenditures_total"]
+        td.account-balance-cell
+          b = @report.data["expenditures_budget_total"]
+        td.account-balance-cell
+          b = @report.data["expenditures_account_balance_total"]
+        td.account-balance-cell
+          b
+            = @report.data["expenditures_account_balance_percentage"]&.to_f&.round(2)
+            |%
+      tr.total-total-row
+        td.spacer
+        td colspan="2"
+          b = "EXCESS (DEFICIENCY) OF REVENUES OVER EXPENSES".titleize
+        - @report.data["excess_revenues_totals"].values.each do |bal|
+          td.account-balance-cell
+            b = bal
+        td.account-balance-cell
+          b = @report.data["excess_revenues"]
+        td.account-balance-cell
+          b = @report.data["excess_revenues_budget"]
+        td.account-balance-cell
+          b = @report.data["excess_revenues_account_balance"]
+        td.account-balance-cell

@@ -1,0 +1,126 @@
+
+#profit_and_loss_statement
+  table.header
+    tbody
+      tr
+        td style="width: 25%"
+          p Fiscal Year: #{@report.end_date&.year}
+          p Report Date: #{Date.today.to_formatted_s(:std)}
+        td
+          h1.title = @current_org['name']
+          h2.subtitle style="font-weight: bold;" Financial Summary for Period Ending:&nbsp;#{@report.end_date&.to_formatted_s(:std)}
+
+          - filter_string = (@report.account_search_params || []).map {|k,v| next if !v&.present?; "#{k.gsub(/_code/, '').titleize}: #{v.join(", ")}" }.compact.join(", ")
+          h3.subsubtitle style="font-weight: bold;" #{filter_string}
+
+        td style="width: 25%"
+
+  table.report-table.condensed
+    thead
+      tr
+        th.spacer
+        th
+        th
+        th style="border-bottom: 2px solid black; text-align: right"
+    tbody
+      / ASSETS
+      tr.total-row
+        - @report.titles.each_with_index do |title, i|
+          - if i > 0
+            th.account-balance-cell #{title}
+          - else
+            td colspan="3" Assets
+
+      - @report.data["assets"].select{|a| a["current_balance"] != "$0.00" || a["before_balance"] != "$0.00" }.each do |acc_obj|
+        tr
+          td.spacer
+          td.account-code-cell
+            b #{acc_obj["code"]}
+          td.account-name-cell #{acc_obj["name"]}
+          td.account-balance-cell = acc_obj["current_balance"]
+          td.account-balance-cell = acc_obj["before_balance"]
+          td.account-balance-cell #{get_changes_price(acc_obj["current_balance"], acc_obj["before_balance"])}
+          td.account-balance-cell #{get_changes_percentage(acc_obj["current_balance"], acc_obj["before_balance"])}
+      tr.total-row
+        td colspan="3" Total Assets
+        td.account-balance-cell
+          = @report.data["total_assets"]["current_balance"]
+        td.account-balance-cell
+          = @report.data["total_assets"]["before_balance"]
+        td.account-balance-cell
+          = get_changes_price(@report.data["total_assets"]["current_balance"], @report.data["total_assets"]["before_balance"])
+        td.account-balance-cell
+          = get_changes_percentage(@report.data["total_assets"]["current_balance"], @report.data["total_assets"]["before_balance"])
+
+      / LIABILITIES
+      tr.total-row
+        - @report.titles.each_with_index do |title, i|
+          - if i > 0
+            th.account-balance-cell #{title}
+          - else
+            td colspan="3" Liabilities
+      - @report.data["liabilities"].select{|a| a["current_balance"] != "$0.00" || a["before_balance"] != "$0.00" }.each do |acc_obj|
+        tr
+          td.spacer
+          td.account-code-cell
+            b #{acc_obj['code']}
+          td.account-name-cell #{acc_obj['name']}
+          td.account-balance-cell = acc_obj['current_balance']
+          td.account-balance-cell = acc_obj['before_balance']
+          td.account-balance-cell = get_changes_price(acc_obj['current_balance'], acc_obj['before_balance'])
+          td.account-balance-cell = get_changes_percentage(acc_obj['current_balance'], acc_obj['before_balance'])
+      tr.total-row
+        td colspan="3" Total Liabilities
+        td.account-balance-cell
+          = @report.data["total_liabilities"]["current_balance"]
+        td.account-balance-cell
+          = @report.data["total_liabilities"]["before_balance"]
+        td.account-balance-cell
+          = get_changes_price(@report.data["total_liabilities"]["current_balance"], @report.data["total_liabilities"]["before_balance"])
+        td.account-balance-cell
+          = get_changes_percentage(@report.data["total_liabilities"]["current_balance"], @report.data["total_liabilities"]["before_balance"])
+
+
+      / EQUITIES
+      tr.total-row
+        - @report.titles.each_with_index do |title, i|
+          - if i > 0
+            th.account-balance-cell #{title}
+          - else
+            td colspan="3" Equity
+      - @report.data["equities"].select{|a| a["current_balance"] != "$0.00" || a["before_balance"] != "$0.00" }.each do |acc_obj|
+        tr
+          td.spacer
+          td.account-code-cell
+            b #{acc_obj['code']}
+          td.account-name-cell #{acc_obj['name']}
+          td.account-balance-cell = acc_obj['current_balance']
+          td.account-balance-cell = acc_obj['before_balance']
+          td.account-balance-cell = get_changes_price(acc_obj['current_balance'], acc_obj['before_balance'])
+          td.account-balance-cell = get_changes_percentage(acc_obj['current_balance'], acc_obj['before_balance'])
+      tr
+        td.spacer
+        td.account-code-cell
+        td.account-name-cell Net Income (Loss)
+        td.account-balance-cell = @report.data['net_income_loss']['current_balance']
+        td.account-balance-cell = @report.data['net_income_loss']['before_balance']
+        td.account-balance-cell = get_changes_price(@report.data['net_income_loss']['current_balance'], @report.data['net_income_loss']['before_balance'])
+        td.account-balance-cell = get_changes_percentage(@report.data['net_income_loss']['current_balance'], @report.data['net_income_loss']['before_balance'])
+      tr.total-row
+        td colspan="3" Total Equity
+        td.account-balance-cell = @report.data['equity_balance']['current_balance']
+        td.account-balance-cell = @report.data['equity_balance']['before_balance']
+        td.account-balance-cell = get_changes_price(@report.data['equity_balance']['current_balance'], @report.data['equity_balance']['before_balance'])
+        td.account-balance-cell = get_changes_percentage(@report.data['equity_balance']['current_balance'], @report.data['equity_balance']['before_balance'])
+
+      / YTD Balance
+      tr.total-row
+        td colspan="3" Total Liabilities and Equity
+        td.account-balance-cell style="border-bottom: 3px double black"
+          = @report.data["net_fund_balance"]["current_balance"]
+        td.account-balance-cell style="border-bottom: 3px double black"
+          = @report.data["net_fund_balance"]["before_balance"]
+        td.account-balance-cell style="border-bottom: 3px double black"
+          = get_changes_price(@report.data['net_fund_balance']['current_balance'], @report.data['net_fund_balance']['before_balance'])
+        td.account-balance-cell style="border-bottom: 3px double black"
+          = get_changes_percentage(@report.data['net_fund_balance']['current_balance'], @report.data['net_fund_balance']['before_balance'])

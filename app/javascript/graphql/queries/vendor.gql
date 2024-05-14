@@ -1,0 +1,106 @@
+query vendor($slug: String!) {
+  vendor: vendorBySlug(slug: $slug) {
+    id
+    slug
+    name
+    company
+    active
+    aasmState
+    accountNumber
+    editPath
+    displayName
+    path
+    notes
+    paymentTerms
+    visibleId
+    approvedAt
+    approver
+    homePhoneNumber
+    mobilePhoneNumber
+    workPhoneNumber
+    faxPhoneNumber
+    startingBalance
+    startDate
+    endDate
+    addresses {
+      name
+      line1
+      line2
+      zip
+      city
+      state
+      attention
+      department
+    }
+    currentTenNinetyNine {
+      einType
+      ein
+      required
+      year
+      updatedAt
+      fileUrl
+      address {
+        name
+        line1
+        line2
+        zip
+        city
+        state
+        attention
+        department
+      }
+    }
+    tenNinetyNines {
+      id
+      addressId
+      einType
+      ein
+      required
+      year
+      fileUrl
+      updatedAt
+      address {
+        name
+        line1
+        line2
+        zip
+        city
+        state
+        attention
+        department
+      }
+    }
+
+    permissions {
+      index
+      create
+      edit
+      view
+      show
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+    stateChangeLogs {
+      loggableType
+      fromState
+      toState
+      createdAt
+      reason
+      user {
+        fullName
+      }
+    }
+  }
+  filestack {
+    clientName
+    security {
+      signature
+      policy
+    }
+  }
+}

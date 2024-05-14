@@ -1,0 +1,33 @@
+div.btn-group style="display: flex; flex-wrap: nowrap; align-items: center;"
+  - case @invoice.aasm_state.to_s
+    - when "draft"
+      - if !local_assigns[:hide_draft]
+        = f.button :submit, value: "Save Draft", class: "btn btn-flat draft"
+        .separator &nbsp;
+
+      = f.button :submit, value: "Send For Approval", class: "btn btn-flat approval"
+
+    - when "needs_revision"
+      - if !local_assigns[:hide_draft]
+        = f.button :submit, value: "Save Draft", class: "btn btn-flat draft"
+        .separator &nbsp;
+      = f.button :submit, value: "Send For Approval", class: "btn btn-flat approval"
+
+    - when "needs_approval"
+      = f.button :submit, value: "Approve", class: "btn btn-flat approval"
+      .separator &nbsp;
+      = render partial: "shared/denial_btn", locals: {f:f}
+
+    - when "ready_to_pay"
+      = f.button :submit, value: "Send For Payment Approval", class: "btn btn-flat approval"
+
+    - when "needs_payment_approval"
+      = f.button :submit, value: "Approve Payment", class: "btn btn-flat approval"
+      .separator &nbsp;
+      = render partial: "shared/denial_btn", locals: {f:f, btn_text: "Deny Payment"}
+
+    - when "payment_reviewed"
+      = f.button :submit, value: "Approve Signatures", class: "btn btn-flat green-text"
+
+    - when "paid"
+      b.green-text Payment Finalized on #{@invoice.state_change_logs.order(created_at: :desc).first&.updated_at&.to_formatted_s(:long)}

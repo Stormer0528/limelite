@@ -1,0 +1,29 @@
+query statements(
+  $slug: String
+  $statementableType: String
+  $endingBefore: String
+  $endingAfter: String
+) {
+  statementSearch(
+    statementable_slug: $slug
+    statementable_type: $statementableType
+    ending_before: $endingBefore
+    ending_after: $endingAfter
+  ) {
+    id
+    startedAt
+    endedAt
+    adjustmentAmount
+    creatorName
+    approverName
+    approved
+    endingBalance
+    path
+    editPath
+    permissions {
+      show
+      edit
+      delete
+    }
+  }
+}

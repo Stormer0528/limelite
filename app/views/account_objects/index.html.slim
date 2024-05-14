@@ -1,0 +1,46 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Objects", icon_options: "medium"
+    | Objects
+
+h2.page-header
+  = class_icon "Objects", icon_options: "medium"
+  | Objects
+
+.card
+  .card-content
+    table.responsive-table.bordered
+      thead
+        tr
+          th Code
+          th Rollup
+          th Name
+          th Cash Account
+          th Object Type
+          th Normal Balance
+          th Actions
+
+      tbody
+        - @account_objects.each do |account_object|
+          tr
+            td = account_object.code
+            td = account_object.rollup
+            td = account_object.name
+
+            td.center-align
+              - if account_object.cash_account?
+                i.material-icons check_box
+              - else
+                i.material-icons check_box_outline_blank
+            td.center-align = account_object.object_type
+            td.center-align = account_object.normal_balance
+            td
+              = render partial: "shared/view_links", locals: { \
+                show_path: account_object,
+                hide_show: true,
+                edit_path: edit_account_object_path(account_object) }
+
+/ Add Btn
+.fixed-action-btn
+  = link_to new_account_object_path, class: "btn-floating btn-large green lighten-1" do
+    i class="material-icons large" add

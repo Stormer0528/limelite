@@ -1,0 +1,5 @@
+mutation destroyCheck($id: ID!) {
+  destroyCheck(id: $id) {
+    id
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "AccountElementInterface",
+        "possibleTypes": [
+          {
+            "name": "AccountBalanceObjectType"
+          },
+          {
+            "name": "AccountFunction"
+          },
+          {
+            "name": "AccountFund"
+          },
+          {
+            "name": "AccountGoal"
+          },
+          {
+            "name": "AccountLocation"
+          },
+          {
+            "name": "AccountObject"
+          },
+          {
+            "name": "AccountResource"
+          },
+          {
+            "name": "AccountYear"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "AccountSearchableInterface",
+        "possibleTypes": [
+          {
+            "name": "BalanceSheet"
+          },
+          {
+            "name": "BudgetVsActualReport"
+          },
+          {
+            "name": "CashFlowReport"
+          },
+          {
+            "name": "MonthlyCashFlowReport"
+          },
+          {
+            "name": "MonthlyProfitAndLossStatement"
+          },
+          {
+            "name": "ProfitAndLossByResourceReport"
+          },
+          {
+            "name": "ProfitAndLossStatement"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "BankItem",
+        "possibleTypes": [
+          {
+            "name": "Check"
+          },
+          {
+            "name": "Deposit"
+          },
+          {
+            "name": "AccountTransfer"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "BankItemInterface",
+        "possibleTypes": [
+          {
+            "name": "AccountTransfer"
+          },
+          {
+            "name": "Check"
+          },
+          {
+            "name": "Deposit"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "CreditCardItemInterface",
+        "possibleTypes": [
+          {
+            "name": "CreditCardCharge"
+          },
+          {
+            "name": "CreditCardPayment"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "InvoiceableUnion",
+        "possibleTypes": [
+          {
+            "name": "Customer"
+          },
+          {
+            "name": "Vendor"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "JournalableUnion",
+        "possibleTypes": [
+          {
+            "name": "Invoice"
+          },
+          {
+            "name": "Payment"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "PayableInterface",
+        "possibleTypes": [
+          {
+            "name": "Customer"
+          },
+          {
+            "name": "Vendor"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "Reconcilable",
+        "possibleTypes": [
+          {
+            "name": "CreditCard"
+          },
+          {
+            "name": "BankAccount"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "ReconcilableItem",
+        "possibleTypes": [
+          {
+            "name": "CreditCardCharge"
+          },
+          {
+            "name": "CreditCardPayment"
+          },
+          {
+            "name": "Deposit"
+          },
+          {
+            "name": "Check"
+          },
+          {
+            "name": "AccountTransfer"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "ReportInterface",
+        "possibleTypes": [
+          {
+            "name": "ApAgingReport"
+          },
+          {
+            "name": "ArAgingReport"
+          },
+          {
+            "name": "BalanceSheet"
+          },
+          {
+            "name": "BudgetVsActualReport"
+          },
+          {
+            "name": "CashFlowReport"
+          },
+          {
+            "name": "CashFlowReportReport"
+          },
+          {
+            "name": "MonthlyCashFlowReport"
+          },
+          {
+            "name": "MonthlyProfitAndLossStatement"
+          },
+          {
+            "name": "ProfitAndLossByResourceReport"
+          },
+          {
+            "name": "ProfitAndLossStatement"
+          },
+          {
+            "name": "Vendor1099Report"
+          },
+          {
+            "name": "Vendor1099ReportItem"
+          },
+          {
+            "name": "VendorReport"
+          },
+          {
+            "name": "VendorReportItem"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "StatementItem",
+        "possibleTypes": [
+          {
+            "name": "Check"
+          },
+          {
+            "name": "Deposit"
+          },
+          {
+            "name": "AccountTransfer"
+          },
+          {
+            "name": "CreditCardCharge"
+          },
+          {
+            "name": "CreditCardPayment"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "Statementable",
+        "possibleTypes": [
+          {
+            "name": "BankAccount"
+          },
+          {
+            "name": "CreditCard"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "ValidatableInterface",
+        "possibleTypes": [
+          {
+            "name": "Account"
+          },
+          {
+            "name": "AccountTransfer"
+          },
+          {
+            "name": "ApAgingReport"
+          },
+          {
+            "name": "ArAgingReport"
+          },
+          {
+            "name": "BalanceSheet"
+          },
+          {
+            "name": "BudgetVsActualReport"
+          },
+          {
+            "name": "CashFlowReport"
+          },
+          {
+            "name": "CashFlowReportReport"
+          },
+          {
+            "name": "Check"
+          },
+          {
+            "name": "Deposit"
+          },
+          {
+            "name": "Entry"
+          },
+          {
+            "name": "EntryItem"
+          },
+          {
+            "name": "MonthlyCashFlowReport"
+          },
+          {
+            "name": "MonthlyProfitAndLossStatement"
+          },
+          {
+            "name": "ProfitAndLossByResourceReport"
+          },
+          {
+            "name": "ProfitAndLossStatement"
+          },
+          {
+            "name": "PurchaseOrder"
+          },
+          {
+            "name": "Vendor1099Report"
+          },
+          {
+            "name": "Vendor1099ReportItem"
+          },
+          {
+            "name": "VendorReport"
+          },
+          {
+            "name": "VendorReportItem"
+          }
+        ]
+      }
+    ]
+  }
+}

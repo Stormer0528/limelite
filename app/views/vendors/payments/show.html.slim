@@ -1,0 +1,196 @@
+scss:
+  .card .card-content .card-title i {
+    line-height: 32px;
+    position: relative;
+    top: 4px;
+    left: -0.25rem;
+  }
+
+  .card .card-content .card-title .btn.waves-effect.waves-light.btn-flat.grey-text.icon-btn i.material-icons {
+    position: relative;
+    top: 0;
+  }
+
+- content_for :header_content do
+  h2.page-header
+    span.text
+      = link_to vendors_path(@vendor), class: "breadcrumb primary" do
+        = class_icon "vendor", icon_options: "large"
+
+      = link_to vendor_path(@vendor), class: "breadcrumb" do
+        span.link-text
+          = @vendor.name
+      '
+      = link_to vendor_invoice_path(@vendor, @invoice), class: "breadcrumb" do
+        span.link-text
+          b Invoice:&nbsp;
+          '
+          = @invoice.number
+      span.breadcrumb style="display: flex; align-items: center;"
+        = class_icon "payment", icon_options: "tiny"
+        | &nbsp;
+        b Payment:&nbsp;
+        '
+        = @payment.id
+
+h5.page-header
+  .pull-right.right-align
+    - if @invoice
+      = link_to vendor_invoice_path(@vendor, @invoice),
+                class: "waves-effect waves-teal btn-flat" do
+        i.material-icons.medium list
+        '  Invoice
+    - if @payment.purchase_order
+      '  |
+      = link_to vendor_purchase_order_path(@vendor, @payment.purchase_order),
+                class: "waves-effect waves-teal btn-flat" do
+        i.medium.material-icons assignment
+        '  Purchase Order
+    '  |
+    = link_to vendor_invoice_path(@vendor, @invoice, anchor: :payments),
+              class: "waves-effect waves-teal btn-flat" do
+      i.medium.material-icons payment
+      '  Payments
+    '  |
+
+.divider
+
+ul.collapsible data-collapsible="expandable"
+  li#payment-breakdown-section.active
+    .collapsible-header.active
+      h5.page-header
+        i.medium.material-icons style="top: 4px; left: 0.5rem;" payment
+        '  Payment
+        span.separator style="display:inline-block; width: 1.5rem;"
+
+        span.right-align.pull-right
+          b Total Paid:
+          span.date
+            '
+            = number_to_currency @payment.total_amount, precision: 2
+
+    .collapsible-body
+      .row
+        .col.s3
+          b Date:
+          '
+          = @payment&.date&.to_formatted_s(:std)
+
+        - if @payment.check
+          .col.s3
+            = link_to bank_account_check_path(@payment.check.bank_account, @payment.check),
+                      class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn'  do
+              i.material-icons style="position:relative; top: 0; left: -0.25rem" check_circle
+              ' View Check
+
+        .col.s2.offset-s2.right-align
+          b Amount:
+        .col.s2
+          = number_to_currency @payment.amount, precision: 2
+      .row
+        .col.s2.offset-s8.right-align
+          b Shipping:
+        .col.s2
+          = number_to_currency @payment.shipping_amount, precision: 2
+
+      .row
+        .col.s2.offset-s8.right-align
+          b Tax:
+        .col.s2
+          = number_to_currency @payment.tax_amount, precision: 2
+      .row
+        .divider
+      .row
+        - if @payment.final_pay
+          .col.s4
+            = disabled_checkbox 'Final Payment', @payment.final_pay
+
+        .col.s2.offset-s8.right-align
+          b Total Paid:
+        .col.s2
+          = number_to_currency @payment.total_amount, precision: 2
+
+  - if @payment.purchase_order
+    li#purchase-order-section
+      .collapsible-header
+        = class_icon :purchase_order
+        b Purchase Order:
+        '  &nbsp;
+        = link_to @payment.purchase_order_number, vendor_purchase_order_path(@vendor, @payment.purchase_order)
+      .collapsible-body
+        .row
+          .col.s6
+            b PO #
+            '
+            = link_to @payment.purchase_order_number, vendor_purchase_order_path(@vendor, @payment.purchase_order)
+
+/ Fixed Action Button
+/ .fixed-action-btn
+/     = link_to new_vendor_invoice_payment_path(@vendor, @invoice), class: "btn-floating btn-large green" do
+/       i.large.material-icons tooltip="add" add
+
+.card.entry-show
+  .card-content
+    span.card-title
+      i class="material-icons" style="position: relative; top: 4px" receipt
+      | Entry
+      .pull-right
+        = link_to @payment.entry_item.entry,
+            class: 'btn waves-effect waves-light btn-flat grey-text icon-btn'  do
+          i.material-icons find_in_page
+          ' View Entry
+
+    = render partial: "entry", locals: {entry: @payment.entry_item.entry}
+
+- if @payment.invoice
+  .card.invoice-show
+    .card-content
+      span.card-title
+        = class_icon "Invoice"
+        | Invoice
+        .pull-right
+          = link_to @payment.vendor,
+              class: 'btn waves-effect waves-light btn-flat grey-text icon-btn'  do
+            i.material-icons find_in_page
+            ' View Invoice
+      .spacer
+      .row
+        .col.s6
+          b Invoice #
+          '
+          = link_to @invoice.number, vendor_invoice_path(@vendor, @invoice)
+        .col.s6
+          b Invoice Total:
+          '
+          = number_to_currency @invoice.amount, precision: 2
+      .row
+        .col.s6
+          b Invoice Date
+          '
+          = @invoice.date&.to_formatted_s(:std)
+        .col.s6
+        b Due Date
+        '
+        = @invoice.due_date&.to_formatted_s(:std)
+
+- if @payment.vendor
+  .card.vendor-show
+    .card-content
+      span.card-title
+        = class_icon "Vendor"
+        | Vendor
+        .pull-right
+          = link_to @payment.vendor,
+              class: 'btn waves-effect waves-light btn-flat grey-text icon-btn'  do
+            i.material-icons find_in_page
+            ' View Vendor
+      .spacer
+      .row
+        .col.s6
+          b Vendor:
+          '  #{"  "}
+          = link_to @vendor.name, vendor_path(@vendor)
+        .col.s6
+          b Vendor ID:
+          '  #{"  "}
+          = @vendor.visible_id

@@ -1,0 +1,27 @@
+.card.nested-fields
+  .card-content
+    span.card-title
+      .pull-right
+        = link_to_remove_association f, class: 'btn waves-effect waves-light btn-flat red-text icon-btn' do
+          i.material-icons.medium cancel
+    .row
+      .col.s12
+        = f.input :name, label: "Address Name"
+    .row
+      .col.s6
+        = f.input :attention
+      .col.s6
+        = f.input :department
+    .row
+      .col.s12
+        = f.input :line1, label: "Line 1"
+    .row
+      .col.s12
+        = f.input :line2, label: "Line 2"
+    .row
+      .col.s6
+        = f.input :city
+      .col.s2
+        = f.input :state
+      .col.s3
+        = f.input :zip

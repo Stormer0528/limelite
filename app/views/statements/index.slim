@@ -1,0 +1,45 @@
+- content_for :bottom_javascript do
+  = javascript_pack_tag 'render_bank_account_page', defer: true, charset: 'utf-8'
+
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+    #statements_index  {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ReactVirtualized__Table__row:last-child {
+      border-bottom: 1px solid #eee !important;
+      padding-bottom: 2px;
+    }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "statement", icon_options: "medium"
+    span.text
+      '  Reconciliations
+
+#statements_index data-fiscal-year="#{@fiscal_year.year}"

@@ -1,0 +1,7 @@
+mutation updateFundUsers($accountFundId: ID!, $userIds: [ID]!, $organizationId: ID!) {
+  updateFundUsers(accountFundId: $accountFundId, userIds: $userIds, organizationId: $organizationId) {
+    name
+    id
+    code
+  }
+}

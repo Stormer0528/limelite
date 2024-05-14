@@ -1,0 +1,37 @@
+- content_for :header_content do
+  h2.page-header
+    i.material-icons.medium printer_setting
+    span.text
+      '  Printer Settings
+
+.card
+  .card-content
+    table.table.bordered.highlight
+      thead
+        tr
+          th Name
+          th Type
+          th
+
+      tbody
+        - @printer_settings.each do |printer_setting|
+          tr
+            td = link_to printer_setting.name, printer_setting
+            td = printer_setting.printer_type
+            td.actions style="width: 10em"
+              .btn-group
+                = link_to printer_setting,
+                          class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn'  do
+                  i.material-icons find_in_page
+                = link_to edit_printer_setting_path(printer_setting),
+                          class: 'btn waves-effect waves-light btn-flat green-text icon-btn' do
+                  i.material-icons edit
+                = link_to printer_setting,
+                          class: 'btn waves-effect waves-light btn-flat red-text icon-btn',
+                          data: { confirm: 'Are you sure?' }, method: :delete do
+                  i.material-icons delete
+
+/ Add Btn
+.fixed-action-btn
+  = link_to new_printer_setting_path, class: "btn-floating btn-large green lighten-1" do
+    i class="material-icons large" add

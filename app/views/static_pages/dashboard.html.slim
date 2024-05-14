@@ -1,0 +1,40 @@
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+    #top-navbar { position: static !important; }
+
+    main {
+      padding-top: 8px
+    }
+
+    #dashboard, #dashboard > div {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+  = javascript_pack_tag 'render_dashboard', defer: true, charset: 'utf-8'
+  = stylesheet_link_tag    "react-vis", media: "all"
+
+#dashboard

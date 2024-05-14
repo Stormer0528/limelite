@@ -1,0 +1,179 @@
+/*
+*= require chartist/dist/chartist
+*= require chartist-plugin-tooltips/dist/chartist-plugin-tooltip
+*/
+
+// Front Page
+.title.card {
+  .card-title {
+    a {
+      display: flex;
+      align-items: center;
+      color: #607d8b;
+
+      i.material-icons {
+        display: inline-block;
+        margin-right: 0.75rem;
+      }
+    }
+  }
+
+  ul.collapsible.collapsible-accordion {
+    background: white;
+    margin-bottom: 0;
+    border-radius: 0 0 3px 3px;
+
+    li a.collapsible-header {
+      padding: 1em 0.5em 0;
+      display: block;
+
+      &.active {
+        background-color: #00897b;
+        color: white !important;
+        transition: background-color 0.125s linear;
+      }
+    }
+    .collapsible-body {
+      padding: 15px 0 0;
+
+      .link-row {
+        margin: -1.125em 0 -0.5rem;
+        padding: 0.5em;
+        background: #b2dfdb;
+        border-bottom: 1px solid #b0bec5;
+        box-shadow: 0 0 12.5px -5px #004d40 inset;
+
+        .btn:hover,
+        .btn-large:hover {
+          background-color: #4db6ac;
+        }
+      }
+    }
+  }
+
+  .chart-container {
+    margin-right: -1em;
+    margin-left: -0.5em;
+    width: 100%;
+    width: calc(100% + 1em);
+    position: relative;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABXgAAAAYCAYAAABAx5XKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAt1JREFUeNrs2LFNA0EQBdCdqYASKMEt0IGdIgJcAiVQAaICHJwupgMowaVQAnvITvAdcniD3kq7ydztPulnP9q0xuGtn9u+79r9w7H9XuOw6edH3099fpiZ35zmxz7ft7k1Do/9fLnijfc/7picm9MdXwtvTN/sOTk5OTk5OTk5OTk5OTk5OTk5OTn/uzOUu5ycnJycnJycnJycnJycnJycnJycNZ2p3OXk5OTk5OTk5OTk5OTk5OTk5OTkrOlM5S4nJycnJycnJycnJycnJycnJycnZ01nLFyq3OXk5OTk5OTk5OTk5OTk5OTk5OTkXLNztuBV7nJycnJycnJycnJycnJycnJycnJyrr7cvSx4lbucnJycnJycnJycnJycnJycnJycnFWcr6nc5eTk5OTk5OTk5OTk5OTk5OTk5OQs6TyEcpeTk5OTk5OTk5OTk5OTk5OTk5OTs6YzlLucnJycnJycnJycnJycnJycnJycnDWdqdzl5OTk5OTk5OTk5OTk5OTk5OTk5KzpTOUuJycnJycnJycnJycnJycnJycnJ2dNZyw8KgROTk5OTk5OTk5OTk5OTk5OTk5OzpU7QwicnJycnJycnJycnJycnJycnJycnAWdFwWvEDg5OTk5OTk5OTk5OTk5OTk5OTk5qzhvQwicnJycnJycnJycnJycnJycnJycnDWdIQROTk5OTk5OTk5OTk5OTk5OTk5OzprOEAInJycnJycnJycnJycnJycnJycnZ01nCoGTk5OTk5OTk5OTk5OTk5OTk5OTs6YzhcDJycnJycnJycnJycnJycnJycnJWdMZbWkJgZOTk5OTk5OTk5OTk5OTk5OTk5Nzvc5x2KYQODk5OTk5OTk5OTk5OTk5OTk5OTnLlbs/94cQODk5OTk5OTk5OTk5OTk5OTk5OTlLlbtn4y6FwMnJycnJycnJycnJycnJycnJyclZptw9///cZ5/fAgwASJR+JseP6ZEAAAAASUVORK5CYII=);
+
+    .chart-area {
+      position: relative;
+      width: 100%;
+      height: 16px;
+      // Deposits
+      .ct-series-a .ct-point,
+      .ct-series-a .ct-line,
+      .ct-series-a .ct-bar,
+      .ct-series-a .ct-slice-donut {
+        stroke: #8bc34a;
+      }
+      // Debits
+      .ct-series-b .ct-point,
+      .ct-series-b .ct-line,
+      .ct-series-b .ct-bar,
+      .ct-series-b .ct-slice-donut {
+        stroke: #e53935;
+      }
+      // Transfers
+      .ct-series-c .ct-point,
+      .ct-series-c .ct-line,
+      .ct-series-c .ct-bar,
+      .ct-series-c .ct-slice-donut {
+        stroke: #ffd54f;
+      }
+      // tooltip
+      .chartist-tooltip {
+        font-family: "Roboto", sans-serif;
+        background: #263238;
+        color: #e8f5e9;
+
+        &:before {
+          border-top-color: #263238;
+        }
+
+        .chartist-tooltip-value {
+          font-weight: 300;
+        }
+      }
+    }
+  }
+}
+
+// CUstom colors
+.title.card#bank-accounts {
+  background: #dcedc8;
+  border: 1px solid #a5d6a7;
+
+  span.card-title a {
+    color: #2e7d32;
+  }
+}
+
+.title.card#credit-cards {
+  background: #bbdefb;
+  border: 1px solid #90caf9;
+
+  span.card-title a {
+    color: #0d47a1;
+  }
+
+  ul.collapsible.collapsible-accordion {
+    li a.collapsible-header.active {
+      background-color: #1e88e5;
+    }
+  }
+}
+
+// Vendors
+.title.card#vendors {
+  .invoice-summary {
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 100;
+      font-variant: italic;
+      color: grey;
+      padding-left: 1rem;
+    }
+
+    .row {
+      display: flex;
+      margin-bottom: 0;
+      align-items: flex-end;
+      padding: 0 0.65em;
+    }
+
+    .col {
+      color: white;
+      padding: 0 0.125rem;
+
+      h4 {
+        font-weight: 300;
+        margin-top: 0.25em;
+        margin-bottom: 0;
+        padding: 1em 0.5rem 0.5rem;
+
+        small {
+          color: white;
+          font-weight: 200;
+          font-variant: small-caps;
+          font-size: 0.9rem;
+          display: block;
+          margin-bottom: -0.5rem;
+        }
+      }
+
+      &.unbilled h4 {
+        background-color: #0d47a1;
+      }
+      &.overdue h4 {
+        background-color: orange;
+      }
+      &.paid h4 {
+        background-color: green;
+      }
+    }
+  }
+}

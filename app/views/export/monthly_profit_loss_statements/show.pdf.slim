@@ -1,0 +1,144 @@
+css:
+  table.report-table {
+    page-break-inside: avoid;
+    page-break-after: always;
+    page-break-before: avoid;
+  }
+
+#profit_and_loss_statement
+  table.header
+    tbody
+      tr
+        td style="width: 25%"
+          p Fiscal Year: #{@report.end_date.year}
+          p Report Date: #{Date.today.to_formatted_s(:std)}
+        td
+          h1.title = @current_org.name
+          h2.subtitle style="font-weight: bold" #{@report.subtitle}
+          h3.subsubtitle style="font-weight: bold" From #{@report.start_date.to_formatted_s(:std)} To #{@report.end_date.to_formatted_s(:std)}
+        td style="width: 25%"
+- @report.data["reports"].each do |fund, report|
+    - fund_codes = fund == "all" ? @report.data["account_funds"].map {|f| f.dig("code")} : [fund]
+    table.report-table.condensed
+      thead
+        tr
+          th colspan="2" Fund / Resource
+          - filter_string = @report.account_search_params.map {|k,v| next if !v&.present?; "#{k.gsub(/_code/, '').titleize}: #{v}" }.compact.join(", ")
+          th colspan="#{@report.colspan_width - 1}" #{filter_string}
+        tr
+          th.spacer &nbsp;
+          th Object
+          th Description
+          - @report.month_titles.each do |title|
+            th #{title}
+          th.account-balance-cell Balance
+      tbody
+        /Revenues
+        tr.fund-row
+          td colspan="#{@report.colspan_width + 1}" REVENUES
+        - report["revenues"].each do |account_range, acc_obj|
+          - acc_obj["accounts"].each do |account|
+            - unless account["balance"] == "$0.00"
+              tr
+                td.spacer
+                td.account-code-cell #{account["code"]}
+                td.account-name-cell #{account["description"]}
+                - @report.db_titles.each do |code|
+                  td.account-balance-cell  #{account[code]}
+                td.account-balance-cell #{account["balance"]}
+          tr.total-row
+            td.spacer
+            td #{account_range}
+            td #{acc_obj["title"]}
+            - @report.db_titles.each do |code|
+              td.month.account-balance-cell #{acc_obj["balances"][code]}
+            td.account-balance-cell #{acc_obj["balances"]["balance"]}
+        tr.total-row
+          td.spacer
+          td colspan="2"
+            b TOTAL, REVENUE
+            - @report.db_titles.each do |code|
+              td = report["revenues_range_totals"][code]
+          td = report["revenues_range_totals"]["balance"]
+
+        / EXPENSES
+        tr.fund-row
+          td colspan="#{@report.colspan_width + 1}" EXPENSES
+        - report["expenses"].each do |account_range, acc_obj|
+          - acc_obj["accounts"].each do |account|
+            tr
+              td.spacer
+              td.account-code-cell #{account["code"]}
+              td.account-name-cell #{account["description"]}
+              - @report.db_titles.each do |code|
+                td.account-balance-cell  #{account[code]}
+              td.account-balance-cell #{account["balance"]}
+          tr.total-row
+            td.spacer
+            td #{account_range}
+            td #{acc_obj["title"]}
+            - @report.db_titles.each do |code|
+              td.month.account-balance-cell #{acc_obj["balances"][code]}
+            td.account-balance-cell #{acc_obj["balances"]["balance"]}
+        tr.total-row
+          td.spacer
+          td colspan="2"
+            b TOTAL, EXPENSES
+          - @report.db_titles.each do |code|
+            td.account-balance-cell
+              b #{report["expenses_range_totals"][code]}
+          td.account-balance-cell
+            b = report["expenses_range_totals"]["balance"]
+
+        /REVENUE VS EXPENSES
+        tr.total-total-row
+          td.spacer
+          td colspan="2"
+            b EXCESS (DEFICIENCY) OF REVENUES OVER EXPENSES
+          - @report.db_titles.each do |code|
+            td.account-balance-cell
+                b = report["excess_revenues_totals"][code]
+          td.account-balance-cell
+            b = report["excess_revenues_totals"]["balance"]
+
+        / OTHER FINANCING SOURCES/USES
+        tr.fund-row
+          td colspan="#{@report.colspan_width + 1}" OTHER FINANCING SOURCES/USES
+        - report["other_financing"].each do |account_range, acc_obj|
+          - acc_obj["accounts"].each do |account|
+            tr
+              td.spacer
+              td.account-code-cell #{account["code"]}
+              td.account-name-cell #{account["description"]}
+              - @report.db_titles.each do |code|
+                td.account-balance-cell  #{account[code]}
+              td.account-balance-cell #{account["balance"]}
+
+          tr.total-row
+            td.spacer
+            td #{account_range}
+            td #{acc_obj["title"]}
+            - @report.db_titles.each do |code|
+              td.month.account-balance-cell #{acc_obj["balances"][code]}
+            td.account-balance-cell #{acc_obj["balances"]["balance"]}
+
+        / TOTAL, OTHER FINANCING SOURCES/USES
+        tr.fund-row
+          td.spacer
+          td colspan="2"
+            b TOTAL, OTHER FINANCING SOURCES/USES
+          - @report.db_titles.each do |code|
+            td.account-balance-cell
+              b #{report["other_financing_range_totals"][code]}
+          td.account-balance-cell #{report["other_financing_range_totals"]["balance"]}
+
+        / NET INCREASE (DECREASE) IN NET POSITION
+        tr.total-total-row
+          td.spacer
+          td colspan="2"
+            b NET INCREASE (DECREASE) IN NET POSITION
+          - @report.db_titles.each do |code|
+            td.account-balance-cell
+              b #{report["net_position_totals"][code]}
+          td.account-balance-cell
+              b #{report["net_position_totals"]["balance"]}

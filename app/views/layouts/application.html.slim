@@ -1,0 +1,48 @@
+
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="x-ua-compatible" content="ie=edge"
+    = csrf_meta_tags
+
+    title
+      | Limelite DS
+      = yield(:page_title)
+
+    = stylesheet_link_tag    "application", media: "all"
+    = stylesheet_link_tag    "print",       media: "print"
+
+    = javascript_include_tag "application"
+    = javascript_pack_tag "application"
+
+    = favicon_link_tag "cropped-fox-270x270.png", type: "image/png"
+    = favicon_link_tag "cropped-fox-270x270.png", rel: "apple-touch-icon", type: "image/png"
+
+    - if !@current_org
+      scss:
+        .alt-breadcrumb {
+          top: 64px;
+          position: absolute;
+        }
+
+        main.container.with-breadcrumb {
+          padding-top: 85px;
+        }
+
+    / Top level Js
+    = yield(:head)
+  body.materialize
+    - if current_user && @current_org
+      = render 'shared/top_navigation' if policy(@current_org).show?
+
+    main.container.with-breadcrumb
+      .alt-breadcrumb
+        = yield(:header_content)
+      = render 'shared/flash_message'
+      = yield
+
+    - if content_for?(:footer)
+      footer = yield(:footer)
+
+    = yield(:bottom_javascript) if content_for?(:bottom_javascript)

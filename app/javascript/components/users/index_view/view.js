@@ -1,0 +1,88 @@
+import PropTypes from "prop-types";
+
+// import {useCallback} from "react";
+// import {useCurrentRoute} from "react-navi";
+
+import {withStyles} from "@material-ui/core/styles";
+
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+// import Form from "../form";
+// import Navlinks from "./navlinks";
+
+// import {validationSchema, submissionSchema} from "../form/users.schema";
+
+// import {useMutation} from "react-apollo";
+
+// import MUTATION from "../../../../graphql/mutations/mutation.gql";
+
+import Icon from "@material-ui/icons/Help";
+
+const View = ({classes = {}}) => {
+  return (
+    <section className={classes.root}>
+      <header className={classes.header}>
+        <h3 className={classes.title}>
+          <Icon className={classes.titleIcon} /> New Users
+        </h3>
+      </header>
+      <Card>
+        <CardContent>
+          <h2>Form</h2>
+        </CardContent>
+      </Card>
+    </section>
+  );
+};
+
+// const View = () => {
+//   const {data = {}} = {}} = useCurrentRoute();
+//   // const [createUser] = useMutation(MUTATION);
+//   const onSubmit = useCallback((data, formikBag) => {}, [])
+//
+//   return (
+//     <section className={classes.root}>
+//       <header className={classes.header}>
+//         <h3 className={classes.title}>
+//           <Icon className={classes.titleIcon} /> New Users
+//         </h3>
+//       </header>
+//       <Card>
+//         <CardContent>
+//           <Form {...{onSubmit}} />
+//         </CardContent>
+//       </Card>
+//     </section>
+//   );
+// };
+
+View.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+const styles = (theme) => ({
+  root: {
+    marginBottom: "5rem",
+  },
+  header: {
+    display: "grid",
+    gridTemplateColumns: "1fr 315px",
+    alignItems: "baseline",
+    marginBottom: "-0.125rem",
+    padding: "0 .5rem .25rem",
+    borderTop: "1px solid #f0f0f0",
+    borderRadius: "4px 4px 0 0",
+    background: "#f0f0f087",
+  },
+  title: {
+    margin: 0,
+  },
+  titleIcon: {
+    fontSize: "2.35rem !important",
+    position: "relative",
+    top: ".065em",
+    color: "#455A64",
+  },
+});
+
+export default withStyles(styles)(View);

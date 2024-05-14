@@ -1,0 +1,143 @@
+= simple_form_for(@printer_setting, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @printer_setting }
+
+  .card
+    .card-content
+      .row
+        .col.s6
+          = f.input :name, label: 'Settings Name', disabled: local_assigns[:disabled]
+        .col.s3
+          = f.input :printer_type, collection: PrinterSetting::TYPES, disabled: local_assigns[:disabled]
+        .col.s3
+          = f.input :direction, collection: PrinterSetting::DIRECTIONS, disabled: local_assigns[:disabled]
+      .row
+        .col.s12
+          h4 Printer offsets
+          p
+            | We recommend printing out a test sheet of paper and holding it up to the light to ensure that the printed text matches with your printed check stock.
+          p
+            | Increasing the size of the horizontal offset will push it right. Whereas, increasing the size of the vertical offset will push the text down.
+            '  Setting the offset to a negative number will pull the text in the opposite direction
+      .well
+        .row
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Payee Text:
+              .col.s3
+                = f.input :payee_offset_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :payee_offset_y, label: 'Vertical', disabled: local_assigns[:disabled]
+          .col.s6
+            .row
+              .row
+                .col.s6.right-align
+                  h5 Amount:
+                .col.s3
+                  = f.input :amount_offset_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+                .col.s3
+                  = f.input :amount_offset_y, label: 'Vertical', disabled: local_assigns[:disabled]
+
+        .row
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Amount Text:
+              .col.s3
+                = f.input :amount_text_offset_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :amount_text_offset_y, label: 'Vertical', disabled: local_assigns[:disabled]
+
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Memo:
+              .col.s3
+                = f.input :memo_offset_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :memo_offset_y, label: 'Vertical', disabled: local_assigns[:disabled]
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 MICR Line:
+              .col.s3
+                = f.input :micr_offset_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :micr_offset_y, label: 'Vertical', disabled: local_assigns[:disabled]
+
+      .row
+        .col.s12
+          h4 Voucher Settings
+
+      .well
+        .row
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Spacing:
+              .col.s3
+                = f.input :voucher1_offset_y, label: 'Voucher 1', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :voucher2_offset_y, label: 'Voucher 2', disabled: local_assigns[:disabled]
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Invoice #
+              .col.s3
+                = f.input :invoice_no_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :invoice_no_y, label: 'Vertical', disabled: local_assigns[:disabled]
+        .row
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Date
+              .col.s3
+                = f.input :invoice_date_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :invoice_date_y, label: 'Vertical', disabled: local_assigns[:disabled]
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Invoice Amount
+              .col.s3
+                = f.input :invoice_amount_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :invoice_amount_y, label: 'Vertical', disabled: local_assigns[:disabled]
+
+        .row
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Amount Paid
+              .col.s3
+                = f.input :invoice_amount_paid_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :invoice_amount_paid_y, label: 'Vertical', disabled: local_assigns[:disabled]
+          .col.s6
+            .row
+              .col.s6.right-align
+                h5 Description
+              .col.s3
+                = f.input :invoice_description_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+              .col.s3
+                = f.input :invoice_description_y, label: 'Vertical', disabled: local_assigns[:disabled]
+        / .row
+          / .col.s6
+          /   .row
+          /     .col.s6.right-align
+          /       h5 Signature:
+          /     .col.s3
+          /       = f.input :signature_offset_x, label: 'Horizontal', disabled: local_assigns[:disabled]
+          /     .col.s3
+          /       = f.input :signature_offset_y, label: 'Vertical', disabled: local_assigns[:disabled]
+          / .col.s6
+          /   .row
+          /     .col.s6.right-align
+          /       h5 Check Margin:
+          /     .col.s4
+          /       = f.input :check_margin, label: 'Margin', disabled: local_assigns[:disabled]
+  - unless local_assigns[:disabled]
+    .card-actions
+      .float-right
+        = f.button :submit

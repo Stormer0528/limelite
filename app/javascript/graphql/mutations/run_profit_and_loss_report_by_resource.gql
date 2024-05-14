@@ -1,0 +1,44 @@
+mutation runProfitAndLossReportByResource(
+  $startDate: String
+  $endDate: String
+  $account: AccountCodeInputObject
+) {
+  report: createProfitAndLossByResourceReport(
+    startDate: $startDate
+    endDate: $endDate
+    account: $account
+  ) {
+    data
+    persisted
+    valid
+    errors
+    startDate
+    endDate
+    pdfUrl
+    xlsxUrl
+    colspanWidth
+    titles
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+  }
+}

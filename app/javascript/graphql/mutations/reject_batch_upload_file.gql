@@ -1,0 +1,6 @@
+mutation rejectBatchUploadFile($id: ID!, $fileIndex: ID!, $reason: String) {
+  denyBatchUploadFile(id: $id, fileIndex: $fileIndex, reason: $reason) {
+    success
+    errorMessages
+  }
+}

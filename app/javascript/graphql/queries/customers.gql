@@ -1,0 +1,28 @@
+query customers($aasm_state: String, $name: String, $number: String) {
+  customers: customerSearch(
+    aasm_state: $aasm_state
+    name: $name
+    number: $number
+  ) {
+    id
+    name
+    number
+    fullName
+    email
+    aasmState
+    displayName
+    path
+    editPath
+    permissions {
+      index
+      edit
+      view
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+  }
+}

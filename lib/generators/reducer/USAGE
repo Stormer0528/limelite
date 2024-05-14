@@ -1,0 +1,9 @@
+Description:
+    Creates a redux reducer and associated actions
+
+Example:
+    rails generate reducer NAME action1 action2 action3 ...
+
+    This will create:
+        app/assets/reducers/name_reducer.js
+        app/assets/actions/name_actions.js

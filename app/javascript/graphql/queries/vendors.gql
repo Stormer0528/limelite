@@ -1,0 +1,6 @@
+query vendorsQuery {
+  vendors {
+    id
+    displayName
+  }
+}

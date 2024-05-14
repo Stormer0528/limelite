@@ -1,0 +1,111 @@
+/ - content_for(:head) do
+/   javascript:
+/     window.initial_data = {
+/       report: #{{ render "report/profit_and_loss_statements/profit_and_loss_statement", report: @report }}
+/     };
+/   = javascript_pack_tag 'render_profit_and_loss_report_routes', defer: true
+/
+/ - content_for(:head) do
+/   javascript:
+/     window.initial_data = {
+/       report: #{{ render "report/profit_and_loss_statements/profit_and_loss_statement", report: @report }}
+/     };
+/
+/   = javascript_pack_tag 'render_profit_and_loss_report_routes', defer: true
+
+  - content_for :header_content do
+    h2.page-header
+      = class_icon "report", icon_options: "medium"
+      span.text
+        = link_to reports_path, class: "breadcrumb primary" do
+          span.link-text
+            '  Reports
+        '
+        = link_to report_profit_and_loss_statements_path, class: "breadcrumb" do
+          span.link-text
+            | Profit And Loss Statements
+
+/ #report_view
+
+#profit_and_loss_statement
+  table.header
+    tbody
+      tr
+        td style="width: 25%"
+          p Fiscal Year: #{@report.end_date.year}
+          p Report Date: #{Date.today.to_formatted_s(:std)}
+        td
+          h1.title = @current_org.name
+          h2.subtitle #{@report.subtitle}
+          h3.subsubtitle From #{@report.start_date.to_formatted_s(:std)} To #{@report.end_date.to_formatted_s(:std)}
+        td style="width: 25%"
+  table.report-table.condensed
+    thead
+      tr
+        th colspan="#{@report.colspan_width + 1}" Fund / Resource
+      tr
+        th.spacer &nbsp;
+        th Object
+        th Description
+        - @report.month_titles.each do |title|
+          th #{title}
+        th.account-balance-cell Balance
+    tbody
+      tr.fund-row
+        td colspan="#{@report.colspan_width + 1}" 62 - Charter Schools Enterprise Fund
+      - Report::MonthlyProfitLossReport::Categories.each do |k,obj|
+        - total_total = []
+        - obj.each do |range, title|
+          / Get accounts in range
+          - ranges = range.to_s.split("-")
+          - account_range = Range.new(ranges[0]&.to_i, ranges[1]&.to_i || ranges[0]&.to_i + 999)
+          - account_objects = AccountObject.where(organization_id: @current_org.id, code: account_range).order(code: :asc)
+          - account_objects.each do |account|
+            - if account.balance(@report.start_date, @report.end_date, @report.account_search_params || {}) != 0
+              tr
+                td.spacer
+                td.account-code-cell #{account.code}
+                td.account-name-cell #{account.name}
+                - @report.months.each.with_index do |month, index|
+                  - month_end_date = (index == @report.months.length - 1) ? @report.end_date : month.end_of_month
+                  - month_total = account.balance(month, month_end_date, @report.account_search_params || {})
+                  td.month.account-balance-cell #{month_total.zero? ? " - " : month_total.format}
+
+                td.account-balance-cell #{account.balance(@report.start_date, @report.end_date, @report.account_search_params || {})&.format}
+
+          - total_balance = account_objects.map { |acc_obj| acc_obj.balance(@report.start_date, @report.end_date, @report.account_search_params || {}) }.inject(Money.new(0)) {|total, balance|  total + balance }
+          - if total_balance != 0
+            tr.total-row
+              td.spacer
+              td #{range}
+              td #{title}
+
+              - @report.months.each.with_index do |month, index|
+                - month_end_date = (index == @report.months.length - 1) ? @report.end_date : month.end_of_month
+                - month_balance = account_objects.map { |acc_obj| acc_obj.balance(month, month_end_date, @report.account_search_params || {}) }.inject(Money.new(0)) {|total, balance|  total + balance }
+                td.month.account-balance-cell #{month_balance.zero? ? " - " : month_balance.format}
+
+              td.account-balance-cell
+                - total_total.push(total_balance)
+                = total_balance&.format
+
+        tr.total-total-row
+          td.spacer
+          td colspan="2"
+            b = "Total #{k}".titleize
+          - @report.data["monthly_#{k}_totals"].each do |monthly_total|
+            td #{monthly_total}
+          td.account-balance-cell
+            - instance_variable_set "@#{k}", total_total.inject(Money.new(0)) {|total, balance|  total + balance }
+            b = instance_variable_get("@#{k}")&.format
+
+      /REVENUE VS EXPENSES
+      tr.fund-row
+        td colspan="#{@report.colspan_width + 1}" 62 - Charter Schools Enterprise Fund
+      tr.total-total-row
+        td colspan="3"
+          b Excess (Deficiency) of Revenues Over Expenses
+        - @report.data["monthly_expenditures_totals"].each do |monthly_total|
+          td #{monthly_total}
+        td.account-balance-cell
+          b = (@revenue - @expenditures)&.format

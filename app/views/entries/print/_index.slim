@@ -1,0 +1,75 @@
+section.ledger
+  h5.page-header
+    i.material-icons receipt
+    | Entries
+  .divider
+
+  table.bordered.condensed
+    thead
+      tr
+        th Date
+        th Account
+        th Vendor
+        th Memo
+        th Debit
+        th Credit
+
+    tbody
+      - AccountObject::OBJECT_TYPES.each do |object_type|
+        tr.object-row
+          td colspan="6"
+            b #{object_type}
+        - @account_objects.select {|account_object| account_object.object_type == object_type}.each do |account_object|
+          tr.object-row
+            td colspan="6"
+              b #{account_object.display_name}
+          - filtered_items = @filtered_items.select {|item| item.account.account_object == account_object}
+          - total_deb = filtered_items.select {|item| item.type == "Debit"}.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount}
+          - total_cred = filtered_items.select {|item| item.type == "Credit"}.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount}
+          - balance = filtered_items.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount}
+          - filtered_items.each do |item|
+            tr
+              td = item.date.to_formatted_s(:std)
+              td = item.account.number
+              td
+                - if item.entry.journalable.is_a?(Invoice)
+                  = item.entry.journalable.invoiceable.full_name
+                - elsif item.entry.journalable.is_a?(Payment)
+                  = item.entry.journalable.payable.full_name
+                - else
+                  |
+              td = item.memo
+              - if item.type == "Credit"
+                td
+                td.green-text
+                  = item.amount.format
+              - else
+                td.red-text.text-darken-1
+                  = item.positive_amount.format
+                td
+          tr
+            td
+            td Total Activity
+            td
+            td
+            td.red-text.text-darken-1
+              = total_deb >= Money.new(0) ? nil : Money.new(-1*total_deb).format
+            td.green-text
+              = total_cred > Money.new(0) ? total_cred.format : nil
+          tr
+            td
+            td Ending Balance
+            td
+            td
+            - if balance > Money.new(0)
+              td
+              td.green-text
+                = balance.format
+            - else
+              td.red-text.text-darken-1
+                = Money.new(-1*balance).format
+              td
+          tr
+            td
+            td colspan="5"
+              'Ending Balance

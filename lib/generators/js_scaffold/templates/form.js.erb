@@ -1,0 +1,128 @@
+import PropTypes from "prop-types";
+import {withStyles} from "@material-ui/core/styles";
+import {useCurrentRoute} from "react-navi";
+import clsx from "clsx";
+import {format} from "date-fns/esm";
+
+import ValidationErrors from "<%= @file_dots%>shared/validation_errors";
+
+import {Formik, Form, Field, ErrorMessage, FieldArray} from "formik";
+import { TextField } from 'formik-material-ui';
+
+const <%= @model_name %>Form = ({
+  isInitialValid = true,
+  readOnly = false,
+  hideSubmissionBar = false,
+  disabled: formDisabled = false,
+  <%= @model_prefix %> = {},
+  <%= @model_prefix %>: {aasmState = "draft"} = {},
+  onSubmit = function() {},
+  classes = {},
+}) => {
+  const {
+    data = {},
+  } = useCurrentRoute();
+  console.log("Current Route:", data);
+
+  const default<%= @model_name %> = {
+    /* add default associations */
+    // parentId,
+    // items = [{}, {}],
+  };
+
+  return (
+    <section className={clsx(classes.root)}>
+      <Formik
+        initialValues={{
+          ...default<%= @model_name %>,
+          ...<%= @model_prefix %>,
+        }}
+        isInitialValid={isInitialValid}
+        onSubmit={onSubmit}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          setFieldValue,
+          isSubmitting,
+        }) => {
+          const disabled = formDisabled || isSubmitting;
+          // const handleDate = name => date => {
+          //   handleChange({
+          //     target: {id: name, name: name, value: format(date, "yyyy-MM-dd")},
+          //   });
+          // };
+
+          // const handleAmountChange = name => ({floatValue}) => {
+          //   const value = parseInt((floatValue * 100).toFixed(0), 10);
+          //   handleChange({target: {name, value}});
+          // };
+
+          return (
+            <Form className={classes.form}>
+              {!readOnly && errors.length > 0 && (
+                <ValidationErrors errors={errors} />
+              )}
+
+              {/**
+               * Fields
+               */}
+              <h3>Auto-Generated Fields</h3>
+<section className="fields" style={{display:"flex", alignItems: "center", justifyContent: "space-between"}}>
+<% @graphql_model.fields.keys.map do |key| %>
+<% next if key =~ /id|path|url|slug/i %>
+<Field
+  component={TextField}
+  name="<%= key %>"
+  label="<%= key.titleize %>"
+/>
+<% end %>
+</section>
+              {!hideSubmissionBar && (
+                <SubmissionBar
+                  {...{
+                    setFieldValue,
+                    handleSubmit,
+                    isSubmitting,
+                    aasmState,
+                    disabled,
+                  }}
+                />
+              )}
+            </Form>
+          );
+        }}
+      </Formik>
+    </section>
+  );
+};
+
+<%= @model_name %>Form.propTypes = {
+  vendorId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  <%= @model_prefix %>: PropTypes.object,
+  isInitialValid: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
+  hideSubmissionBar: PropTypes.bool,
+  onSubmit: PropTypes.func,
+  classes: PropTypes.object.isRequired,
+};
+
+const styles = theme => ({
+  root: {},
+  form: {
+    "& .disabled.readOnly > label": {
+      color: "#546E7A",
+    },
+
+    "& .disabled.readOnly input": {
+      color: "#333",
+    },
+  },
+});
+
+export default withStyles(styles)(<%= @model_name %>Form);

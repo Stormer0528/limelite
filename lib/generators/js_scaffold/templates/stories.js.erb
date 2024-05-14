@@ -1,0 +1,18 @@
+import withTheme, {CSSBaseline} from "../shared/stories/theme_decorator";
+import withApollo from "../shared/stories/apollo_decorator";
+
+import IndexView from "./index_view"
+import NewView from "./new_view"
+import ShowView from "./show_view"
+import EditView from "./edit_view"
+
+export default{
+  component: IndexView,
+  title: "<%= file_name.titleize %>/Views",
+  decorators: [withTheme, withApollo, CSSBaseline],
+}
+
+export const Index = () => <IndexView />
+export const Show = () => <ShowView />
+export const New = () => <NewView />
+export const Edit = () => <EditView />

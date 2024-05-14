@@ -1,0 +1,55 @@
+query findBankItems(
+  $start_date: String
+  $end_date: String
+  $bank_account_id: ID
+  $approved: Boolean
+  $reconciled: Boolean
+  $aasm_state: String
+  $type: String
+) {
+  bankItemSearch(
+    start_date: $start_date
+    end_date: $end_date
+    bank_account_id: $bank_account_id
+    approved: $approved
+    reconciled: $reconciled
+    aasm_state: $aasm_state
+    type: $type
+  ) {
+    ... on Deposit {
+      id
+      bankAccountId
+      amount
+      memo
+      number
+      type
+      date
+      amountInCents
+      editPath
+    }
+    ... on Check {
+      id
+      bankAccountId
+      amount
+      memo
+      type
+      date
+      number
+      payee
+      amountInCents
+      editPath
+    }
+    ... on AccountTransfer {
+      id
+      bankAccountId
+      amount
+      memo
+      type
+      date
+      amountInCents
+      editPath
+      isFromAccountItem
+      isToAccountItem
+    }
+  }
+}

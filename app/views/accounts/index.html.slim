@@ -1,0 +1,32 @@
+= content_for :page_title
+  '&nbsp; :: Accounts
+
+= content_for :bottom_javascript
+  / Preload page info
+  javascript:
+    window.initial_data = Object.assign({}, (window.initial_data || {}), {
+    });
+
+- content_for :head do
+  = javascript_pack_tag 'render_account_index', defer: true
+
+  css:
+    #AccountsTable, #accounts_index, .AccountFinderRow {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    #AccountsTable {
+      margin-bottom: .75em;
+    }
+
+    #container { width: 90%; }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Account", icon_options: "medium"
+    span.text
+      '  Accounts
+
+#accounts_index data-organization-id="#{@current_org.id}"

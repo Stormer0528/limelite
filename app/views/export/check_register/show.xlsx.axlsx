@@ -1,0 +1,118 @@
+def parse_num(num)
+  num.gsub(/[\$\,]/, "").to_f
+end
+
+def format_date(date)
+  if date.is_a?(Date)
+    date.to_formatted_s(:std_alt)
+  elsif date.is_a?(String)
+    Date.parse(date).to_formatted_s(:std_alt)
+  else
+    ""
+  end
+end
+
+def number_to_letter(n=1)
+  (n - 1).to_i.to_s(27).tr("0-9a-q", "A-Z")
+end
+
+def multi_style(length: nil, array: @fund_codes, style:)
+  ary_length = length || array.length
+  Array.new(ary_length, style)
+end
+
+wb = xlsx_package.workbook
+wb.styles do |s|
+  # Style Definitions
+  left_align = s.add_style alignment: {horizontal: :left}
+  title_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+
+  bold_cell = s.add_style b: true, alignment: {horizontal: :left}
+  currency = wb.styles.add_style num_fmt: 43
+  bold_title_cell = s.add_style b: true, bg_color: "D8D8D8", alignment: {horizontal: :left}
+  bold_title_cell_right = s.add_style b: true, bg_color: "D8D8D8", alignment: {horizontal: :right}
+  bold_subtitle_cell    = s.add_style b: true, bg_color: "CCCCCC", alignment: {horizontal: :left}
+  bold_subtitle_cell_right = s.add_style b: true, bg_color: "CCCCCC", alignment: {horizontal: :right}
+  bold_total_cell = s.add_style b: true, num_fmt: 7, border: {style: :double, color: "00", edges: [:bottom]}
+  border = s.borders[s.cellXfs[bold_total_cell].borderId]
+  border.prs << Axlsx::BorderPr.new(name: :top, color: Axlsx::Color.new(rgb: "000000"), style: :thin)
+
+  wb.add_worksheet(name: "Check Register") do|sheet|
+    # Header
+    sheet.add_row [@current_org.name.upcase], style: [title_cell]
+    sheet.merge_cells("A1:G1")
+
+    sheet.add_row ["CHECK REGISTER"], style: [title_cell]
+    sheet.merge_cells("A2:G2")
+
+    if @bank_account
+      sheet.add_row ["FOR #{@bank_account.name.upcase} (#{@bank_account.object_code})"], style: [title_cell]
+      sheet.merge_cells("A3:G3")
+    else
+      sheet.add_row
+    end
+
+    # Date Range
+    start_date = @start_date || @items.to_a.keep_if(&:date).min_by(&:date).date.to_s
+    end_date   = @end_date   || @items.to_a.keep_if(&:date).max_by(&:date).date.to_s
+
+    sheet.add_row ["#{format_date(start_date)} - #{format_date(end_date)}"], style: title_cell
+    sheet.merge_cells("A4:G4")
+    sheet.add_row
+
+    sheet.add_row ["No.", "Date", "Vendor/Payee", "Memo", "Object(s)", "Amount", *(@fund_codes).sort],
+                  style: [*([bold_title_cell] * 6), *multi_style(length: @fund_codes.length, style: bold_title_cell_right)]
+
+    @items.each do |item|
+      items_totals = @fund_codes.sort.map do |code|
+        item.entry_items_fund_code_totals[code]&.first || [0.00]
+      end.flatten
+
+      objects = item.entry&.debits.map {|d| "#{d.account_object_code} - #{d.account_object_name}" }.uniq.join(", ")
+
+      sheet.add_row [
+        item.number,
+        item.date&.to_formatted_s(:std),
+        item.payee,
+        item.memo,
+        objects,
+        item.amount.to_f,
+        *items_totals
+      ],
+      types: [:string, nil, nil, nil, nil, :float],
+      style: [left_align, nil, nil, nil, nil, currency, *multi_style(length: @fund_codes.length, style: currency)]
+
+      if item.invoices.count > 0
+        item.invoices.each do |invoice|
+          invoice.entry.debits.each do |debit|
+
+            debit_totals = @fund_codes.sort.map do |code|
+              debit.account_fund_code == code ? debit.amount : 0.00
+            end.flatten
+
+            sheet.add_row [
+              "",
+              "",
+              "",
+              debit.memo,
+              debit.account_object_display_name,
+              0.00,
+              *debit_totals
+            ],
+            types: [:string, nil, nil, nil, nil, :float],
+            style: [left_align, nil, nil, nil, nil, currency, *multi_style(length: @fund_codes.length, style: currency)]
+          end
+        end
+
+      end
+    end
+
+    sheet.add_row
+    sheet.add_row [nil, nil, nil, nil, "Total", "=SUM(F7:F#{sheet.rows.length - 1})"],
+      style: [nil, nil, nil, nil, bold_cell, bold_total_cell]
+
+    # Column Widths
+    sheet.column_info.first.width = 15
+    sheet.column_info.last.width = 15
+  end
+end

@@ -1,0 +1,27 @@
+= content_for :page_title
+  '&nbsp; :: Accounts > #{@account.number} > Edit
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Account", icon_options: "medium"
+    span.text
+      = link_to accounts_path, class: "breadcrumb" do
+        span.link-text
+          '  Accounts
+      '
+      = link_to @account, class: "breadcrumb" do
+        span.link-text = @account.name
+      '
+      span.breadcrumb Edit
+
+.well style="padding: 1em"
+  .row
+    .col.s6
+      b Name:
+      |  #{@account.name}
+
+    .col.s6
+      b Account Number:
+      |  #{@account.number}
+
+== render 'form', local_assigns: {back_path: accounts_path}

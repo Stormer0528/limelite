@@ -1,0 +1,70 @@
+h1.title {
+  text-align: center;
+  font-size: 1.35em;
+  font-weight: bold;
+  margin-bottom: 0.35em;
+}
+
+h2.subtitle {
+  text-align: center;
+  font-size: 1.15rem;
+  margin: 0 0 1em;
+}
+
+h3.subsubtitle {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 300;
+  margin: -0.5rem 0 1em;
+}
+
+table.report-table tr.fund-row,
+table.report-table tr.total-row {
+  font-weight: bold;
+}
+
+table.report-table tr.total-row {
+  border-collapse: separate;
+}
+
+table.report-table tr.total-row td {
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  border-top: 1px solid transparent;
+}
+
+table.report-table tr.total-total-row td {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+table.report-table tr .spacer {
+  width: 1.5rem;
+}
+
+table.report-table tr th.account-balance-cell,
+table.report-table tr td.account-balance-cell {
+  text-align: right;
+}
+
+table.report-table tr.total-row th.account-balance-cell {
+  border-bottom: 1px solid black;
+}
+
+table.report-table tr.total-row td.account-balance-cell {
+  border-top: 1px solid black;
+}
+
+table.header tbody p {
+  margin: 0;
+}
+
+.header-top-links {
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0.25;
+}
+
+.header-top-links:hover {
+  opacity: 1;
+}

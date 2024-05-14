@@ -1,0 +1,200 @@
+query userGroups($organizationId: ID) {
+  userGroups(organizationId: $organizationId) {
+    id
+    parentId
+    name
+    childCount
+    approvalAmount
+    modulePermissions {
+      Report
+      Vendor
+      Account
+      Customer
+      CreditCard
+      BankAccount
+      BatchUpload
+      approvalAmount
+    }
+    children {
+      id
+      parentId
+      name
+      approvalAmount
+      modulePermissions {
+        Account
+        BankAccount
+        BatchUpload
+        CreditCard
+        Customer
+        Report
+        Vendor
+        approvalAmount
+      }
+      children {
+        id
+        parentId
+        name
+        approvalAmount
+        modulePermissions {
+          Report
+          Vendor
+          Account
+          Customer
+          CreditCard
+          BankAccount
+          BatchUpload
+          approvalAmount
+        }
+        children {
+          id
+          parentId
+          name
+          approvalAmount
+          modulePermissions {
+            Report
+            Vendor
+            Account
+            Customer
+            CreditCard
+            BankAccount
+            BatchUpload
+            approvalAmount
+          }
+          children {
+            id
+            parentId
+            name
+            approvalAmount
+            modulePermissions {
+              Report
+              Vendor
+              Account
+              Customer
+              CreditCard
+              BankAccount
+              BatchUpload
+              approvalAmount
+            }
+            children {
+              id
+              parentId
+              name
+              approvalAmount
+              modulePermissions {
+                Report
+                Vendor
+                Account
+                Customer
+                CreditCard
+                BankAccount
+                BatchUpload
+                approvalAmount
+              }
+              children {
+                id
+                parentId
+                name
+                approvalAmount
+                modulePermissions {
+                  Report
+                  Vendor
+                  Account
+                  Customer
+                  CreditCard
+                  BankAccount
+                  BatchUpload
+                  approvalAmount
+                }
+                children {
+                  id
+                  parentId
+                  name
+                  approvalAmount
+                  modulePermissions {
+                    Report
+                    Vendor
+                    Account
+                    Customer
+                    CreditCard
+                    BankAccount
+                    BatchUpload
+                    approvalAmount
+                  }
+                  children {
+                    id
+                    parentId
+                    name
+                    approvalAmount
+                    modulePermissions {
+                      Report
+                      Vendor
+                      Account
+                      Customer
+                      CreditCard
+                      BankAccount
+                      BatchUpload
+                      approvalAmount
+                    }
+                    children {
+                      id
+                      parentId
+                      name
+                      approvalAmount
+                      modulePermissions {
+                        Report
+                        Vendor
+                        Account
+                        Customer
+                        CreditCard
+                        BankAccount
+                        BatchUpload
+                        approvalAmount
+                      }
+                      children {
+                        id
+                        parentId
+                        name
+                        approvalAmount
+                        modulePermissions {
+                          Report
+                          Vendor
+                          Account
+                          Customer
+                          CreditCard
+                          BankAccount
+                          BatchUpload
+                          approvalAmount
+                        }
+                        children {
+                          id
+                          parentId
+                          name
+                          approvalAmount
+                          modulePermissions {
+                            Report
+                            Vendor
+                            Account
+                            Customer
+                            CreditCard
+                            BankAccount
+                            BatchUpload
+                            approvalAmount
+                          }
+                          children {
+                            id
+                            parentId
+                            name
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

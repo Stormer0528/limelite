@@ -1,0 +1,32 @@
+query purchaseOrders($number: String, $vendor_id: ID, $invoice_number: String) {
+  purchaseOrderSearch(
+    vendor_id: $vendor_id
+    number: $number
+    invoice_number: $invoice_number
+  ) {
+    id
+    number
+    dateNeeded
+    buyer
+    requisitionNumber
+    requestedBy: requestedByName
+    requestedFor: requestedForName
+    fileUrl
+    vendorName
+    invoiceNumber
+    path
+    editPath
+    invoicePath
+    permissions {
+      index
+      edit
+      view
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+  }
+}

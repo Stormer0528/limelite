@@ -1,0 +1,14 @@
+= content_for :page_title
+  '&nbsp; :: Customers > New
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "customer", icon_options: "medium"
+    span.text
+      = link_to customers_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Customers
+      '
+      span.breadcrumb New
+
+== render 'form', locals: { back_path: customers_path }

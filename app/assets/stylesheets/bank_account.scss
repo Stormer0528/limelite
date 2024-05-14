@@ -1,0 +1,62 @@
+#bank_account_index {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+  margin-bottom: 1em;
+}
+
+// Account Ledger
+//------------------------------------------------------------------------------
+section.ledger {
+  color: #424242;
+
+  // Balances
+  .balances {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .initial-balance {
+      color: #78909c;
+      font-size: 0.9rem;
+      margin-right: 0.5em;
+      line-height: 1em;
+    }
+  }
+
+  // Empty Message
+  .well.empty-message {
+    ul.add-links {
+      display: flex;
+
+      li {
+        border-right: 1px solid #cfd8dc;
+        flex-grow: 1;
+        padding: 0 1em;
+        text-align: center;
+
+        &:last-child {
+          border: none;
+        }
+
+        a {
+          color: #0277bd;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+
+          i.material-icons {
+            margin-right: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.card-action.form-footer .pull-left a {
+  display: inline-flex;
+  align-items: center;
+}

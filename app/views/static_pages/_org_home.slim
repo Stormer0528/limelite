@@ -1,0 +1,176 @@
+= content_for :head
+  = stylesheet_link_tag "minimal",           media: "all"
+  = stylesheet_link_tag "landing_page",           media: "all"
+
+  scss:
+    main > .container {
+      margin: 12.5vh 12.5% 0;
+    }
+
+    h2.page-header {
+      justify-content: center;
+      font-size: 3rem;
+      margin: 16px 4px 0;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+
+      & > i.material-icons {
+        color: #7a92a9;
+        margin-right: 0.35em;
+
+        &.medium {
+          font-size: 1em;
+        }
+      }
+
+      .action-btns {
+        float: right;
+        position: relative;
+        top: 0.25em;
+      }
+    }
+
+    .chip.message {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      animation: fadeOut 2s ;
+      animation-delay: 5s;
+    }
+
+    .lime.lighten-1 {
+      background-color: #d4e157 !important;
+    }
+
+    i.close {
+      cursor: pointer;
+    }
+
+    .chip {
+      display: inline-block;
+      height: 32px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #0009;
+      line-height: 32px;
+      padding: 0 12px;
+      border-radius: 16px;
+      background-color: #e4e4e4;
+      margin-bottom: 5px;
+      margin-right: 5px;
+    }
+
+    .white-text {
+      color: #fff !important;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1;}
+      99% { opacity: 0.01;width: 100%; height: 100%;}
+      100% { opacity: 0;width: 0; height: 0;}
+    }
+
+    .tile-container {
+      position: relative
+    }
+
+    .sub-items {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 45px;
+      right: 24px;
+      padding-top: 24px;
+      padding-bottom: 28px;
+      transition: 0.3s cubic-bezier(0.47, 1.64, 0.41, 0.8);
+    }
+
+    .sub-items > a {
+      color: white;
+      border: 1px solid #fff;
+      opacity: .25;
+      border-radius: 50%;
+      padding: 4px;
+      height: 35px;
+      width: 35px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .tile-container .item:hover + .sub-items {
+      transform: scale(1.075) translateX(12.5%);
+    }
+
+    .sub-items > a:hover {
+      opacity: .75;
+    }
+
+javascript:
+  document.addEventListener("readystatechange", () => {
+    const btn = document.querySelector("i.close");
+    if(btn){
+      btn.onclick = (e) => {
+        e.target.parentElement.remove()
+      }
+    }
+  })
+
+
+= content_for :page_title
+  '&nbsp; :: #{@current_org&.name} > Home
+
+.container
+  = render 'shared/flash_message'
+
+  / h2.page-header
+  /   = class_icon 'organization', icon_options: "medium"
+  /   '  #{@current_org&.name}
+
+  .LandingPage
+    - if policy(Report).index? and @current_org.id == 29 # abc charter school
+      = link_to  dashboard_path, class: 'item dashboards' do
+        = class_icon "dashboard", icon_options: 'small'
+        span.text Dashboards
+
+    - if policy(Account).index?
+      = link_to accounts_path, class: 'item account' do
+        = class_icon "account"
+        span.text Accounts
+
+    - if policy(BankAccount).index?
+      = link_to bank_accounts_path, class: 'item bank-account' do
+        = class_icon "bank_account", icon_options: 'small'
+        span.text Bank Accounts
+
+    - if policy(CreditCard).index?
+      = link_to credit_cards_path, class: 'item credit-card' do
+        = class_icon "credit_card", icon_options: 'small'
+        span.text Credit Cards
+
+    - if policy(Customer).index?
+      = link_to customers_path, class: 'item customer' do
+        = class_icon "customer", icon_options: 'small'
+        span.text Customers
+
+    - if policy(Report).index?
+      = link_to  reports_path, class: 'item reports' do
+        = class_icon "reports", icon_options: 'small'
+        span.text Reports
+
+    - if policy(Vendor).index?
+      = link_to vendors_path, class: 'item vendor' do
+        = class_icon "vendor", icon_options: 'small'
+        span.text Vendors
+
+      = link_to  "/files/menu", class: 'item uploads' do
+        = class_icon "cloud_upload", icon_options: 'small'
+        span.text Upload

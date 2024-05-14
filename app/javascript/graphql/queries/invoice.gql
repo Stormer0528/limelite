@@ -1,0 +1,36 @@
+query invoice(
+  $id: ID!
+) {
+  invoice(id: $id) {
+    id
+    aasmState
+    amount
+    date
+    displayLabel
+    dueDate
+    editPath
+    invoiceableId
+    invoiceableType
+    number
+    paid
+    path
+    invoiceable {
+      ... on Customer {
+        name
+        path
+      }
+      ... on Vendor {
+        name
+        path
+      }
+    }
+    notes
+    dueDate
+    description
+
+    addressType
+    addressText
+    accountObject
+    fileUrl
+  }
+}

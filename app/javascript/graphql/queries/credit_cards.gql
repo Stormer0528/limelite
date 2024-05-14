@@ -1,0 +1,10 @@
+query {
+  creditCards {
+    path
+    slug
+    lastReconciledDate
+    balance
+    number
+    name
+  }
+}

@@ -1,0 +1,6 @@
+mutation archiveUserGroup($id: ID!) {
+  archiveUserGroup(id: $id) {
+    success
+    errorMessages
+  }
+}

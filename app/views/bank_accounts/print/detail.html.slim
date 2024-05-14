@@ -1,0 +1,15 @@
+javascript:
+  $(document).ready(function(){
+    window.print();
+  })
+
+section#bank-info
+  .name
+    = @bank_account.name
+  .number
+    b Acct. #
+    | xxxx
+    = @bank_account.number
+
+section#ledger
+  == render partial: "bank_accounts/ledger_detail"

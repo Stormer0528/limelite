@@ -1,0 +1,11 @@
+= content_for :page_title
+  '&nbsp; :: Admin > Users
+
+= content_for :head
+  = stylesheet_link_tag "minimal",           media: "all"
+  = javascript_pack_tag 'render_admin_user_index',  charset: "utf-8"
+
+#admin_index [
+  data-title="Manage Users"
+  data-logo-path="#{image_url("LOGO-1.png")}"
+]

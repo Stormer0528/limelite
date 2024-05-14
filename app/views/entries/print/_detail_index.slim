@@ -1,0 +1,40 @@
+section.ledger
+  h5.page-header
+    i.material-icons receipt
+    | Entries
+  .divider
+
+  table.bordered.condensed
+    thead
+      tr
+        th Type
+        th Date
+        th Journalable
+        th State
+        th Amount
+      tr
+        th.right-align Account Object Code
+        th colspan="2" Account Title
+        th Debit
+        th Credit
+    tbody
+      - @entries.each do |item|
+        tr.item-row
+          td = item.entry_type&.demodulize&.titleize
+          td = item.date&.to_formatted_s(:std)
+          td = item.journalable_type&.demodulize&.titleize
+          td = item.aasm_state&.titleize
+          td = number_to_currency(item.amount)
+
+        - item.entry_items.each do |entry_item|
+          tr.entry-row
+            td.account-object-code = entry_item.account_object_code
+            td colspan="2" = entry_item.account_object_name
+            - if entry_item.type == "Credit"
+              td.green-text
+                = entry_item.amount.format
+              td
+            - else
+              td
+              td.red-text.text-darken-1
+                = entry_item.positive_amount.format

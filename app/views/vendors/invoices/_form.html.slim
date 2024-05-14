@@ -1,0 +1,181 @@
+scss:
+  body {
+    margin-top: 95px;
+  }
+
+  .file-section {
+    margin-left: 1em;
+    flex-grow: 1;
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    & b {
+      font-weight: bold;
+      display: inline-block;
+      margin-left: 1rem;
+      margin-right: .5rem;
+    }
+  }
+
+  .card-content > .card-title.header {
+    display: grid;
+    margin: -24px -24px 16px;
+    padding: 16px 16px .5rem;
+    width: calc(100% + 48px);
+    border-bottom: 1px solid #f5f5f5;
+    grid-template-areas:
+      "Icon InvoiceTitle VendName"
+      "Upload Upload Upload";
+    grid-template-columns: 32px 10.5rem 1fr;
+
+    .icon {
+      grid-area: Icon;
+      display: flex;
+      align-items: baseline;
+    }
+    .invoice-title {
+      grid-area: InvoiceTitle;
+      font-weight: 400;
+      text-align: right;
+    }
+    .vendor-name   {
+      grid-area: VendName;
+      padding-left: .25em;
+    }
+    .uploads {
+      grid-area: Upload;
+      display: flex;
+      justify-content: flex-end;
+      padding-top: .35em;
+
+      & > div {
+        display: flex;
+        font-size: 1rem;
+        margin-right: 1rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        & > b {
+          font-weight: bold;
+          display: inline-block;
+          margin-right: .5rem;
+        }
+      }
+    }
+  }
+
+  .entry-row{
+    width: calc(100% + 48px);
+    margin: 0 -24px -24px;
+    background: #fcfcfc;
+    padding: 1rem .25rem;
+    border-top: 1px solid #f5f5f5;
+  }
+
+/ Set Defaults for form path
+- form_path ||= @invoice.new_record? ? vendor_invoices_path(@vendor) : vendor_invoice_path(@vendor, @invoice)
+
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+  = javascript_pack_tag "render_vendor_table", defer: true, charset: 'utf-8', nonce: true
+
+= simple_form_for(@invoice, url: form_path, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @invoice }
+
+  input type="hidden" name="purchase_order_id" value="#{@invoice&.purchase_order&.id}"
+
+  .form_inputs
+    .card style="margin-bottom: 4rem;"
+      .card-content
+        .card-title.header
+          .icon = class_icon "invoice"
+          .invoice-title
+            b Invoice For:
+
+          .vendor-name = @vendor.name
+
+          .uploads
+            .invoice-upload
+              b Invoice Upload:
+              .filestack-btn[data-inputId="invoice::file_url"
+                              data-name="invoice[file_url]"
+                              data-value="#{@invoice.file_url}"
+                              data-apikey="#{get_client_and_api_key[1]}"
+                              data-policy="#{get_fresh_policy_and_signature[1]}"
+                              data-signature="#{get_fresh_policy_and_signature[0]}"]
+            - if @invoice.payments.length > 0
+              .payment-upload
+                b Final Payment:
+                .filestack-upload-btn[data-inputId="invoice::final_payment"
+                                data-name="invoice[final_payment_url]"
+                                data-value="#{@invoice.final_payment_url}"
+                                data-apikey="#{get_client_and_api_key[1]}"
+                                data-policy="#{get_fresh_policy_and_signature[1]}"
+                                data-invoice-id="#{@invoice.id}"
+                                data-signature="#{get_fresh_policy_and_signature[0]}"]
+
+        .row
+          .col.s4
+            = f.input :number, label: "Invoice #"
+
+          .col.s4
+            = f.input :due_date, label: "Due Date",
+                      as: :string, wrapper: :materialize_date
+
+
+          .col.s4.react-inputs
+            #po_dropdown data-vendor-id="#{@invoice&.invoiceable_id}" data-value="#{@purchase_order&.id}" data-name="purchase_order_id"
+        .row
+          .col.s12
+            = f.input :description
+
+          .col.s12
+            = f.input :notes, label: "Approved With"
+
+        .row
+          .col.s6
+            = f.input :account_object_id,
+              collection: @account_objects,
+              label_method: :display_name,
+              value_method: :id,
+              include_blank: false
+
+          .col.s6
+            = f.input :address_id,
+              collection: @addresses,
+              label_method: :name,
+              value_method: :id,
+              include_blank: false
+
+        - if @invoice.entry
+          .row.entry-row
+            .col.s12
+              = render  partial: "shared/entry_input",
+                locals: { \
+                  journalable: @invoice,
+                  default_entry_type: "Accounts Payable",
+                  parent_class: "invoice",
+                  add_item_label: "+ Account String",
+                  default_object_code: 9500,
+                  invoice_remaining: 0}
+
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @invoice.aasm_state.titleize
+
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @invoice,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "state_btn"}
+
+  = render "shared/reason_modal", f: f

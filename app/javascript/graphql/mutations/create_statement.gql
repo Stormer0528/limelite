@@ -1,0 +1,29 @@
+mutation createStatement(
+  $statementable_id: ID!
+  $statementable_type: String!
+  $started_at: String!
+  $ended_at: String!
+  $starting_balance: String!
+  $ending_balance: String!
+  $item_ids: [ID]
+  $statement_id: ID
+  $adjustment_amount: String
+  $file_url: String
+  $state_action: String
+) {
+  createStatement(
+    statementable_id: $statementable_id
+    statementable_type: $statementable_type
+    started_at: $started_at
+    ended_at: $ended_at
+    starting_balance: $starting_balance
+    ending_balance: $ending_balance
+    item_ids: $item_ids
+    statement_id: $statement_id
+    adjustment_amount: $adjustment_amount
+    file_url: $file_url
+    state_action: $state_action
+  ) {
+    id
+  }
+}

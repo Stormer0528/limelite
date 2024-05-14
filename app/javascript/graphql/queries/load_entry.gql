@@ -1,0 +1,72 @@
+query entry($entry_id: ID!) {
+  entry(id: $entry_id) {
+    id
+    entryType
+    date
+    totalDebits
+    totalCredits
+    path
+    fileUrl
+    journalablePath
+    journalableType
+    payableName
+    payablePath
+    payableType
+    entryItems {
+      id
+      type
+      memo
+      date
+      accountName
+      accountNumber
+      accountDisplayName
+      positiveAmount
+      debit
+      credit
+      payable {
+        ... on Vendor {
+          name
+          path
+          __typename
+        }
+        ... on Customer {
+          name
+          path
+          __typename
+        }
+        __typename
+      }
+      payableType
+      __typename
+    }
+    __typename
+    creditCardItems {
+      number: id
+      type
+      path
+      permissions {
+        show
+      }
+    }
+    bankAccountItems {
+      type
+      path
+      number
+      ... on Check {
+        permissions {
+          show
+        }
+      }
+      ... on Deposit {
+        permissions {
+          show
+        }
+      }
+      ... on AccountTransfer {
+        permissions {
+          show
+        }
+      }
+    }
+  }
+}

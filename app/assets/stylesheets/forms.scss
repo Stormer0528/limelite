@@ -1,0 +1,152 @@
+// Forms
+//------------------------------------------------------------------------------
+// Color read only fields
+.field .input.readonly input {
+  background: #f7f7f7;
+  border: inherit;
+
+  &:focus {
+    background: #f5f5f5;
+    border: inherit;
+  }
+}
+
+// Align check boxes with labels
+.boolean.checkbox > input {
+  margin-right: 1em;
+  position: relative;
+  top: 0.25em;
+}
+
+// Buttons
+.btn-group {
+  display: flex;
+
+  > .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.btn i {
+  font-size: 1.3rem;
+  line-height: inherit;
+  position: relative;
+  top: 0.15em;
+  left: -0.25em;
+}
+
+.btn-floating {
+  &.btn-large i,
+  &.btn-large i,
+  &.btn-flat i {
+    top: 0;
+    left: 0;
+  }
+}
+
+.mobile-fab-tip {
+  position: absolute;
+  right: 4.5em;
+  padding: 0px 0.5rem;
+  text-align: center;
+  background-color: rgba(35, 35, 35, 0.65);
+  border-radius: 50px;
+  color: #fff;
+  width: auto;
+  min-width: 6.5em;
+  padding: 0.5em;
+  font-size: 1rem;
+  line-height: 1.25em;
+}
+
+a.btn-flat {
+  display: inline-flex;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  > .material-icons {
+    margin-right: 0.3em;
+    margin-top: -0.125em;
+  }
+
+  &.icon-btn > .material-icons {
+    margin-right: 0;
+    margin-top: 0;
+    left: 0;
+  }
+}
+
+.btn-group {
+  .icon-btn {
+    margin-right: 0.5rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &.bordered {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    display: inline-flex;
+  }
+}
+
+//  Form Footer
+//------------------------------------------------------------------------------
+.card-action.right-align.form-footer .pull-left {
+  flex-grow: 1;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+}
+
+.card-action.right-align.form-footer {
+  display: flex;
+  justify-content: flex-start;
+
+  .pull-right {
+    .delete-btn {
+      margin-right: 1rem;
+    }
+  }
+}
+
+// Add Buttons
+//------------------------------------------------------------------------------
+.mobile-fab-tip {
+  padding: 0px 0.5rem;
+  text-align: center;
+  background-color: #424242cf;
+  border-radius: 3px;
+  color: white;
+  min-width: 6em;
+  padding: 0.5em 0;
+  line-height: 1.5em;
+}
+
+.btn-floating {
+  margin-bottom: 0.5em;
+}
+
+// Validations
+//------------------------------------------------------------------------------
+.card.validation-errors {
+  box-shadow: none;
+  border: 1px dotted #d32f2f;
+  padding: 0;
+
+  .card-content {
+    padding: 0.5rem 1rem;
+
+    .card-title {
+      font-size: 1.25rem;
+      color: #d32f2f;
+    }
+
+    ul.browser-default {
+      margin: 0 0 0.325em;
+      padding-top: 0;
+    }
+  }
+}

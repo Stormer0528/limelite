@@ -1,0 +1,8 @@
+query clientDashboard($fundCode: String, $startDate: String, $endDate: String) {
+  dashboard(fundCode: $fundCode, startDate: $startDate, endDate: $endDate) {
+    data
+    fundCode
+    startDate
+    endDate
+  }
+}

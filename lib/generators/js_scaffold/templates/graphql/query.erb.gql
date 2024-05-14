@@ -1,0 +1,7 @@
+<% @graphql_model = "Types::#{@file_name.classify}Type".safe_constantize || "Types::#{@file_name.classify}".safe_constantize %>
+
+query load<%= @file_name.singularize.camelize%>(id: ID!) {
+	<%= @file_name.singularize.camelize(:lower)%>(id: $id) {
+<%= @graphql_model.fields.keys.map { |k| k.to_str.indent(2, "  ") }.join(" \n") %>
+	}
+}

@@ -1,0 +1,6 @@
+mutation deleteBatchUploadFile($id: ID!, $fileIndex: ID!) {
+  deleteBatchUploadFile(id: $id, fileIndex: $fileIndex) {
+    success
+    errorMessages
+  }
+}

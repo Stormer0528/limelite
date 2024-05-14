@@ -1,0 +1,24 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "vendor", icon_options: "medium"
+    span.text
+      = link_to vendors_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Vendors
+      '
+      = link_to vendor_path(@vendor), class: "breadcrumb" do
+        span.link-text
+          = @vendor.name
+      '
+      = link_to vendor_invoice_path(@vendor, @invoice, anchor: :payments), class: "breadcrumb" do
+        = class_icon "invoice", icon_options: "medium"
+        span.link-text
+          = @invoice.number
+      '
+      = link_to vendor_invoice_payment_path(@vendor, @invoice, @payment), class: "breadcrumb" do
+        = class_icon "payment", icon_options: "medium"
+      '
+      span.breadcrumb Edit
+
+
+== render 'form'

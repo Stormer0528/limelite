@@ -1,0 +1,90 @@
+h5.page-header
+  .pull-right.right-align
+    = link_to bank_accounts_path, class: "waves-effect waves-teal btn-flat" do
+      i.material-icons list
+      '  All Accounts
+    '  |
+    = link_to edit_bank_account_path(@bank_account), class: "waves-effect waves-teal btn-flat" do
+      i.material-icons edit
+      '  Edit
+
+.card
+  .card-content
+    span.card-title
+      .row
+        .col.s1
+          = class_icon "bank_account", icon_options: "small"
+
+        .col.s5
+          = @bank_account.name
+
+        .col.s6.right-align
+          b Acct #:
+          '
+          = @bank_account.number
+        .col.s12
+          .divider
+    .row.compact
+      .col.s6
+        - unless @bank_account.description.empty?
+          b Desc:
+          '
+          = @bank_account.description
+      - if @bank_account.ended_at
+        .col.s3
+          strong Start Date:
+          '
+          = @bank_account.started_at
+        .col.s3
+          strong End Date:
+          = @bank_account.ended_at
+      - else
+        .col.s6.right-align.pull-right
+          strong Start Date:
+          '
+          = @bank_account.started_at
+    .row
+      .col.s4
+        - unless @bank_account.edp_number.empty?
+          strong EDP #:
+          '
+          = @bank_account.edp_number
+
+      .col.s4.center-align
+        - unless @bank_account.state_account_number.empty?
+          strong State Acct #:
+          '
+          = @bank_account.state_account_number
+
+      .col.s4.right-align
+        - unless @bank_account.pseudo.empty?
+          strong Pseudo:
+          '
+          = @bank_account.pseudo
+
+.spacer
+
+== render partial: 'ledger'
+
+
+
+/ Floating Action Button
+.fixed-action-btn
+    = link_to edit_bank_account_path(@bank_account), class: "btn-floating btn-large green" do
+      i.large.material-icons tooltip="Edit" mode_edit
+
+    ul
+      li
+        = link_to new_bank_account_check_path(@bank_account), class: "btn-floating blue" do
+          = class_icon 'check'
+
+        a.btn-floating.mobile-fab-tip href="#" + Check
+
+        = link_to new_bank_account_deposit_path(@bank_account), class: "btn-floating orange" do
+          = class_icon 'deposit'
+
+        a.btn-floating.mobile-fab-tip href="#" + Deposit
+        = link_to new_bank_account_account_transfer_path(@bank_account), class: "btn-floating red" do
+          = class_icon 'account_transfer'
+
+        a.btn-floating.mobile-fab-tip href="#" + Transfer

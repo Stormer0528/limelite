@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Start date:
+  = @report_balance_sheet_by_resource.start_date
+p
+  strong End date:
+  = @report_balance_sheet_by_resource.end_date
+p
+  strong Data:
+  = @report_balance_sheet_by_resource.data
+p
+  strong Organization:
+  = @report_balance_sheet_by_resource.organization
+
+=> link_to 'Edit', edit_report_balance_sheet_by_resource_path(@report_balance_sheet_by_resource)
+'|
+=< link_to 'Back', report_balance_sheet_by_resources_path

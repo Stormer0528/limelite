@@ -1,0 +1,18 @@
+query CreatedAuthorizableItems {
+  currentUser {
+    items: createdAuthorizables {
+      id
+      vendorName
+      number
+      date
+      dateNeeded
+      aasmState
+      path
+      editPath
+      permissions {
+        view
+        edit
+      }
+    }
+  }
+}

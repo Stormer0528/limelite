@@ -1,0 +1,15 @@
+mutation updateState(
+  $id: ID!
+  $nextState: String!
+  $slug: String
+  $reason: String
+  $modelType: String!
+) {
+  updateState(
+    id: $id
+    nextState: $nextState
+    slug: $slug
+    reason: $reason
+    modelType: $modelType
+  )
+}

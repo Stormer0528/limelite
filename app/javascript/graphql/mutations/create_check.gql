@@ -1,0 +1,45 @@
+mutation createCheck(
+  $check: CheckAttributes
+  $stateAction: String
+  $reason: String
+) {
+  createCheck(check: $check, stateAction: $stateAction, reason: $reason) {
+    id
+    aasmState
+    amountInCents
+    number
+    amount
+    bankAccountId
+    creatorId
+    date
+    fileUrl
+    memo
+    printed
+    checkType
+    valid
+    errors
+    errorMessages
+
+    entry {
+      id
+      organizationId
+      entryType
+      date
+      aasmState
+      entryItems {
+        id
+        amount
+        type
+        accountFunctionCode
+        accountFundCode
+        accountGoalCode
+        accountLocationCode
+        accountObjectCode
+        accountResourceCode
+        accountYearCode
+        errors
+      }
+      errors
+    }
+  }
+}

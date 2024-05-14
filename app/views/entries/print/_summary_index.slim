@@ -1,0 +1,40 @@
+section.ledger
+  h5.page-header
+    i.material-icons receipt
+    | Entries
+  .divider
+
+  - AccountObject::OBJECT_TYPES.each do |object_type|
+    h5 #{object_type}
+
+    table.bordered.condensed
+      thead
+        tr
+          th ID
+          th Date
+          th Account
+          th Memo
+          th Debit
+          th Credit
+      tbody
+      - @object_items = @filtered_items.select {|item| item.account.account_object.object_type == object_type}
+      - @object_items.each do |item|
+        tr
+          td = item.id
+          td = item&.date&.to_formatted_s(:std)
+          td = item.account.number
+          td = item.memo
+          td.red-text
+            = item.type == "Debit" ? item.positive_amount.format : nil
+          td.green-text.lighten-1
+            = item.type == "Credit" ? item.amount.format : nil
+
+      - @credit_balance = @object_items.select {|obj| obj.type == "Credit"}.inject(Money.new(0)) {|total, obj| total + obj.amount }
+      - @debit_balance = @object_items.select {|obj| obj.type == "Debit"}.inject(Money.new(0)) {|total, obj| total + obj.positive_amount }
+
+      tr style="border-top: 2px solid black"
+        td style="font-weight: bold;" colspan="3" Total Balance
+        td.red-text
+          = @debit_balance.format
+        td.green-text.lighten-1
+          = @credit_balance.format

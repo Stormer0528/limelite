@@ -1,0 +1,22 @@
+/ Customer#index - root page for invoices, vendors and purchase orders
+
+= content_for :page_title
+  '&nbsp; :: Customers
+
+- content_for :head do
+  = javascript_pack_tag 'render_customer_index', defer: true, charset: 'utf-8'
+
+  css:
+    #customer_index, .CustomerIndex, .SearchableTable {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "customer", icon_options: "medium"
+    span.text
+      '  Customers
+
+#customer_index

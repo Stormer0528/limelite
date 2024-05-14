@@ -1,0 +1,37 @@
+/ Floating Action Button
+- if policy(@vendor).edit?
+  .fixed-action-btn
+      = link_to edit_vendor_path(@vendor), class: "btn-floating btn-large green" do
+        i.large.material-icons tooltip="Edit" mode_edit
+
+      ul
+        li
+          = link_to vendors_path, class: "btn-floating blue" do
+            i.material-icons tooltip="Vendors" business
+          a.btn-floating.mobile-fab-tip href="#" Vendors
+          - if policy(@vendor.invoices.new).create?
+            = link_to new_vendor_invoice_path(@vendor), class: "btn-floating orange" do
+              i.material-icons tooltip="New Invoice" list
+            a.btn-floating.mobile-fab-tip href="#" + Invoice
+          - if policy(@vendor.purchase_orders.new).create?
+            = link_to new_vendor_purchase_order_path(@vendor), class: "btn-floating red" do
+              i.material-icons tooltip="New Purchase Order" assignment
+            a.btn-floating.mobile-fab-tip href="#" + PO
+- elsif policy(@vendor.invoices.new).create?
+  .fixed-action-btn
+    = link_to new_vendor_invoice_path(@vendor), class: "btn-floating btn-large orange" do
+      i.material-icons tooltip="New Invoice" list
+
+    ul
+      li
+        = link_to vendors_path, class: "btn-floating blue" do
+          i.material-icons tooltip="Vendors" business
+        a.btn-floating.mobile-fab-tip href="#" Vendors
+        - if policy(@vendor.purchase_orders.new).create?
+          = link_to new_vendor_purchase_order_path(@vendor), class: "btn-floating red" do
+            i.material-icons tooltip="New Purchase Order" assignment
+          a.btn-floating.mobile-fab-tip href="#" + PO
+- else
+  .fixed-action-btn
+    = link_to vendors_path, class: "btn-floating btn-large blue" do
+      i.material-icons tooltip="Vendors" business

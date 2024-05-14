@@ -1,0 +1,9 @@
+query {
+  bank_accounts {
+    path
+    lastReconciledDate
+    balance
+    number
+    name
+  }
+}

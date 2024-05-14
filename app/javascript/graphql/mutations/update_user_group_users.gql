@@ -1,0 +1,8 @@
+mutation updateUserGroupUsers($id: ID!, $userIds: [ID]!, $organizationId: ID!) {
+  updateUserGroupUsers(userGroupId: $id, userIds: $userIds, organizationId: $organizationId) {
+    users {
+      id
+      fullName
+    }
+  }
+}

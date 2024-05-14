@@ -1,0 +1,12 @@
+h1 
+  i.ui.icon.users
+  '  New User:
+  small
+    '  #{@school.name.titleize} 
+.ui.divider
+
+== render partial: 'form',
+          locals: { \
+            admin: false,
+            form_path: school_users_path,
+            back_path: school_users_path }

@@ -1,0 +1,16 @@
+query {
+  currentOrg {
+    subdomain
+    url
+  }
+
+  currentUser {
+    id
+    admin
+    organizations {
+      name
+      subdomain
+      url
+    }
+  }
+}

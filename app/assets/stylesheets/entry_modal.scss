@@ -1,0 +1,220 @@
+// addEntry btn
+//------------------------------------------------------------------------------
+#addEntry {
+  &:hover {
+    color: color("green", "lighten-1");
+  }
+
+  i.material-icons {
+    display: inline-block;
+  }
+  .valign-wrapper {
+    display: inline-block;
+    position: relative;
+    top: -0.35rem;
+    margin: 0 0.5em;
+  }
+
+  & span.NewEntryBtn > span {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    i.material-icons {
+      margin-right: 1.35em;
+    }
+  }
+}
+
+.EntryInputSection,
+.EntryDialog {
+  & > h6 {
+    position: relative;
+    top: 2em;
+    left: 1em;
+  }
+
+  .date-amount-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    & > label,
+    & > div {
+      margin: 1em;
+    }
+  }
+}
+
+.AccountFinder {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.well,
+.well.condensed {
+  margin-bottom: 1em;
+}
+
+.AccountFinderRow {
+  .AccountFinder {
+    display: flex;
+    padding: 0 0.35em 1em;
+  }
+}
+
+.EntryInputSection,
+.EntryDialog {
+  input,
+  input:focus,
+  input:not([type]),
+  input[type="text"]:not(.browser-default),
+  input[type="password"]:not(.browser-default),
+  input[type="email"]:not(.browser-default),
+  input[type="url"]:not(.browser-default),
+  input[type="time"]:not(.browser-default),
+  input[type="date"]:not(.browser-default),
+  input[type="datetime"]:not(.browser-default),
+  input[type="datetime-local"]:not(.browser-default),
+  input[type="tel"]:not(.browser-default),
+  input[type="number"]:not(.browser-default),
+  input[type="search"]:not(.browser-default),
+  textarea {
+    border-bottom: none !important;
+    box-shadow: none !important;
+    height: 1.1875em;
+    margin: 0;
+  }
+
+  .row {
+    .col.s2,
+    .col.s4,
+    .col.s5,
+    .col.s6,
+    .col.m2,
+    .col.m4,
+    .col.m5,
+    .col.m6 {
+      margin-left: 0;
+    }
+  }
+
+  .EntryItemsSection {
+    .EntryItem {
+      .account {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        input {
+          margin-bottom: 0;
+          line-height: 1em;
+          text-align: center;
+          font-weight: 400;
+          font-size: 13px;
+
+          &::placeholder {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #90a4ae;
+            font-weight: 500;
+            padding: 0 0.35em;
+          }
+        }
+
+        span.dash-spacer {
+          text-align: center;
+          font-weight: 200;
+          flex-grow: 1;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
+
+// Entries
+//------------------------------------------------------------------------------
+.row.entry-item {
+  .col {
+    padding-left: 0.35rem;
+  }
+}
+
+// EntryInputSection specific styles
+.EntryInputSection {
+  .memo-cell {
+    position: relative;
+    top: 4px;
+    right: -0.5em;
+  }
+}
+
+//
+.react-inputs {
+  input,
+  input:focus,
+  input:not([type]),
+  input[type="text"]:not(.browser-default),
+  input[type="password"]:not(.browser-default),
+  input[type="email"]:not(.browser-default),
+  input[type="url"]:not(.browser-default),
+  input[type="time"]:not(.browser-default),
+  input[type="date"]:not(.browser-default),
+  input[type="datetime"]:not(.browser-default),
+  input[type="datetime-local"]:not(.browser-default),
+  input[type="tel"]:not(.browser-default),
+  input[type="number"]:not(.browser-default),
+  input[type="search"]:not(.browser-default),
+  textarea {
+    border-bottom: none !important;
+    box-shadow: none !important;
+    height: 1.1875em;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 100%;
+    border: 0;
+    display: block;
+    padding: 6px 0 7px;
+    min-width: 0;
+    background: none;
+    box-sizing: content-box;
+    animation-name: MuiInputBase-keyframes-auto-fill-cancel;
+    -webkit-tap-highlight-color: #0000;
+  }
+}
+
+// Entry Show
+//------------------------------------------------------------------------------
+
+.card.entry-show,
+.simple_form.edit_entry {
+  table.entry-items {
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+
+    th.credit,
+    th.debit {
+      text-align: center;
+    }
+
+    td.credit {
+      color: #388e3c;
+      border: 2px solid #388e3c;
+      background: #e8f5e9;
+      border-width: 0 2px 0 1px;
+      text-align: right;
+    }
+
+    td.debit {
+      color: #b71c1c;
+      height: 100%;
+      border: 2px solid #b71c1c;
+      background: #ffebee;
+      border-width: 0 1px 0 2px;
+      text-align: right;
+    }
+  }
+}

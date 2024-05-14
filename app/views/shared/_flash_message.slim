@@ -1,0 +1,10 @@
+.flash-messages
+  - if notice
+    .chip.message.lime.lighten-1.white-text
+        = notice
+        i class="close material-icons" close
+        
+  - if alert
+    .chip.message.yellow.lighten-3
+        = alert
+        i class="close material-icons" close

@@ -1,0 +1,41 @@
+query purchaseOrders($number: String, $vendor_id: ID, $invoice_number: String) {
+  purchaseOrders: purchaseOrderSearchConnection(
+    vendor_id: $vendor_id
+    number: $number
+    invoice_number: $invoice_number
+  ) {
+    edges {
+      node {
+        id
+        number
+        dateNeeded
+        buyer
+        requisitionNumber
+        requestedBy: requestedByName
+        requestedFor: requestedForName
+        fileUrl
+        vendorName
+        invoiceNumber
+        path
+        editPath
+        invoicePath
+        permissions {
+          index
+          edit
+          view
+          delete
+          save_draft
+          send_for_approval
+          reverse_approval
+          approve
+          deny
+        }
+      }
+    }
+
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

@@ -1,0 +1,261 @@
+wb = xlsx_package.workbook
+@wb = wb
+wb.styles do |s|
+  require_relative "../report_functions"
+
+  # HELPERS
+  #---------------------------------------------------------------------------
+  def col_count
+    @report.titles.count + 1
+  end
+
+  def end_col
+    column_name(col_count)
+  end
+
+  def merged_rows(row_num)
+    "A#{row_num}:#{end_col}#{row_num}"
+  end
+
+  def multi_style(style, num=1)
+    Array.new(num || 0) { style }
+  end
+
+  def col_empty?(account)
+    @report.titles.map {|code| account[code.downcase] }.all? {|val| val == "$0.00" }
+  end
+
+  def sum_all_resources
+    "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"
+  end
+
+  # STYLES
+  #---------------------------------------------------------------------------
+  left_align = s.add_style alignment: {horizontal: :left}
+  title_cell    = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  grey_cell     = s.add_style fg_color: "00", bg_color: "CC", b: true, alignment: {horizontal: :center}
+
+  range_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  total_title_cell = s.add_style fg_color: "00", b: true, alignment: {indent: 8}
+  subtitle_cell = s.add_style fg_color: "333333", b: true
+  thin_border   = s.add_style num_fmt: 43, border: {style: :thin, color: "00", edges: [:top, :bottom]}
+  section_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  currency = wb.styles.add_style num_fmt: 43
+  currency_with_sign = wb.styles.add_style num_fmt: 44
+  bold_currency_with_sign = wb.styles.add_style num_fmt: 44, b: true,
+                                                border: {style: :double, color: "00", edges: [:bottom]}
+  bold_currency = wb.styles.add_style num_fmt: 43, b: true,
+                                      border: {style: :thin, color: "00", edges: [:bottom]}
+
+  # Reports
+  #---------------------------------------------------------------------------
+  @report.data["reports"]&.each do |fund_name, report|
+    wb.add_worksheet(name: fund_name.capitalize) do |sheet|
+      # PAGE HEADER
+      #---------------------------------------------------------------------------
+      sheet.add_row [@report.organization_name.upcase], style: title_cell
+      sheet.merge_cells(merged_rows(1))
+
+      sheet.add_row ["PROFIT & LOSS BY RESOURCE"], style: title_cell
+      sheet.merge_cells(merged_rows(2))
+
+      sheet.add_row
+      formatted_start_date = @report.start_date&.to_formatted_s(:long)&.upcase
+      formatted_end_date   = @report.end_date&.to_formatted_s(:long)&.upcase
+      sheet.add_row ["#{formatted_start_date} THROUGH #{formatted_end_date}"], style: title_cell
+      sheet.merge_cells(merged_rows(4))
+
+      sheet.add_row ["#{@report.data['fund_code']} - #{@report.data['fund_name']}".upcase], style: title_cell
+      sheet.merge_cells(merged_rows(5))
+
+      sheet.add_row
+      #---------------------------------------------------------------------------
+
+      # Table Headers
+      sheet.add_row ["", "", *@report.data["titles"].map(&:titleize), "Balance"],
+                    style: grey_cell, types: :string
+
+      # REVENUES
+      #---------------------------------------------------------------------------
+      sheet.add_row ["REVENUES"], style: subtitle_cell
+
+      # set different style for first row
+      first_row = true
+
+      revenue_total_rows = []
+      report["revenues"]&.each do |account_range, acc_obj|
+        nonzero_accounts = acc_obj["accounts"]&.each do |account|
+          balance_style = first_row ? currency_with_sign : currency
+
+          sheet.add_row [
+            account["code"],
+            account["description"],
+            *@report.data["unrestricted_codes"].map {|code|
+              parse_num account[code.downcase]
+            },
+            horizontal_sum(@report.data["unrestricted_codes"], 3),
+            *@report.data["restricted_codes"].map {|code|
+              parse_num account[code.downcase]
+            },
+            horizontal_sum(@report.data["restricted_codes"], 4 + @report.data["unrestricted_codes"]&.length),
+            "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"
+          ],
+                        style: [left_align, nil,
+                                *multi_style(balance_style, @report.titles.length), balance_style]
+          first_row = false
+          current_row.hidden = col_empty?(account)
+        end
+
+        sheet.add_row [account_range, acc_obj["title"],
+                       *vertical_sum_for_array(
+                         sheet,
+                         horizontal_length: @report.titles.length,
+                         vertical_length: nonzero_accounts.length,
+                         start_index: 3
+                       ),
+                       "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"],
+                      style: [range_cell, nil, *multi_style(thin_border, @report.titles.length), thin_border]
+        revenue_total_rows << current_row_num
+      end
+
+      revenue_totals = cell_names_for_array(@report.titles, start_col: 3).map do |col|
+        "=" + revenue_total_rows.map {|n| "#{col}#{n}" }.join("+")
+      end
+
+      sheet.add_row ["TOTAL, REVENUES", "", *revenue_totals, "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"],
+                    style: [total_title_cell, nil, *multi_style(bold_currency, @report.titles.length), bold_currency]
+      total_revnue_row = current_row_num
+      sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+      #---------------------------------------------------------------------------
+      sheet.add_row
+
+      # EXPENDITURES
+      #---------------------------------------------------------------------------
+      sheet.add_row ["EXPENSES"], style: subtitle_cell
+      expenditures_total_rows = []
+
+      report["expenses"]&.each do |account_range, acc_obj|
+        nonzero_accounts = acc_obj["accounts"]&.each do |account|
+          balance_style = first_row ? currency_with_sign : currency
+
+          sheet.add_row [
+            account["code"],
+            account["description"],
+            *@report.data["unrestricted_codes"].map {|code|
+              parse_num account[code.downcase]
+            },
+            horizontal_sum(@report.data["unrestricted_codes"], 3),
+            *@report.data["restricted_codes"].map {|code|
+              parse_num account[code.downcase]
+            },
+            horizontal_sum(@report.data["restricted_codes"], 4 + @report.data["unrestricted_codes"]&.length),
+            "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"
+          ],
+                        style: [left_align, nil,
+                                *multi_style(balance_style, @report.titles.length), balance_style]
+          first_row = false
+          current_row.hidden = col_empty?(account)
+        end
+
+        sheet.add_row [account_range, acc_obj["title"],
+                       *vertical_sum_for_array(
+                         sheet,
+                         horizontal_length: @report.titles.length,
+                         vertical_length: nonzero_accounts.length,
+                         start_index: 3
+                       ),
+                       "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"],
+                      style: [range_cell, nil, *multi_style(thin_border, @report.titles.length), thin_border]
+        expenditures_total_rows << current_row_num
+      end
+
+      expenditures_totals = cell_names_for_array(@report.titles, start_col: 3).map do |col|
+        "=" + expenditures_total_rows.map {|n| "#{col}#{n}" }.join("+")
+      end
+      sheet.add_row ["TOTAL, EXPENSES", "", *expenditures_totals, sum_all_resources],
+                    style: [total_title_cell, nil, *multi_style(bold_currency, @report.titles.length), bold_currency]
+      total_expenditures_row = current_row_num
+      sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+      sheet.add_row
+
+      excess_revenues_sums = cell_names_for_array(@report.titles, start_col: 3).map do |col|
+        "=#{col}#{total_revnue_row}-#{col}#{total_expenditures_row}"
+      end
+      sheet.add_row ["EXCESS (DEFICIENCY) OF REVENUES OVER EXPENSES", nil, *excess_revenues_sums, sum_all_resources],
+                    style: [section_cell, nil, *multi_style(bold_currency, @report.titles.length), bold_currency]
+      excess_revenues_row = current_row_num
+      sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+      sheet.add_row
+
+      # OTHER FINANCING SOURCES/USES
+      #---------------------------------------------------------------------------
+      other_income_rows = []
+      sheet.add_row ["OTHER FINANCING SOURCES/USES"], style: section_cell
+      report["other_financing"]&.each do |account_range, acc_obj|
+        nonzero_accounts = acc_obj["accounts"]&.each do |account|
+          balance_style = first_row ? currency_with_sign : currency
+
+          sheet.add_row [
+            account["code"],
+            account["description"],
+            *@report.data["unrestricted_codes"].map {|code|
+              parse_num account[code.downcase]
+            },
+            horizontal_sum(@report.data["unrestricted_codes"], 3),
+            *@report.data["restricted_codes"].map {|code|
+              parse_num account[code.downcase]
+            },
+            horizontal_sum(@report.data["restricted_codes"], 4 + @report.data["unrestricted_codes"]&.length),
+            "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"
+          ],
+                        style: [left_align, nil,
+                                *multi_style(balance_style, @report.titles.length), balance_style]
+          first_row = false
+          current_row.hidden = col_empty?(account)
+        end
+
+        sheet.add_row [account_range, acc_obj["title"],
+                       *vertical_sum_for_array(
+                         sheet,
+                         horizontal_length: @report.titles.length,
+                         vertical_length: nonzero_accounts.length,
+                         start_index: 3
+                       ),
+                       "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"],
+                      style: [range_cell, nil, *multi_style(thin_border, @report.titles.length), thin_border]
+        other_income_rows << current_row_num
+      end
+
+      other_expenses_totals = cell_names_for_array(@report.titles, start_col: 3).map {|col|
+        "=" + other_income_rows.map {|n|
+                "#{col}#{n}"
+              }.join("+")
+      }
+      sheet.add_row ["TOTAL, OTHER FINANCING SOURCES/USES", "",
+                     *other_expenses_totals,
+                     "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"],
+                    style: [total_title_cell, nil, *multi_style(bold_currency, @report.titles.length), bold_currency]
+      other_income_rows_row = current_row_num
+      sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+      sheet.add_row
+
+      # excess_revenue_value + other_financing_value
+      net_position_sums = cell_names_for_array(@report.titles, start_col: 3).map {|col|
+        "=#{col}#{other_income_rows_row}+#{col}#{excess_revenues_row}"
+      }
+      sheet.add_row ["NET INCREASE (DECREASE) IN NET POSITION", "", *net_position_sums, "=SUM(#{column_name(@report.data['unrestricted_codes']&.length + 3)}#{current_row_num + 1}, #{column_name(@report.titles.length + 2)}#{current_row_num + 1})"],
+                    style: [total_title_cell, nil, *multi_style(bold_currency_with_sign, @report.titles.length),
+                            bold_currency_with_sign]
+      sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+      # Column Widths
+      sheet.column_info.first.width = 18
+      sheet.column_info[1].width    = 60
+      sheet.column_info[2].width    = 15
+      sheet.column_info[2..sheet.column_info.length - 2]&.each {|col| col.width = 15 }
+      sheet.column_info.last.width = 15
+    end
+  end
+end

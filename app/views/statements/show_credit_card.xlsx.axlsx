@@ -1,0 +1,101 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+  title_cell = s.add_style :fg_color => "00", :b => true, :sz => 16, :alignment => { :horizontal=> :center }
+  subtitle_cell = s.add_style :fg_color => "00", :b => true, :sz => 13, :alignment => { :horizontal=> :center }
+  # grey_cell = s.add_style :bg_color => "DDDDDD", :fg_color => "00", :sz => 12, :alignment => { :horizontal=> :center }
+  header_subcell = s.add_style :b => true, :sz => 12
+  subheader_cell = s.add_style :bg_color => "CCCCCC", :fg_color => "000000", :b => true, :sz => 12, :alignment => { :horizontal=> :center }
+  bold_cell = s.add_style :b => true
+  total_title_cell = s.add_style b: true, alignment: { horizontal: :right}
+
+  wb.add_worksheet(name: "Credit Card Statement") do |sheet|
+    # HEADER
+    sheet.merge_cells("A1:G1")
+    sheet.add_row [@current_org.name], style: title_cell
+
+    sheet.merge_cells("A2:G2")
+    sheet.add_row ["CREDIT CARD RECONCILIATION REPORT"], style: subtitle_cell
+
+    sheet.merge_cells("A3:G3")
+    sheet.add_row ["#{@account.name} for Period Ending #{@statement.ended_at.strftime('%m/%d/%Y')}".upcase], style: subtitle_cell
+
+    sheet.add_row
+    sheet.add_row ["Type", "Date", "Name", "Clear", "Amount", "Balance"], style: header_subcell
+
+    # Cleared Transactions
+    sheet.merge_cells("A6:G6")
+    sheet.add_row ["Cleared Transactions"], style: subheader_cell
+
+    sheet.merge_cells("A7:C7")
+    sheet.add_row ["", "", "", "Beginning Balance", "", @statement.starting_balance.format], style: bold_cell
+
+    # Payments
+    sheet.merge_cells("A8:G8")
+    sheet.add_row ["Payments"], style: bold_cell
+
+    payments = @statement.reconciliations.map(&:"reconcilable_item").select {|item| item.type == "CreditCard::Payment"}
+    payments.each do |record|
+      sheet.add_row ["Payment", record.date, record.memo, "X", record.amount.format]
+    end
+
+    total_payments = payments.inject(Money.new(0)) {|total, payment| payment.amount + total}
+
+    sheet.add_row ["Total Payments", "", "", "", "", total_payments.format], style: total_title_cell
+    sheet.merge_cells("A#{payments.length + 9}:E#{payments.length + 9}")
+
+    # Charges
+    charges_start_row = payments.length + 10
+    sheet.merge_cells("A#{charges_start_row}:G#{charges_start_row}")
+    sheet.add_row ["Charges"], style: bold_cell
+
+    charges = @statement.reconciliations.map(&:"reconcilable_item").select {|item| item.type == "CreditCard::Charge"}
+    charges.each do |record|
+      sheet.add_row ["Charge", record.date, record.memo, "X", record.amount.format]
+    end
+
+    total_charges = charges.inject(Money.new(0)) {|total, charges| charges.amount + total}
+
+    sheet.add_row ["Total Charges and Payments", "", "", "", "", total_charges.format], style: total_title_cell
+    charge_total_row = charges_start_row + charges.length + 1
+    sheet.merge_cells("A#{charge_total_row}:E#{charge_total_row}")
+
+    # Ending Balance
+    sheet.add_row ["Ending Register Balance as of #{@statement.ended_at.to_date.to_formatted_s(:std)}", "", "", "", "", @statement.ending_balance.format], style: total_title_cell
+    sheet.merge_cells("A#{charge_total_row + 1}:E#{charge_total_row + 1}")
+
+    # UNCLEARED
+    #---------------------------------------------------------------------------
+    sheet.add_row
+    sheet.add_row ["Transactions Not Cleared"], style: subheader_cell
+    sheet.merge_cells("A#{charge_total_row + 3}:G#{charge_total_row + 3}")
+
+    # Uncleared Payments
+    sheet.add_row ["Payments"], style: bold_cell
+    uncleared_payments = @account.charges.unreconciled.where(date: @statement.started_at...@statement.ended_at)
+    uncleared_payments.each do |record|
+      sheet.add_row ["Payment", record.date, record.memo, "", record.amount]
+    end
+
+    uncleared_payments_total = uncleared_payments.inject(Money.new(0)) {|total, payment| payment.amount + total}
+    uncleared_payment_row_index = charge_total_row + uncleared_payments.length + 4 + 1
+    sheet.add_row ["Total Uncleared Payments", "", "", "", "", uncleared_payments_total.format], style: total_title_cell
+    sheet.merge_cells("A#{uncleared_payment_row_index}:E#{uncleared_payment_row_index}")
+
+    # Uncleared Charges
+    sheet.add_row ["Charges"], style: bold_cell
+    uncleared_charges = @account.charges.unreconciled.where(date: @statement.started_at...@statement.ended_at)
+    uncleared_charges.each do |record|
+      sheet.add_row ["Charge", record.date, record.memo, "", record.amount]
+    end
+
+    uncleared_charges_total = uncleared_charges.inject(Money.new(0)) {|total, charge| charge.amount + total}
+
+    uncleared_charges_row_index = uncleared_payment_row_index + uncleared_charges.length + 2
+    sheet.add_row ["Total Uncleared Charges and Payments", "", "", "", "", uncleared_charges_total.format], style: total_title_cell
+    sheet.merge_cells("A#{uncleared_charges_row_index}:E#{uncleared_charges_row_index}")
+
+    sheet.add_row ["Ending Register Balance as of #{@statement.ended_at.to_date.to_formatted_s(:std)}", "", "", "", "", @statement.ending_balance.format], style: total_title_cell
+    sheet.merge_cells("A#{uncleared_charges_row_index + 1}:E#{uncleared_charges_row_index + 1}")
+
+  end
+end

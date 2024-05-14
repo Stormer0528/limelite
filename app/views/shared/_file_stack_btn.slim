@@ -1,0 +1,9 @@
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+.filestack-btn[data-inputId="#{input_id}"
+                data-name="#{input_name}"
+                data-value="#{input_value}"
+                data-apikey="#{get_client_and_api_key[1]}"
+                data-policy="#{get_fresh_policy_and_signature[1]}"
+                data-signature="#{get_fresh_policy_and_signature[0]}"]

@@ -1,0 +1,51 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "report", icon_options: "medium"
+    span.text
+      = link_to reports_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Reports
+      = link_to report_ap_aging_reports_path, class: "breadcrumb primary" do
+        ' AP Aging Report
+
+.header-top-links
+  = link_to report_ap_aging_reports_path,
+    class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+    i.material-icons arrow_back
+  = link_to report_ap_aging_report_path(@report, format: :xlsx),
+    class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+    i.material-icons border_all
+  = link_to report_ap_aging_report_path(@report, format: :pdf),
+    class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+    i.material-icons picture_as_pdf
+  = link_to edit_report_ap_aging_report_path(@report),
+    class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+    i.material-icons edit
+
+.date-row style="display: flex; align-items: center;"
+  div style="flex-grow: 1; margin-right: 1em;"
+    h5 = @ap_aging_report.name
+  div style="margin-right: 1em"
+    b Start Date:
+    '  #{@ap_aging_report.start_date.to_formatted_s(:std)}
+  div
+    b End Date:
+    '  #{@ap_aging_report.end_date.to_formatted_s(:std)}
+
+table.ar-aging-report.table.table.striped.bordered
+  thead
+    tr
+      th style="width: 35%" vendor
+      - @ap_aging_report.period_names.each do |p_name|
+        th = p_name&.to_s
+      th
+        b Total
+
+  tbody
+    - @ap_aging_report.data["periods_by_vendor"].each do |id, vendor|
+      tr
+        td.vendor style="width: 35%"
+          = vendor["name"]
+        - vendor["periods"].each do |period_name, value|
+          td class="#{period_name}" = number_to_currency value
+        td.total_balance = number_to_currency vendor["total_balance"]

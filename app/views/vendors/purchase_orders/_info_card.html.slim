@@ -1,0 +1,72 @@
+.card
+  .card-content
+    span.card-title
+      i.material-icons assignment
+      |  PO #
+      '
+      = @purchase_order.number
+
+      - if @purchase_order&.file_url.present?
+        .pull-right
+          .btn-group
+            = link_to fs_link(@purchase_order.file_url), class: 'btn btn-flat', target: "_blank" do
+              i.material-icons.medium description
+              '  View
+
+
+    .divider.spaced
+    .row
+      .col.s6
+        b Invoice #:
+        '
+        = @purchase_order.invoice_number
+      .col.s6
+        b Invoice Amount:
+        '
+        = number_to_currency @purchase_order.invoice_amount, precision: 2
+
+    .divider.spaced
+
+    .row
+      .col.s6
+        b Date Needed:
+        '
+        = @purchase_order.date_needed
+      .col.s6
+        b Status:
+        '
+        = @purchase_order.status
+    .row
+      .col.s6
+        = disabled_checkbox "Blanket:", @purchase_order.blanket
+      .col.s6
+        = disabled_checkbox  "Stock PO:", @purchase_order.blanket
+    .row
+      .col.s6
+        strong Buyer:
+        '
+        = @purchase_order.buyer
+      .col.s6
+        strong Requisition number:
+        '
+        = @purchase_order.requisition_number
+    .row
+      .col.s6
+        strong Requested by:
+        '
+        = @purchase_order.requested_by
+      .col.s6
+        strong Requested for:
+        '
+        = @purchase_order.requested_for
+
+    .divider.spaced
+
+    .row
+      .col.s6
+        b Vendor:
+        '
+        = @purchase_order.vendor_name
+      .col.s6
+        b Vendor Number:
+        = @purchase_order.vendor_ein

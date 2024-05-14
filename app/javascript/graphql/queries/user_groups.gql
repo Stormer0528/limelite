@@ -1,0 +1,6 @@
+query userGroupsList($organizationId: ID) {
+  groups: userGroupList(organizationId: $organizationId) {
+    id
+    name
+  }
+}

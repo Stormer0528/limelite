@@ -1,0 +1,5 @@
+mutation destroyAccountTransfer($id: ID!) {
+  destroyAccountTransfer(id: $id) {
+    id
+  }
+}

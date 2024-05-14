@@ -1,0 +1,11 @@
+query lastStatementBalance(
+  $id: ID!
+  $statementDate: String
+  $statementableType: String!
+) {
+  lastStatementBalance(
+    id: $id
+    before_date: $statementDate
+    statementable_type: $statementableType
+  )
+}

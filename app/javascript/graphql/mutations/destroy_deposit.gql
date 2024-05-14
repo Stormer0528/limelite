@@ -1,0 +1,5 @@
+mutation destroyDeposit($id: ID!) {
+  destroyDeposit(id: $id) {
+    id
+  }
+}

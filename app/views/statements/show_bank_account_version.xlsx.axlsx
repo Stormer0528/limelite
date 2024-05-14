@@ -1,0 +1,213 @@
+wb = xlsx_package.workbook
+@wb = wb
+
+wb.styles do |s|
+  require_relative "../export/report_functions"
+
+  def vertical_sum(ary, column:)
+    return 0.0 if ary.length <= 0
+
+    "=SUM(#{column}#{current_row_num - ary.length + 1}:#{column}#{current_row_num})"
+  end
+
+  title_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  subtitle_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+
+  # Sub Headers
+  header_subcell_left = s.add_style b: true, alignment: {horizontal: :left}
+  header_subcell_center = s.add_style b: true, alignment: {horizontal: :center}
+
+  subheader_cell = s.add_style bg_color: "CCCCCC", fg_color: "000000", b: true, alignment: {horizontal: :center}
+
+  # Text Cells
+  text_left   = s.add_style fg_color: "00", alignment: {horizontal: :left, vertical: :center}
+  text_center = s.add_style fg_color: "00", alignment: {horizontal: :center}
+  # text_right  = s.add_style fg_color: "00", alignment: {horizontal: :right}
+  money_right = s.add_style fg_color: "00", alignment: {horizontal: :right}, num_fmt: 43
+  amount_total = s.add_style b: true, fg_color: "00", alignment: {horizontal: :right}, num_fmt: 43,
+                             border: {color: "00", style: :thin, edges: [:top, :bottom]}
+  beginning_balance_total = s.add_style b: true, fg_color: "00", alignment: {horizontal: :right}, num_fmt: 44,
+                                        border: {color: "00", style: :thin, edges: [:bottom]}
+  balance_total = s.add_style b: true, fg_color: "00", alignment: {horizontal: :right}, num_fmt: 44,
+                              border: {color: "00", style: :double, edges: [:bottom]}
+
+  bold_cell = s.add_style b: true
+  total_title_cell = s.add_style b: true, alignment: {horizontal: :right}
+
+  # Row types and styles
+  bank_item_styles = [text_left, text_left, text_left, text_left, text_left, text_center, money_right, money_right]
+  bank_item_types = [nil, :string, :string, :string, :string, :string, :float, :float]
+
+  wb.add_worksheet(name: "Bank Reconciliation") do |sheet|
+    # HEADER
+    sheet.add_row [@current_org.name.upcase], style: title_cell
+    sheet.merge_cells("A1:H1")
+
+    sheet.add_row ["BANK RECONCILIATION REPORT"], style: subtitle_cell
+    sheet.merge_cells("A2:H2")
+
+    sheet.add_row ["#{@bank_account.name} for Period #{@statement.started_at.strftime('%m/%d/%Y')} to #{@statement.ended_at.strftime('%m/%d/%Y')}".upcase],
+                  style: subtitle_cell
+    sheet.merge_cells("A3:H3")
+
+    sheet.add_row
+    sheet.add_row ["Type", "Date", "Ref. No.", "Vendor", "Memo", "Reconciled", "Amount", "Balance"],
+                  style: [header_subcell_left, header_subcell_left, header_subcell_left, header_subcell_left,
+                          header_subcell_left, header_subcell_center, header_subcell_center, header_subcell_center]
+    # Cleared Transactions
+    #---------------------------------------------------------------------------
+    sheet.add_row ["CLEARED TRANSACTIONS"], style: subheader_cell
+    sheet.merge_cells("A6:H6")
+
+    sheet.add_row ["Beginning Balance", "", "", "", "", "", "", @statement.starting_balance.to_f],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, nil, beginning_balance_total],
+                  types: [:string, nil, nil, nil, nil, nil, nil, :float]
+    sheet.merge_cells("A7:F7")
+
+    # Checks
+    sheet.add_row ["CHECKS AND PAYMENTS"], style: bold_cell
+    sheet.merge_cells("A8:H8")
+
+    # -- Cleared Checks Rows
+    checks = @audit.associated_items["bank_account_items"]
+                   .select {|item| item["balance_type"] == "debit" }
+                   .sort_by {|item| item["date"] }
+
+    checks.each do |record|
+      sheet.add_row [
+        "",
+        record["date"],
+        record["number"],
+        record["payee"],
+        record["memo"],
+        "X",
+        Money.new(record["amount_in_cents"]).to_f.abs
+      ],
+                    style: bank_item_styles,
+                    types: bank_item_types
+    end
+
+    # -- Cleared Checks Totals
+    sheet.add_row ["Total Checks and Payments",
+                   "", "", "", "", "",
+                   vertical_sum(checks, column: "G")],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, amount_total]
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+
+    # Deposits
+    sheet.add_row ["DEPOSITS"], style: bold_cell
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+
+    # -- Cleared Deposits Rows
+    deposits = @audit.associated_items["bank_account_items"]
+                     .select {|item| item["balance_type"] == "credit" }
+                     .sort_by {|item| item["date"] }
+
+    deposits.each do |record|
+      sheet.add_row [
+        "",
+        record["date"],
+        record["number"].to_s,
+        record["payee"],
+        record["memo"],
+        "X",
+        Money.new(record["amount_in_cents"]).to_f.abs
+      ],
+                    style: bank_item_styles,
+                    types: bank_item_types
+    end
+
+    # -- Cleared Deposits Totals
+    sheet.add_row ["Total Deposits", "", "", "", "", "", vertical_sum(deposits, column: "G")],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, amount_total],
+                  types: [:string, nil, nil, nil, nil, nil, nil]
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+
+    # Ending Balance
+    sheet.add_row ["Ending Balance as of #{@statement.ended_at.strftime('%m/%d/%Y')}", "", "", "", "", "", "", @statement.ending_balance.to_f],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, nil, balance_total],
+                  types: [:string, nil, nil, nil, nil, nil, nil, :float]
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+    ending_balance_row = current_row_num
+
+    # UNCLEARED
+    #---------------------------------------------------------------------------
+    sheet.add_row
+    sheet.add_row ["TRANSACTIONS NOT CLEARED"], style: subheader_cell
+    sheet.merge_cells("A#{current_row_num}:H#{current_row_num}")
+
+    # Uncleared Checks
+    sheet.add_row ["CHECKS AND PAYMENTS"], style: bold_cell
+    sheet.merge_cells("A#{current_row_num}:H#{current_row_num}")
+
+    uncleared_checks = @audit.associated_items["unreconciled_items"]
+                             .select {|item| item["balance_type"] == "debit" }
+                             .sort_by {|item| item["date"] }
+
+    # -- Uncleared Check Rows
+    uncleared_checks.each do |record|
+      sheet.add_row [
+        "",
+        record["date"],
+        record["number"].to_s,
+        record["payee"],
+        record["memo"],
+        "",
+        Money.new(record["amount_in_cents"]).to_f.abs
+      ],
+                    style: bank_item_styles,
+                    types: bank_item_types
+    end
+
+    # -- Check totals
+    sheet.add_row ["Total Uncleared Checks and Payments", "", "", "", "", "", vertical_sum(uncleared_checks, column: "G")],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, amount_total],
+                  types: [:string, nil, nil, nil, nil, nil, nil]
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+    checks_balance_row = current_row_num
+
+    # Uncleared Deposits
+    sheet.add_row ["DEPOSITS"], style: bold_cell
+    sheet.merge_cells("A#{current_row_num}:H#{current_row_num}")
+
+    uncleared_deposits = @audit.associated_items["unreconciled_items"]
+                               .select {|item| item["balance_type"] == "credit" }
+                               .sort_by {|item| item["date"] }
+
+    # -- Uncleared Deposits Rows
+    uncleared_deposits.each do |record|
+      sheet.add_row [
+        "",
+        record["date"],
+        record["number"].to_s,
+        record["payee"],
+        record["memo"],
+        "",
+        Money.new(record["amount_in_cents"]).to_f.abs
+      ],
+                    style: bank_item_styles,
+                    types: bank_item_types
+    end
+
+    # -- Uncleared Deposits Totals
+    sheet.add_row ["Total Uncleared Deposits", "", "", "", "", "", vertical_sum(uncleared_deposits, column: "G")],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, amount_total]
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+
+    deposits_balance_row = current_row_num
+    sheet.add_row [
+      "Ending Register Balance as of #{@statement.ended_at.strftime('%m/%d/%Y')}",
+      "", "", "", "", "", "",
+      "=(H#{ending_balance_row} - G#{checks_balance_row} + G#{deposits_balance_row})"
+    ],
+                  style: [total_title_cell, nil, nil, nil, nil, nil, nil, balance_total]
+    sheet.merge_cells("A#{current_row_num}:F#{current_row_num}")
+
+    # Set column widths
+    sheet.column_info[0].width = 15
+    sheet.column_info[1].width = 15
+    sheet.column_info[2].width = 15
+    sheet.column_info[5].width = 15
+    sheet.column_info[3].width = 35
+  end
+end

@@ -1,0 +1,9 @@
+h2.page-header
+  = class_icon "user", icon_options: "medium"
+  span.text  New User
+
+== render partial: 'users/form',
+          locals: { \
+            admin: true,
+            form_path: admin_users_path,
+            back_path: admin_users_path }

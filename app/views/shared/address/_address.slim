@@ -1,0 +1,28 @@
+.card
+  .card-content
+    - if address_model.name
+      span.card-title style="border-bottom: 1px solid #ccc; display: flex;"
+        = address_model.name
+    .address style="display: block"
+      - if address_model&.attention
+        .attention
+          b Attn:&nbsp;
+          = address_model.attention
+      - if address_model&.department
+        .department
+          b Dept:&nbsp;
+          = address_model.department
+      .separator style="height: 1em"
+      .line-1
+        = address_model&.line1
+      - if address_model&.line2
+        .line-2
+          = address_model.line2
+      .line-3
+        span.city
+          = address_model&.city
+          |,
+        span.state
+          = address_model&.state
+        span.zip
+          = address_model&.zip

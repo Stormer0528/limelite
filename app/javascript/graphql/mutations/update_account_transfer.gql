@@ -1,0 +1,52 @@
+mutation updateAccountTransfer(
+  $accountTransfer: AccountTransferUpdateAttributes
+  $stateAction: String
+  $reason: String
+) {
+  updateAccountTransfer(
+    accountTransfer: $accountTransfer
+    stateAction: $stateAction
+    reason: $reason
+  ) {
+    id
+    aasmState
+    amountInCents
+    amount
+    bankAccountId
+    creatorId
+    date
+    fileUrl
+    memo
+    valid
+    errors
+    errorMessages
+
+    entry {
+      id
+      organizationId
+      entryType
+      date
+      aasmState
+      entryItems {
+        id
+        accountId
+        accountName
+        amount
+        type
+        memo
+        payableType
+        payableId
+        functionCode
+        fundCode
+        goalCode
+        locationCode
+        objectCode
+        resourceCode
+        yearCode
+        valid
+      }
+
+      errors
+    }
+  }
+}

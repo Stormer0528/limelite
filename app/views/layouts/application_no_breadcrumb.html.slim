@@ -1,0 +1,60 @@
+
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="x-ua-compatible" content="ie=edge"
+    = csrf_meta_tags
+
+    title
+      | Limelite DS
+      = yield(:page_title)
+
+    = stylesheet_link_tag    'application', media: 'all'
+    = stylesheet_link_tag    'print',       media: 'print'
+    = javascript_include_tag 'application'
+    = javascript_pack_tag 'application'
+    = favicon_link_tag 'cropped-fox-270x270.png', type: 'image/png'
+    = favicon_link_tag 'cropped-fox-270x270.png', rel: 'apple-touch-icon', type: 'image/png'
+
+    / Top level Js
+    javascript:
+      // Forward to home page if user is logged out
+      const logoutTimeoutId = setInterval(() => {
+        // Ingnore on log in page
+        if (window.location.pathname === "/users/sign_in") {
+          return;
+        }
+
+        fetch("/logged_in.json")
+          .then((response) => response.json())
+          .then((data) => {
+            const {logged_in} = data || {};
+            if (!logged_in) {
+              window.location = "/";
+            }
+          });
+      }, 1000 * 60 * 30);
+
+      const terminationEvent = "onpagehide" in self ? "pagehide" : "unload";
+      addEventListener(
+        terminationEvent,
+        (event) => {
+          window.clearInterval(logoutTimeoutId);
+        },
+        {capture: true}
+      );
+
+    = yield(:head)
+  body.no-breadcrumb
+    - if current_user && @current_org
+      = render 'shared/top_navigation' if policy(@current_org).show?
+
+    main.container
+      = render 'shared/flash_message'
+      = yield
+
+    - if content_for?(:footer)
+      footer = yield(:footer)
+
+    = yield(:bottom_javascript) if content_for?(:bottom_javascript)

@@ -1,0 +1,53 @@
+= content_for :page_title
+  '&nbsp; :: Uploads
+
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    #top-navbar { position: static !important; }
+    main {
+      padding-top: 8px;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #files_index {
+      width: 100%;
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+  javascript:
+    window.initial_data = {};
+
+  = javascript_pack_tag 'render_files_page', defer: true, charset: 'utf-8'
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "cloud_upload", icon_options: "medium"
+    span.text
+      = link_to "/files", class: "breadcrumb primary" do
+        span.link-text
+          '  Uploads
+
+#files_index data-fiscal-year="#{@fiscal_year.year}" data-user-id="#{@current_user.id}"

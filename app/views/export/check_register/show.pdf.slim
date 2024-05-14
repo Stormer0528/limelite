@@ -1,0 +1,40 @@
+= wicked_pdf_stylesheet_link_tag 'pdf'
+
+h3 Check Register
+
+- if @bank_account
+  section#bank-info
+    .name
+      = @bank_account.name
+    .number
+      b Acct. #
+      | xxxx
+      = @bank_account.number
+
+section#ledger.ledger
+  table.bordered.condensed
+    thead
+      tr
+        th No.
+        th Date
+        th Payee
+        th Memo
+        th Amount
+
+    tbody
+      - @items.each do |item|
+        tr.item-row
+          td = item.number
+          td = item.date&.to_formatted_s(:std)
+          td = item.payee
+          td = item.memo
+          td = item.amount.format
+
+      tr
+        td
+        td
+        td
+        td style="text-align: right"
+          h6 style="font-weight: bold !important; margin: 0" Total
+        td
+          = @items.map(&:amount).inject(Money.new(0)) {|total, amt| total + amt }.format

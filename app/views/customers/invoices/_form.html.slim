@@ -1,0 +1,79 @@
+scss:
+  .filestack-btn {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+/ Set Defaults for form path
+- form_path ||= @invoice.new_record? ? customer_invoices_path(@customer) : customer_invoice_path(@customer, @invoice)
+
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+= simple_form_for(@invoice, url: form_path, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @invoice }
+
+  .card
+    .card-content
+      span.card-title style="display: flex"
+        = class_icon "invoice"
+        ' &nbsp;
+        b Invoice For:
+        ' &nbsp;
+        = @customer.name
+
+        .right-align style="margin-left: 1em; flex-grow: 1"
+          .filestack-btn[data-inputId="invoice::file_url"
+                          data-name="invoice[file_url]"
+                          data-value="#{@invoice.file_url}"
+                          data-apikey="#{get_client_and_api_key[1]}"
+                          data-policy="#{get_fresh_policy_and_signature[1]}"
+                          data-signature="#{get_fresh_policy_and_signature[0]}"]
+      .row
+        .col.s12
+          .divider.spaced /
+
+      .row
+        .col.s4
+          = f.input :number, label: "Invoice #"
+
+        .col.s4
+          = f.input :date, as: :string, label: "Invoice Date",
+                    wrapper: :materialize_date
+
+        .col.s4
+          = f.input :due_date, label: "Due Date",
+                    as: :string, wrapper: :materialize_date
+        .col.s12
+          = f.input :description
+
+        .col.s12
+          = f.input :notes
+
+      .row
+        .col.s12
+          = render  partial: "shared/entry_input",
+            locals: { \
+              journalable: @invoice,
+              default_entry_type: "Accounts Receivable",
+              parent_class: "invoice",
+              add_item_label: "+ Account String",
+              invoice_remaining: 0}
+        .divider
+
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @invoice.aasm_state.titleize
+
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @invoice,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "customers/invoices/state_btn" }
+
+  = render "shared/reason_modal", f: f

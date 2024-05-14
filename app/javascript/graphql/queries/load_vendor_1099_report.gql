@@ -1,0 +1,18 @@
+query {
+  vendor1099Report {
+    valid
+    persisted
+    pdfUrl
+    xlsxUrl
+    organizationName
+    startDate
+    endDate
+    vendors {
+      name
+      address
+      ssnEin
+      type
+      yearAmount
+    }
+  }
+}

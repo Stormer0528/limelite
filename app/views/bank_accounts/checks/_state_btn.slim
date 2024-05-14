@@ -1,0 +1,90 @@
+div
+  - case @check.aasm_state.to_s
+    - when "draft"
+      - if !local_assigns[:hide_draft] && policy(@check).save_draft?
+        = f.button :submit, value: "Save Draft", class: "btn btn-flat blue-text"
+        .separator &nbsp;
+      - if policy(@check).send_for_approval?
+        = f.button :submit, value: "Send For Approval", class: "btn btn-flat approval"
+      - if policy(@check).void?
+        = f.button :submit, value: "Void", class: "btn btn-flat red-text",
+          data: { confirm: 'Are you sure you want to void this check? This process is irreversible.' }
+
+
+    - when "needs_revision"
+      - if !local_assigns[:hide_draft] && policy(@check).save_draft?
+        = f.button :submit, value: "Save Draft", class: "btn btn-flat blue-text draft"
+      - if policy(@check).send_for_approval?
+        .separator &nbsp;
+        = f.button :submit, value: "Send For Approval", class: "btn btn-flat green-text approval"
+      - if policy(@check).void?
+        = f.button :submit, value: "Void", class: "btn btn-flat red-text",
+          data: { confirm: 'Are you sure you want to void this check? This process is irreversible.' }
+
+
+    - when "needs_approval"
+      - if policy(@check).approve?
+        = f.button :submit, value: "Approve", class: "btn btn-flat green-text approval"
+      - if policy(@check).deny?
+        .separator &nbsp;
+        a href="#reason-modal" class="btn btn-flat red-text modal-trigger denial" Deny
+
+    - when "approved"
+      - if policy(@check).reverse_approval?
+        = f.button :submit, value: "Reverse Approval", class: "btn btn-flat blue-text"
+      - if policy(@check).print?
+        = f.button :submit, value: "Print", class: "btn btn-flat orange-text",
+          data: { confirm: 'Are you sure you want to manually mark this as printed?' }
+      - if policy(@check).void?
+        = f.button :submit, value: "Void", class: "btn btn-flat red-text",
+          data: { confirm: 'Are you sure you want to void this check? This process is irreversible.' }
+
+    - when "printed"
+      - if policy(@check).void?
+        = f.button :submit, value: "Void", class: "btn btn-flat btn-borderd red-text void-btn waves-red",
+          data: { confirm: 'Are you sure you want to void this check? This process is irreversible.' }
+
+  - if local_assigns[:delete_path] && !local_assigns[:hide_delete]
+    - if policy(@check).destroy?
+      = link_to local_assigns[:delete_path],
+        class: 'btn waves-effect waves-light red white-text btn-flat waves-red',
+        data: { confirm: 'Are you sure?' }, method: :delete do
+        i.material-icons delete_forever
+        '  Delete
+
+- content_for :bottom_javascript do
+  javascript:
+    $(document).ready(function(){
+      $('.modal').modal();
+    })
+
+- content_for :head do
+  scss:
+    .card.form-footer .void-btn {
+      border: 1px solid #F44336;
+      border-radius: 4px;
+      margin-right: 8px;
+
+      input[type="submit" i] {
+        color: #F44336;
+
+        &:hover {
+          color: #fff;
+          font-weight: bold
+        }
+      }
+
+      &:hover {
+        color: white;
+        background: #F44336;
+        transition: color, background 300ms linear;
+        cursor: pointer;
+
+        input[type="submit" i] {
+          color: #F44336;
+          color: #fff;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+    }

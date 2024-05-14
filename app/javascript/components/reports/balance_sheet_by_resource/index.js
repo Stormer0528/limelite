@@ -1,0 +1,108 @@
+import {useCallback, useState} from "react";
+import {compose} from "redux";
+import DateWrapper from "../../shared/date_wrapper";
+import ThemeWrapper from "../../shared/theme_wrapper";
+import {Formik} from "formik";
+import {camelCaseKeys} from "../../../utils";
+
+import {useQuery, useMutation} from "@apollo/react-hooks";
+import BalanceSheetByResource from "./balance_sheet";
+import Loading from "./loading";
+
+import BALANCE_SHEET_BY_RESOURCE from "../../../graphql/queries/load_balance_sheet_by_resource.gql";
+import RUN_BALANCE_SHEET_BY_RESOURCE from "../../../graphql/mutations/run_balance_sheet_by_resource_report.gql";
+
+function Report() {
+  // Fix: useQuery#onCompleted fires ever re-render ... so skipping after first rendeer
+  const [didFetchInitialData, setInitialDataFetched] = useState(false);
+  const [report, setReport] = useState({data: ""});
+  const [tabIndex, setTabIndex] = useState("all");
+
+  const handleTabClick = useCallback(
+    (e, index) => {
+      setTabIndex(index);
+    },
+    [setTabIndex]
+  );
+
+  const {
+    error,
+    loading: queryLoading = false,
+    data: {report: {startDate = "", endDate = ""} = {}} = {},
+  } = useQuery(BALANCE_SHEET_BY_RESOURCE, {
+    // skip: didFetchInitialData,
+    fetchPolicy: "network-only",
+    onCompleted: ({report = {}}) => {
+      if (!didFetchInitialData) {
+        const data = JSON.parse(report.data);
+        const {account_elements: account} = data || {};
+
+        setReport({account: camelCaseKeys(account), ...report, data});
+        setInitialDataFetched(true);
+      }
+    },
+  });
+
+  error && console.error(error);
+
+  const [runReport, mutation] = useMutation(RUN_BALANCE_SHEET_BY_RESOURCE, {
+    fetchPolicy: "no-cache",
+    onCompleted: ({report = {}}) => {
+      const data = JSON.parse(report.data || "{}");
+      setReport({...report, data});
+      setTabIndex("all");
+    },
+  });
+
+  const {error: mutationError, loading: mutationLoading} = mutation;
+  const loading = queryLoading || mutationLoading;
+
+  mutationError && console.error("Mutation ->", mutationError);
+
+  if (queryLoading || !report.data) {
+    return <Loading />;
+  }
+
+  return (
+    <Formik
+      initialValues={{
+        startDate,
+        endDate,
+        account:
+          (report.data["account_elements"] &&
+            camelCaseKeys(report.data["account_elements"])) ||
+          {},
+      }}
+      validateOnChange={false}
+      isInitialValid
+      onSubmit={async (variables, {setSubmitting, resetForm}) => {
+        setSubmitting(true);
+        await runReport({
+          variables,
+        });
+        setSubmitting(false);
+        resetForm({values: variables});
+      }}
+    >
+      {({errors, ...formik}) => {
+        const {account_elements = {}} = report.data || {};
+        return (
+          <BalanceSheetByResource
+            data={report.data}
+            loading={loading}
+            tabIndex={tabIndex}
+            setTabIndex={setTabIndex}
+            handleTabClick={handleTabClick}
+            {...report}
+            {...account_elements}
+            {...formik}
+          />
+        );
+      }}
+    </Formik>
+  );
+}
+
+// Export
+//------------------------------------------------------------------------------
+export default compose(ThemeWrapper, DateWrapper)(Report);

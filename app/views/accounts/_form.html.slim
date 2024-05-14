@@ -1,0 +1,24 @@
+= simple_form_for(@account, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @account }
+
+  h4 style="display: flex;"
+    i.material-icons style="margin-right: .75rem;" pie_chart
+    | Budgets
+    div style="flex-grow: 1; justify-content: flex-end; display: flex;"
+      = link_to_add_association f, :budgets,
+        partial:  'budgets/form',
+        class: "btn btn-flat btn-outline add-btn",
+        data: {:"association-insertion-node" => "#budgets", :"association-insertion-method" => "append"} do
+        i.material-icons style="margin-right: -0.5em; margin-top: -0.5rem;" add
+  hr
+  #budgets
+    = f.simple_fields_for :budgets do |budget|
+      = render partial: 'budgets/form', locals: { f: budget }
+
+
+
+  = render partial: 'shared/form_footer', locals: { \
+    f:f,
+    back_path: local_assigns[:back_path],
+    show_path: local_assigns[:show_path] ,
+    delete_path: local_assigns[:delete_path] }

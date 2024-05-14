@@ -1,0 +1,52 @@
+= content_for :page_title
+  '&nbsp; :: Organizations
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Organization", icon_options: "medium"
+    span.text
+      = link_to organizations_path, class: "breadcrumb" do
+        | Organizations
+
+h4.page-header
+  = class_icon "organization", icon_options: "medium"
+  span.text Organizations
+
+.card
+  .card-content
+    table.responsive-table.bordered
+      thead
+        tr
+          th style="width:25%" Name
+          th Alias
+          th style="width:25%" Description
+          th Domain
+          th Phone
+          th Archived
+          th
+
+      tbody
+        - @organizations.each do |organization|
+          tr
+            td style="width:25%" = link_to organization.name, organization
+            td = organization.alias
+            td style="width:25%" = organization.description
+            td = organization.subdomain
+            td
+              - if organization.phone
+                = number_to_phone organization.phone, area_code: true
+            td = organization.archived?
+            td.actions
+              .btn-group
+                = link_to edit_organization_path(organization),
+                          class: 'btn waves-effect waves-light btn-flat green-text icon-btn' do
+                  i.material-icons edit
+                = link_to organization,
+                          class: 'btn waves-effect waves-light btn-flat red-text icon-btn',
+                          data: { confirm: 'Are you sure?' }, method: :delete do
+                  i.material-icons delete
+
+/ Add Btn
+.fixed-action-btn
+  = link_to new_organization_path, class: "btn-floating btn-large green lighten-1" do
+    i class="material-icons large" add

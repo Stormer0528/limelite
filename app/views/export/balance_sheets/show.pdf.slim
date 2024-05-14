@@ -1,0 +1,106 @@
+
+#profit_and_loss_statement
+  table.header
+    tbody
+      tr
+        td style="width: 25%"
+          p Fiscal Year: #{@report.end_date&.year}
+          p Report Date: #{Date.today.to_formatted_s(:std)}
+        td
+          h1.title = @current_org['name']
+          h2.subtitle style="font-weight: bold;" Financial Summary for Period Ending:&nbsp;#{@report.end_date&.to_formatted_s(:std)}
+
+          - filter_string = @report.account_search_params.map {|k,v| next if !v&.present?; "#{k.gsub(/_code/, '').titleize}: #{v.join(", ")}" }.compact.join(", ")
+          h3.subsubtitle style="font-weight: bold;" #{filter_string}
+
+        td style="width: 25%"
+
+  table.report-table.condensed
+    thead
+      tr
+        th.spacer
+        th
+        th
+        th style="border-bottom: 2px solid black; text-align: right"
+    tbody
+      / ASSETS
+      tr.total-row
+        td colspan="3" Assets
+        - @report.data["account_funds"].each do |fund|
+          td.account-balance-cell = fund["code"]
+        td.account-balance-cell Ending Balance
+      - @report.data["assets"].select{|a| a["balance"] != "$0.00" or a["account_funds"].values.any? { |v| v != "$0.00" } }.each do |acc_obj|
+        tr
+          td.spacer
+          td.account-code-cell
+            b #{acc_obj['code']}
+          td.account-name-cell #{acc_obj['name']}
+          - acc_obj["account_funds"].values.each do|val|
+            td.account-balance-cell = val
+          td.account-balance-cell = acc_obj['balance']
+      tr.total-row
+        td colspan="3" Total Assets
+        - @report.data["total_assets_by_account_funds"].values.each do|val|
+          td.account-balance-cell = val
+        td.account-balance-cell
+          = @report.data["total_assets"]
+
+      / LIABILITIES
+      tr.total-row
+        td colspan="3" Liabilities
+        - @report.data["account_funds"].each do |fund|
+          td.account-balance-cell = fund["code"]
+        td.account-balance-cell Ending Balance
+      - @report.data["liabilities"].select{|a| a["balance"] != "$0.00" or a["account_funds"].values.any? { |v| v != "$0.00" } }.each do |acc_obj|
+        tr
+          td.spacer
+          td.account-code-cell
+            b #{acc_obj['code']}
+          td.account-name-cell #{acc_obj['name']}
+          - acc_obj["account_funds"].values.each do|val|
+            td.account-balance-cell = val
+
+          td.account-balance-cell = acc_obj['balance']
+      tr.total-row
+        td colspan="3" Total Liabilities
+        - @report.data["total_liabilities_by_account_funds"].values.each do|val|
+          td.account-balance-cell = val
+        td.account-balance-cell
+          = @report.data["total_liabilities"]
+
+      / EQUITIES
+      tr.total-row
+        td colspan="3" Equity
+        - @report.data["account_funds"].each do |fund|
+          td.account-balance-cell = fund["code"]
+        td.account-balance-cell Ending Balance
+      - @report.data["equities"].select{|a| a["balance"] != "$0.00" or a["account_funds"].values.any? { |v| v != "$0.00" } }.each do |acc_obj|
+        tr
+          td.spacer
+          td.account-code-cell
+            b #{acc_obj['code']}
+          td.account-name-cell #{acc_obj['name']}
+          - acc_obj["account_funds"].values.each do|val|
+            td.account-balance-cell = val
+          td.account-balance-cell = acc_obj['balance']
+      tr
+        td.spacer
+        td.account-code-cell
+        td.account-name-cell Net Income (Loss)
+        - @report.data["net_income_loss_by_account_funds"].values.each do |value|
+          td.account-balance-cell = value
+        td.account-balance-cell = @report.data['net_income_loss']
+      tr.total-row
+        td colspan="3" Total Equity
+        - @report.data["equity_balance_by_account_funds"].values.each do |value|
+          td.account-balance-cell = value
+        td.account-balance-cell
+          = @report.data["equity_balance"]
+
+      / YTD Balance
+      tr.total-row
+        td colspan="3" Total Liabilities and Equity
+        - @report.data["net_fund_balance_by_account_funds"].values.each do |value|
+          td.account-balance-cell style="border-bottom: 3px double black" = value
+        td.account-balance-cell style="border-bottom: 3px double black"
+          = @report.data["net_fund_balance"]

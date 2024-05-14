@@ -1,0 +1,29 @@
+.valign-wrapper
+  .card.grey.lighten-3.hoverable.login-box
+    .card-content
+      span.card-title.grey-text.text-darken-4
+        | Resend Unlock Instructions
+        = image_tag 'LOGO-1.png', size: '183x55', class: 'logo pull-right'
+
+      = simple_form_for resource,
+        as: resource_name, url: unlock_path(resource_name),
+        html: { method: :post, class: '' } do |f|
+
+        = f.error_notification
+        = f.full_error :unlock_token
+
+        = f.input :email, required: true, autofocus: true
+
+        .form-actions.right-align
+          = f.button :submit, "Resend Unlock Instructions", class: 'btn waves-effect waves-light'
+
+    .card-action.blue-grey.lighten-4
+      h6.activator
+        | Need Help?
+        i class="material-icons right" more_vert
+    .card-reveal
+      span.card-title.grey-text.text-darken-4
+        | Account Help
+        i.material-icons.right close
+
+      = render "devise/shared/links"

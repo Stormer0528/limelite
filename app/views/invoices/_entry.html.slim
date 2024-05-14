@@ -1,0 +1,25 @@
+/ Entries
+.card.entry-show
+  .card-content
+    span.card-title
+      i.material-icons style="position: relative; top: 4px" receipt
+      '
+      span.text
+        | Entry Details
+
+    .divider.spaced
+    .row
+      .col.s3
+        b Entry: &nbsp;
+        = link_to(entry_path(@invoice.entry)) do
+          = @invoice.id
+      .col.s3
+        b Date: &nbsp;
+        = @invoice.entry&.date&.to_formatted_s(:std)
+      .col.s3
+        b Type:&nbsp;
+        = @invoice.entry&.entry_type
+
+    h5 Debits and Credits
+    = render  partial: 'entries/entry_items_table',
+      locals: { entry: @invoice.entry }

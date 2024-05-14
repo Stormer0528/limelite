@@ -1,0 +1,18 @@
+mutation createEntry(
+  $date: String
+  $entryType: String
+  $fileUrl: String
+  $entryItems: [EntryItemAttributes]
+) {
+  entry: createEntry(
+    date: $date
+    fileUrl: $fileUrl
+    entryType: $entryType
+    entryItems: $entryItems
+  ) {
+    id
+    errors
+    valid
+    path
+  }
+}

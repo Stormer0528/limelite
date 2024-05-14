@@ -1,0 +1,55 @@
+
+javascript:
+  $('#ten_ninety_nines').on('cocoon:after-insert', function(e, insertedItem, originalEvent) {
+    window.renderFilestackBtnComponent();
+  });
+
+.card.nested-fields
+  .card-content
+    span.card-title
+      .pull-right
+        = link_to_remove_association f, class: 'btn waves-effect waves-light btn-flat red-text icon-btn' do
+          i.material-icons.medium cancel
+    .row
+      .col.s3
+        = f.input :id, as: :hidden
+        = f.input :year, label: "EIN Year"
+
+      .col.s3
+        p
+          = f.label :required, value: true
+            = f.radio_button :required, true
+            span  1099 Required
+
+        p
+          = f.label :required, value: false
+            = f.radio_button :required, false
+            span  1099 Not Required
+
+      .col.s5
+        label 1099 Address
+        = f.input_field :address_id,
+         as: :select,
+         collection: @vendor.addresses,
+         value_method: :id,
+         class:'browser-default'
+
+    .row
+      .col.s4
+        = f.input :ein, label: "EIN"
+
+      .col.s4
+        label EIN Type
+        = f.input_field :ein_type,
+                        as: :select,
+                        collection: Vendor::TYPES,
+                        class:'browser-default'
+
+      .col.s4
+        label Upload 1099:
+        a.filestack-btn[data-inputId="vendor::ten_ninety_nines_attributes::[#{f.options[:child_index]}]::file_url"
+                       data-name="vendor[ten_ninety_nines_attributes][#{f.options[:child_index]}][file_url]"
+                       data-value="#{f.object.file_url}"
+                       data-apikey="#{get_client_and_api_key[1]}"
+                       data-policy="#{get_fresh_policy_and_signature[1]}"
+                       data-signature="#{get_fresh_policy_and_signature[0]}"]

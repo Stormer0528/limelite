@@ -1,0 +1,48 @@
+mutation runBalanceSheetReport(
+  $startDate: String
+  $endDate: String
+  $account: AccountCodeInputObject
+) {
+  report: createBalanceSheetByMonth(
+    start_date: $startDate
+    end_date: $endDate
+    account: $account
+  ) {
+    accountFundCode
+    accountFundName
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+    data
+    startDate
+    endDate
+    updatedAt
+    errors
+    organizationName
+    persisted
+    valid
+    xlsxUrl
+    pdfUrl
+    months
+    monthTitles
+    colspanWidth
+  }
+}

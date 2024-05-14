@@ -1,0 +1,11 @@
+query addressSearch($vendor_id: ID) {
+  addressSearch(addressable_type: "Vendor", addressable_id: $vendor_id) {
+    id
+    name
+    line1
+    line2
+    city
+    state
+    zip
+  }
+}

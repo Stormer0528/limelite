@@ -1,0 +1,5 @@
+query Permissions($modelType: String) {
+  permissions(model_class: $modelType) {
+    create
+  }
+}

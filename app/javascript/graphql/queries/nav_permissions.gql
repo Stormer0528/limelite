@@ -1,0 +1,29 @@
+query {
+  reports: permissions(model_class: "Report") {
+    index
+  }
+  entry: permissions(model_class: "Entry") {
+    create
+  }
+  bankAccounts: permissions(model_class: "BankAccount") {
+    index
+  }
+  entries: permissions(model_class: "Entry") {
+    index
+  }
+  creditCards: permissions(model_class: "CreditCard") {
+    index
+  }
+  customer: permissions(model_class: "Customer") {
+    index
+  }
+  accounts: permissions(model_class: "Account") {
+    index
+  }
+  vendors: permissions(model_class: "Vendor") {
+    index
+  }
+  admin: permissions(model_class: "admin") {
+    index
+  }
+}

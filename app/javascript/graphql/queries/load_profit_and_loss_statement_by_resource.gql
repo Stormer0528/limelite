@@ -1,0 +1,36 @@
+query {
+  report: profit_and_loss_by_resource_report {
+    data
+    persisted
+    valid
+    errors
+    startDate
+    endDate
+    pdfUrl
+    xlsxUrl
+    colspanWidth
+    titles
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+  }
+}

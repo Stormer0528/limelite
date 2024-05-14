@@ -1,0 +1,155 @@
+.card-action.state-btns,
+.form-footer {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 0;
+  min-height: 47.5px;
+  z-index: 995; /* Keep under breadcrumb @ 999 */
+
+  .separator {
+    display: inline-block;
+    height: 100%;
+    margin: 0 0.35rem;
+    border-left: 1px solid #e0e0e0;
+    font-size: 2rem;
+    font-weight: 400;
+    display: inline-block;
+    margin: -0.35rem 0.5rem;
+  }
+
+  .left,
+  .center,
+  .right {
+    padding: 0.35rem 12px;
+    height: 100%;
+  }
+
+  .left {
+    h5 {
+      font-size: 1.25rem;
+      margin: 0;
+    }
+  }
+
+  .center {
+    text-align: center;
+    flex-grow: 3;
+  }
+
+  .right {
+    text-align: right;
+    border-left: 1px solid #e0e0e0;
+  }
+}
+
+.input-field.hidden {
+  margin: 0;
+  padding: 0;
+}
+
+.card.form-footer {
+  position: fixed;
+  bottom: -15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  text-align: right;
+  justify-content: flex-end;
+  background: #cfd8dc;
+  color: white;
+  box-shadow: 0 0 10px rgba(33, 33, 33, 0.75);
+
+  .separator {
+    border-left-color: #b0bec5;
+  }
+
+  .left {
+    padding-top: 1.75rem;
+    display: flex;
+    justify-content: flex-start;
+    align-self: flex-start;
+    flex-grow: 1;
+    align-content: center;
+    flex-direction: column;
+    padding-left: 1rem;
+    text-align: left;
+    font-weight: 300;
+
+    h5 {
+      font-weight: 200;
+
+      b {
+        color: #607d8b;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.simple_form.edit_vendor,
+.simple_form.new_vendor,
+.simple_form.edit_customer,
+.simple_form.new_customer {
+  margin-bottom: 85px;
+}
+
+// Background color for btns
+.btn.btn-flat {
+  &.approval {
+    color: #4caf50 !important;
+  }
+  &.denial {
+    color: #f44336 !important;
+
+    &:hover {
+      background-color: #ffcdd2;
+    }
+  }
+
+  &.normal {
+    &:hover {
+      background-color: #cfd8dc;
+    }
+  }
+
+  &.draft {
+    color: #2196f3 !important;
+
+    &:hover {
+      background-color: #bbdefb;
+    }
+  }
+}
+
+// Status Text Colors
+.card-action.state-btns {
+  .left {
+    h5.current_state {
+      &.draft {
+        color: #2196f3;
+      }
+
+      &.paid,
+      &.approved {
+        color: #4caf50;
+      }
+
+      &.needs-approval,
+      &.needs-revision,
+      &.reversal-proposed,
+      &.needs-payment-approval {
+        color: #ffb300;
+      }
+
+      &.reversed {
+        color: #f44336;
+      }
+
+      & > b {
+        color: black;
+      }
+    }
+  }
+}

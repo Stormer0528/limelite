@@ -1,0 +1,30 @@
+query loadUser(id: ID!) {
+	user(id: $id) {
+    permissions {
+        view
+        edit
+        delete
+    }
+    id
+    admin
+    avatarUrl
+    backOffice
+    editUrl
+    path
+    editPath
+    newPath
+    email
+    firstName
+    fullName
+    initials
+    lastName
+    slug
+    url
+    # Relationships
+    # organizations
+    # organizationAssignments
+    # ownerAssignments
+    # editorAssignments
+    # viewerAssignments
+	}
+}

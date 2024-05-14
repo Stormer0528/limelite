@@ -1,0 +1,33 @@
+wb = xlsx_package.workbook
+@wb = wb
+
+wb.styles do |s|
+  require_relative "../report_functions"
+
+  # Style Definitions
+  header_title_cell  = s.add_style fg_color: "00", b: true, sz: 16, alignment: {horizontal: :center}
+  header_border_cell = s.add_style sz: 11, b: true,
+                                   border: {style: :thin, color: "00", edges: [:top, :bottom, :left, :right]}
+  currency_with_sign = wb.styles.add_style num_fmt: 44
+
+  wb.add_worksheet(name: "Vendor 1099 List") do |sheet|
+    sheet.add_row ["#{@current_org.name} 1099 Vendor List"], style: [header_title_cell]
+    sheet.merge_cells("A1:E1")
+    sheet.add_row
+    sheet.add_row ["Vendor Name", "Type", "SSN/EIN",	"Vendor Address",	"Year Amount"], style: header_border_cell
+
+    @report.vendors.each.with_index do |vendor, _i|
+      sheet.add_row [
+        vendor["name"],
+        vendor["type"],
+        vendor["ssn_ein"],
+        vendor["address"],
+        parse_num(vendor["year_amount"])
+      ], style: [nil, nil, nil, nil, currency_with_sign]
+    end
+
+    sheet.column_info.first.width = 35
+    sheet.column_info[2].width = 12
+    sheet.column_info[4].width = 15
+  end
+end

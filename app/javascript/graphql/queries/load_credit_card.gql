@@ -1,0 +1,25 @@
+query loadCreditCard($slug: String!) {
+  account: creditCard(slug: $slug) {
+    id
+    number
+    name
+    description
+    slug
+    number
+    startedAt
+    endedAt
+    balance
+    lastStatementBalance
+
+    permissions {
+      show
+    }
+  }
+
+  accounts: creditCards {
+    path
+    slug
+    number
+    name
+  }
+}

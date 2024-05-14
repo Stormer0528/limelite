@@ -1,0 +1,2 @@
+class BankAccountPolicy < StandardPolicy
+end

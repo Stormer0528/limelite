@@ -1,0 +1,53 @@
+query customer($slug: String!) {
+  customerBySlug(slug: $slug) {
+    id
+    slug
+    name
+    company
+    aasmState
+    editPath
+    displayName
+    path
+    approvedAt
+    approver
+    homePhoneNumber
+    mobilePhoneNumber
+    workPhoneNumber
+    faxPhoneNumber
+    visibleId
+    addresses {
+      name
+      line1
+      line2
+      zip
+      city
+      state
+      attention
+      department
+    }
+    permissions {
+      index
+      create
+      edit
+      view
+      show
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+    stateChangeLogs {
+      loggableType
+      fromState
+      toState
+      reason
+      createdAt
+      user {
+        fullName
+      }
+    }
+  }
+}

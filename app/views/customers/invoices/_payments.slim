@@ -1,0 +1,28 @@
+/ Payments
+ul.collapsible data-collapsible="expandable"
+  li#payments
+    .collapsible-header.active
+      h5
+        i.material-icons payment
+        b  Payments
+        .right-align
+          = link_to new_customer_invoice_payment_path(@customer, @invoice),
+            class: "btn waves-effect waves-light btn-flat green-text icon-btn" do
+            i.material-icons add
+
+    .collapsible-body
+      .row
+        .col.s12
+          = render  partial: 'customers/payments/list',
+                    locals: { payments: @invoice.payments.order(date: :desc),
+                      hide_customer: true, hide_invoice: true, hide_total: true, hide_po: true }
+      .row
+        .col.s2.offset-s5.right-align
+          b Total:
+        .col.s4
+          = number_to_currency @invoice.amount_paid, precision: 2
+      .row
+        .col.s2.offset-s5.right-align
+          b Remaining:
+        .col.s4
+          = number_to_currency @invoice.amount_remaining, precision: 2

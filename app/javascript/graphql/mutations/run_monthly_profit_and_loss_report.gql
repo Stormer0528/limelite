@@ -1,0 +1,45 @@
+mutation runMonthlyProfitAndLossReport(
+  $start_date: String
+  $end_date: String
+  $account: AccountCodeInputObject
+) {
+  createMonthlyProfitAndLossStatement(
+    start_date: $start_date
+    end_date: $end_date
+    account: $account
+  ) {
+    data
+    persisted
+    valid
+    errors
+    startDate
+    endDate
+    pdfUrl
+    xlsxUrl
+    months
+    monthTitles
+    colspanWidth
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+  }
+}

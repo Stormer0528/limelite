@@ -1,0 +1,19 @@
+query vendorPurchaseOrders($vendorId: ID, $currentId: ID!) {
+  purchaseOrders: purchaseOrderSearch(
+    vendor_id: $vendorId
+    without_invoice: true
+  ) {
+    id
+    number
+    date
+    dateNeeded
+    total
+  }
+  current: purchaseOrder(id: $currentId) {
+    id
+    number
+    date
+    dateNeeded
+    total
+  }
+}

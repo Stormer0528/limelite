@@ -1,0 +1,56 @@
+- content_for :head do
+  = stylesheet_link_tag "searchable_table",        media: "all"
+  = javascript_pack_tag "render_filestack_btn",    defer: true, charset: 'utf-8', nonce: true
+  = javascript_pack_tag "render_admin_user_index", defer: true, charset: 'utf-8', nonce: true
+
+/ Set Defaults When not Devise Controller
+- resource ||=@user
+- resource_name ||= 'user'
+- form_path ||= :post
+- form_method ||= registration_path(resource_name)
+
+/ Form...
+= simple_form_for resource,
+  as: resource_name, url: local_assigns[:form_path],
+  html: { method: form_method, class: "dirty-check" } do |f|
+
+  = render partial: 'shared/validation_errors', locals: { resource: @user, f:f }
+
+  .card
+    .card-content
+      .row
+        .col.s6
+          = f.input :first_name, required: true, autofocus: true, readonly: local_assigns[:readonly]
+        .col.s6
+          = f.input :last_name, required: true, readonly: local_assigns[:readonly]
+      .row
+        - unless local_assigns[:readonly]
+          .col.s6
+            label
+              | Logo Image:
+              a.filestack-image-btn[data-inputId="user::avatar_url"
+                            data-name="user[avatar_url]"
+                            data-value="#{@user.avatar_url}"
+                            data-apikey="#{get_client_and_api_key[1]}"
+                            data-policy="#{get_fresh_policy_and_signature[1]}"
+                            data-signature="#{get_fresh_policy_and_signature[0]}"]
+
+        .col.s6
+          = f.input :email, required: true, readonly: local_assigns[:readonly]
+      - unless local_assigns[:readonly]
+        #PasswordRow
+
+      .row
+        - if local_assigns[:admin]
+          .col.s3
+            = f.input :back_office, as: :boolean, label: "Back Office User  ", readonly: local_assigns[:readonly]
+
+          .col.s3
+            = f.input :ap, as: :boolean, label: "AP User  ", readonly: local_assigns[:readonly]
+
+        .col.s6
+          = f.input :confirmed, as: :boolean, label: "Confirm User  ", readonly: local_assigns[:readonly]
+
+    - unless local_assigns[:readonly]
+      .card-action.right-align
+        = f.button :submit, "Update User"

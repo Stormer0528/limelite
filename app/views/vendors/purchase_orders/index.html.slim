@@ -1,0 +1,45 @@
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+  / Preload page info
+  / Skip upload check until all pages converted to redux
+  javascript:
+    window.initial_data = {
+      filestack :{
+        apikey:"#{{get_client_and_api_key[1]}}",
+        policy:"#{{get_fresh_policy_and_signature[1]}}",
+        signature:"#{{get_fresh_policy_and_signature[0]}}",
+        security: {
+          policy:"#{{get_fresh_policy_and_signature[1]}}",
+          signature:"#{{get_fresh_policy_and_signature[0]}}",
+        }
+      },
+      permissions: {
+        
+      }
+    };
+
+  = javascript_pack_tag 'render_purchase_order_routes', defer: true, charset: 'utf-8'
+
+#purchase_orders_index

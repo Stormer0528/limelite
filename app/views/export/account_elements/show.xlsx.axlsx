@@ -1,0 +1,21 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+
+  # Style Definitions
+  header_title_cell  = s.add_style :fg_color => "00", :b => true, :sz => 18, :alignment => { :horizontal=> :center }
+  total_row_cell = s.add_style :fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+
+  %i[funds resources years goals functions objects locations].each do |elem|
+    wb.add_worksheet(name: "ACCOUNT #{(elem == :locations) ? 'SCHOOLS' : elem.to_s.upcase}") do |sheet|
+      sheet.add_row ["Account #{(elem == :locations) ? 'SCHOOLS' : elem.to_s.upcase}"], style: header_title_cell
+      sheet.merge_cells "A1:B1"
+      sheet.add_row
+      sheet.add_row ["Code", "Name"], style: total_row_cell
+
+      @current_org.send("account_#{elem}").order(:code).each do|ae|
+        sheet.add_row [ae.code, ae.name], types: [:string, :string]
+      end
+
+    end
+  end
+end

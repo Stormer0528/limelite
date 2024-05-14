@@ -1,0 +1,8 @@
+query accountFunds($organizationId: ID) {
+  accountFunds(organizationId: $organizationId) {
+    name
+    code
+    id
+    organizationId
+  }
+}

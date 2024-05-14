@@ -1,0 +1,8 @@
+query users($organizationId: ID) {
+  users(organization_id: $organizationId) {
+    id
+    fullName
+    email
+    avatarUrl
+  }
+}

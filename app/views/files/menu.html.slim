@@ -1,0 +1,41 @@
+= content_for :head
+  = stylesheet_link_tag "minimal",           media: "all"
+  = stylesheet_link_tag "landing_page",           media: "all"
+
+  scss:
+    .LandingPage {
+      grid-template-columns: repeat(2, minmax(20vh, 1fr));
+      grid-template-rows: 0.5fr 1fr 0.5fr;
+    }
+    main > .container {
+      margin: 12.5vh 12.5% 0;
+    }
+
+    .upload-files {
+      background: linear-gradient(to bottom right, #1cb5e0 0%, #000851 100%);
+      color: #e8f5e9;
+
+      grid-row: 2;
+      grid-column: 1;
+    }
+
+    .view-files {
+      background: linear-gradient(to bottom right, #9ebd13 0%, #008552 140%);
+      color: #f1f8e9;
+
+      grid-row: 2;
+      grid-column: 2;
+    }
+
+= content_for :page_title
+  '&nbsp; :: #{@current_org&.name} > Uploads
+
+.container
+  .LandingPage
+    = link_to "/files/new", class: 'item upload-files' do
+      = class_icon "file_upload"
+      span.text Upload Files
+
+    = link_to "/files", class: 'item view-files' do
+      = class_icon "folder_open", icon_options: 'small'
+      span.text View Uploaded Files

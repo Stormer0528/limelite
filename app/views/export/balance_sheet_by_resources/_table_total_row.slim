@@ -1,0 +1,8 @@
+tr.total-row
+  td.spacer
+    td.account-code-cell colspan="2"
+      = local_assigns[:title]
+    - @report.data["titles"].each do |code|
+      - next if ["code", "description"].include? code.to_s
+      td.account-name-cell #{acc_obj[code.downcase]}
+    td.account-balance-cell = acc_obj["balance"]

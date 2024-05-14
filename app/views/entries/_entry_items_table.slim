@@ -1,0 +1,112 @@
+javascript:
+  $(document).ready(function(){
+    $('.modal').modal();
+  });
+
+/Entry Items Table
+table.table.bordered.responsive-table.entry-items
+  thead
+    tr
+      th Account
+      th Memo
+      th = entry.entry_items.map(&:payable_type).uniq.compact.reject(&:empty?).sort.join(" / ")
+      - if entry.payments.count > 0
+        th Payment
+      th.debit Debit
+      th.credit Credit
+
+  - entry.entry_items.standard_ordering.each do |item|
+    tbody
+      tr.entry-item
+        td.account_number style="display: flex; justify-content: flex-start; padding: .5em 1.5em; align-items:center"
+
+          a class="modal-trigger" href="#modal-#{item.account_number}"
+            = item.account_number
+          = link_to account_path(item.account), target:"_blank", class: "btn btn-flat", style: "color: #2196f3; margin-left: .25rem;", tooltip: "View Account" do
+            i.material-icons style="left: 2px;" find_in_page
+
+          .modal.account-elements-modal.modal-fixed-footer id="modal-#{item.account_number}"
+            .modal-content
+              h5.header
+                b Account Number:
+                = item.account_number
+              ul.collection
+                / Fund
+                li.collection-item.avatar
+                  = class_icon "Fund", icon_options: "circle"
+                  span.title
+                    b Fund:&nbsp
+                    = item.account.account_fund_code
+                    span &mdash;
+                    = item.account.account_fund_name
+                / Resource
+                li.collection-item.avatar
+                  = class_icon "Resource", icon_options: "circle"
+                  span.title
+                    b Resource:&nbsp
+                    = item.account.account_resource_code
+                    span &mdash;
+                    = item.account.account_resource_name
+                / Year
+                li.collection-item.avatar
+                  = class_icon "Year", icon_options: "circle"
+                  span.title
+                    b Year:&nbsp
+                    = item.account.account_year_code
+                    span &mdash;
+                    = item.account.account_year_name
+                / Goal
+                li.collection-item.avatar
+                  = class_icon "Goal", icon_options: "circle"
+                  span.title
+                    b Goal:&nbsp
+                    = item.account.account_goal_code
+                    span &mdash;
+                    = item.account.account_goal_name
+                / Function
+                li.collection-item.avatar
+                  = class_icon "Function", icon_options: "circle"
+                  span.title
+                    b Function:&nbsp
+                    = item.account.account_function_code
+                    span &mdash;
+                    = item.account.account_function_name
+                / Object
+                li.collection-item.avatar
+                  = class_icon "Object", icon_options: "circle"
+                  span.title
+                    b Object:&nbsp
+                    = item.account.account_object_code
+                    span &mdash;
+                    = item.account.account_object_name
+                / Location
+                li.collection-item.avatar
+                  = class_icon "Location", icon_options: "circle"
+                  span.title
+                    b Location:&nbsp
+                    = item.account.account_location_code
+                    span &mdash;
+                    = item.account.account_location_name
+
+            .modal-footer
+              a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" Close
+        td.memo = item.memo
+        td.payable
+          - if item.payable
+            = link_to send("#{item.payable_type.downcase.pluralize}_path", item.payable.slug) do
+              div title="#{item.payable_type}" style="display: flex; align-items: center;"
+                = class_icon item.payable_type
+                = item.payable.name
+        - if entry.payments.count > 0
+          td.payment
+            - if item.payment && policy(item.payment).show?
+              = link_to vendor_invoice_payment_path(item.payment.vendor, item.payment.invoice, item.payment),
+                  class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn'  do
+                i.material-icons find_in_page
+
+        - if item.type == "Debit"
+          td.debit = item.positive_amount.format
+          td.credit
+        - else
+          td.debit
+          td.credit = item.amount.format

@@ -1,0 +1,101 @@
+.micr-check
+  .org-wrapper
+    .row.org-row
+      .col.s6
+        .check-org.center-align
+          b style="font-size:120%"
+            = @current_org.name
+          br /
+          - if @current_org.addresses.first&.line1.present?
+            = @current_org.addresses.first&.line1
+            br /
+          - if @current_org.addresses.first&.line2.present?
+            = @current_org.addresses.first&.line2
+            br /
+          = "#{@current_org.addresses.first&.city}, #{@current_org.addresses.first&.state} #{@current_org.addresses.first&.zip}"
+      .col.s4
+        .check-fractional.center-align
+          b style="font-size:120%"
+            = @bank_account.bank_name
+          br /
+          = @bank_account.fractional_number
+      .col.s2
+        .check-number.right-align
+          = check.number
+        .check-date.section
+          = (check.date || Date.today).to_formatted_s(:std)
+
+  / Next Row
+  .payee-wrapper
+    .row.payee-row
+      .col.s2
+        .check-pay-to
+          'Pay to the
+          br
+          'Order of
+      .col.s8
+        .check-payee style="top:#{@printer_settings.payee_offset_y * 5}pt; left: #{@printer_settings.payee_offset_x * 5} pt"
+          = check.payee
+      .col.s2
+        .check-amount style="top:#{@printer_settings.amount_offset_y * 5}pt; left: #{@printer_settings.amount_offset_x * 5} pt"
+          = check.amount.format.rjust(12, "*")
+
+  .amount-text-row-wrapper
+    .row.amount-text-row style="top:#{@printer_settings.amount_text_offset_y * 5}pt; left: #{@printer_settings.amount_text_offset_x * 5} pt"
+      .col.s12
+        .check-amount-text style="top:#{@printer_settings.memo_offset_y * 5}pt; left: #{@printer_settings.memo_offset_x * 5} pt"
+          = "#{check.amount.to_i.to_words.titleize} Dollars and #{check.amount_cents}/100".ljust(80, "*")
+
+  //address row
+
+  .address-wrapper
+    .row.address-row
+      .col.s7
+        .check-address style="top:#{@printer_settings.memo_offset_y * 5}pt; left: #{@printer_settings.memo_offset_x * 5}pt"
+          = check.payee
+          br /
+          - unless check.address&.attention.blank?
+            = check.address.attention
+            br /
+          - unless check.address&.department.blank?
+            = check.address.department
+            br /
+          - unless check.address&.line1.blank?
+            = check.address.line1
+            br /
+          - unless check.address&.line2.blank?
+            = check.address.line2
+            br /
+          = "#{check.address&.city}, #{check.address&.state} #{check.address&.zip}"
+      .col.s5
+        .check-signature.center-align style="top:#{@printer_settings.signature_offset_y * 5}pt; left: #{@printer_settings.signature_offset_x * 5} pt"
+          = "_" * 30
+          br /
+          = "_".rjust(30,"_")
+        .check-authorized-signature.center-align
+          'Authorized Signature
+
+  .memo-wrapper
+    .row.memo-row
+      .col.s1
+        .memo
+          'Memo
+      .col.s11
+        .check-memo style="top:#{@printer_settings.memo_offset_y * 5}pt; left: #{@printer_settings.memo_offset_x * 5} pt"
+          - unless check.address&.addressable&.account_number.blank?
+            ' Account #: #{check.address.addressable.account_number}  #{check.memo}
+          - else
+            ' #{check.memo}
+
+  .footer-wrapper
+    .row.check-footer
+      .col.s12
+        .micr-label style="top:#{@printer_settings.signature_offset_y * 5}pt; left: #{@printer_settings.micr_offset_x * 5} pt"
+          | C#{check.number.rjust(6,"0")}C A#{check.routing_number}A #{check.account_number}C
+
+
+/ .check-spacer style="height: #{@printer_settings.check_margin}pt;"
+
+
+= render partial: "voucher_receipt", locals: {voucher_number: 1, check: check, offset: @printer_settings.voucher1_offset_y}
+= render partial: "voucher_receipt", locals: {voucher_number: 2, check: check, offset: @printer_settings.voucher2_offset_y}

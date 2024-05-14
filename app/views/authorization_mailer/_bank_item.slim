@@ -1,0 +1,14 @@
+li style="border: 1px solid #999; border-radius: 4px; padding: 8px; margin: 8px 0;  display: grid; grid-template-columns: repeat(4, minmax(min-content, 1fr)); grid-column-gap: 4px; align-items: flex-end;"
+  span style="font-weight: normal;"
+    b Date:&nbsp;
+    = item&.date&.to_formatted_s(:std_alt)
+
+  span style="font-weight: normal;"
+    b Number:&nbsp;
+    = item.number
+
+  span style="font-weight: normal;"
+    b Amount:&nbsp;
+    = item.amount.format
+
+  a target="_blank" href="#{base_name}/bank_accounts/#{item.bank_account.slug}/#{item.type.demodulize.parameterize.pluralize}/#{item.id}/edit" View Item

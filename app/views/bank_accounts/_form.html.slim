@@ -1,0 +1,90 @@
+javascript:
+  $(document).ready(function(){
+    $(".row.account-row").hide();
+    $(".account-btn").on("click", e => { e.preventDefault(); $(".row.account-row").toggle(); })
+  })
+
+= simple_form_for(@bank_account, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { resource: @bank_account, f:f }
+
+  .card
+    .card-content
+      .row
+        .col.s6
+          = f.input :name
+
+        .col.s6
+          = f.input :starting_balance,
+                    placeholder: "$ 0.00",
+                    html_options: {precision: 2}
+
+      .row
+        .col.s6
+          - if @current_org
+            h6
+              b Organization:
+              '
+              = @current_org.name
+              = f.input :organization_id, as: :hidden, value: @current_org.id
+          - else
+            = f.input :organization_id,
+                      required: true,
+                      collection: @available_orgs,
+                      label_method: :name,
+                      value_method: :id
+
+        .col.s6
+          = f.input :account_object_id, collection: @account_objects, label_method: -> (obj){"[#{obj.code}] #{obj.name}" }
+      .row
+        .col.s12
+          = f.input :description
+
+      .row
+        .col.s12
+          h5 Account Details
+      .row
+        .col.s6
+          = f.input :bank_name
+        .col.s6
+          = f.input :fractional_number
+      .row
+        .col.s6.offset-3
+          a.account-btn href="/" Show/Hide Account Info
+      .row.account-row
+        .col.s4
+          = f.input :number, label: 'Bank Account #'
+
+        .col.s4
+          = f.input :edp_number, label: 'EDP #'
+
+        .col.s4
+          = f.input :state_account_number, label: 'State Acct. #'
+
+        .col.s6
+          = f.input :pseudo
+
+        .col.s6
+          = f.input :routing_number
+
+      .row
+        .col.s12
+          h5 Account Dates
+
+      .row
+        .col.s6
+          = f.input :started_at, as: :string, label: "Start Date",
+                    wrapper: :materialize_date
+
+        .col.s6
+          = f.input :ended_at, as: :string, label: "End Date",
+                    wrapper: :materialize_date
+
+    .card-action.right-align
+      - unless local_assigns.empty?
+          .pull-left
+            - if local_assigns[:back_path]
+              = link_to 'Back', local_assigns[:back_path]
+            - if local_assigns[:show_path]
+              = link_to 'View', local_assigns[:show_path]
+
+      = f.button :submit

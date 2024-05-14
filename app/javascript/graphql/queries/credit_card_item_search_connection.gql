@@ -1,0 +1,72 @@
+query findCreditCardItems(
+  $start_date: String
+  $end_date: String
+  $min_amount: String
+  $max_amount: String
+  $credit_card_id: ID
+  $reconciled: Boolean
+  $aasm_state: String
+  $type: String
+  $number: String
+  $memo: String
+  $cursor: String
+  $first: Int
+  $vendor_id: ID
+) {
+  creditCardItemConnection(
+    start_date: $start_date
+    end_date: $end_date
+    min_amount: $min_amount
+    max_amount: $max_amount
+    credit_card_id: $credit_card_id
+    reconciled: $reconciled
+    aasm_state: $aasm_state
+    number: $number
+    memo: $memo
+    type: $type
+    vendor_id: $vendor_id
+    after: $cursor
+    first: $first
+  ) {
+    edges {
+      node {
+        __typename
+        ... on CreditCardCharge {
+          id
+          creditCardId
+          amount
+          memo
+          type
+          date
+          credit
+          debit
+          payee
+          reconciled
+          aasmState
+          entryId
+          editPath
+          path
+        }
+        ... on CreditCardPayment {
+          id
+          creditCardId
+          amount
+          memo
+          type
+          date
+          credit
+          debit
+          reconciled
+          aasmState
+          entryId
+          editPath
+          path
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

@@ -1,0 +1,160 @@
+query purchaseOrder($vendorSlug: String!, $slug: String!) {
+  purchaseOrder: purchaseOrderBySlug(vendorSlug: $vendorSlug, slug: $slug) {
+    id
+    vendorId
+    number
+    dateNeeded
+    date
+
+    errors
+    errorMessages
+
+    authorizations {
+      id
+      groupId
+      groupName
+      userName
+      action
+      reason
+      date: updatedAt
+    }
+
+    authorizationPath {
+      name
+      id
+    }
+    authorizationPathIndex
+
+    buyer
+    requisitionNumber
+    requestedById
+    requestedForId
+
+    requestedBy {
+      fullName
+      id
+    }
+
+    requestedFor {
+      fullName
+      id
+    }
+
+    slug
+    fileUrl
+    aasmState
+    buyer
+    requisitionNumber
+    referenceNumber
+    slug
+    fileUrl
+    addressId
+    vendorAddressId
+    quoteDate
+    quoteNumber
+    proposalDate
+    proposalNumber
+    paymentTerms
+
+    vendorName
+    vendorPath
+    invoiceId
+    invoicePath
+    createdAt
+    updatedAt
+    path
+    editPath
+    exportPath
+
+    taxAmountInCents
+    subtotalInCents
+    shippingAmountInCents
+    totalInCents
+
+    permissions {
+      index
+      create
+      edit
+      view
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+      authorize
+    }
+
+    stateChangeLogs {
+      id
+      fromState
+      toState
+      createdAt
+      reason
+      user {
+        fullName
+      }
+    }
+    approver
+    approvedAt
+
+    purchaseOrderItems {
+      id
+      purchaseOrderId
+      order
+      quantity
+      description
+      priceInCents
+      totalInCents
+    }
+
+    address {
+      id
+      name
+      line1
+      line2
+      city
+      state
+      zip
+    }
+
+    vendorAddress {
+      id
+      name
+      line1
+      line2
+      city
+      state
+      zip
+    }
+  }
+
+  permissions {
+    index
+    create
+    edit
+    view
+    update
+    delete
+    save_draft
+    send_for_approval
+    reverse_approval
+    approve
+    deny
+  }
+
+  filestack {
+    clientName
+    security {
+      signature
+      policy
+    }
+  }
+
+  vendor: vendorBySlug(slug: $vendorSlug) {
+    vendorId: id
+    slug
+    organizationId
+  }
+}

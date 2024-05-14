@@ -1,0 +1,29 @@
+= content_for :page_title
+  '&nbsp; :: Organizations > #{@organization.name} > Edit
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Organization", icon_options: "medium"
+    span.text
+      = link_to organizations_path, class: "breadcrumb" do
+        span.link-text
+          '  Organizations
+      '
+      span.breadcrumb
+        span.link-text
+          = link_to @organization.name, @organization, class: "breadcrumb"
+      '
+      span.breadcrumb
+        '
+        ' Edit
+
+h4.page-header
+  = class_icon "organization", icon_options: "small"
+  span.text
+    b Editing:&nbsp;
+    = @organization.name
+
+== render partial: 'form', locals: { \
+  class_name: @organization.name,
+  show_path: @organization,
+  back_path: organizations_path }

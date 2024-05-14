@@ -1,0 +1,15 @@
+/ javascript:
+/   $(document).ready(function(){
+/     window.print();
+/   })
+
+section#bank-info
+  .name
+    = @credit_card.name
+  .number
+    b Acct. #
+    | xxxx
+    = @credit_card.number
+
+section#ledger
+  == render partial: "credit_cards/ledger"

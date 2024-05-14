@@ -1,0 +1,32 @@
+= content_for :page_title
+  '&nbsp; :: Reports
+
+- content_for :head do
+  = javascript_pack_tag 'render_report_routes', defer: true, charset: 'utf-8'
+
+  css:
+    body > main.container {
+      margin: 0 auto;
+      width: 100vw;
+      max-width: inherit;
+      padding: 0 1em;
+    }
+
+    body > main.container .LandingPage {
+      width: 100vw;
+    }
+
+    @media (min-width: 1490px){
+      .LandingPage {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+    }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "report", icon_options: "medium"
+    span.text
+      = link_to reports_path, class: "breadcrumb primary" do
+        '  Reports
+
+#router_routes

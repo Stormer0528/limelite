@@ -1,0 +1,48 @@
+css:
+  body {
+    color: #000000de;
+    margin: 16px;
+    font-size: 0.875rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    background-color: #fafafa;
+  }
+
+h1 Limelite Authorizations Pending Review
+hr
+
+- @user.organizations.each do |org|
+  - auth_items =  @user.authorizable_items(org.id).group_by {|i| i.class.name}
+  - next unless auth_items.entries.length > 0
+
+  h2 #{org.name}
+  - protocol = @path =~ /localhost/ ? "http:" : "https:"
+  - org_path = "#{protocol}//#{[org.subdomain, @path].join(".")}"
+
+  - auth_items.each do |item_type, items|
+    h3 #{item_type.demodulize.pluralize.titleize}
+    ul style="list-style-type: none; padding-inline-start: 0;width: fit-content"
+      - items.each do |item|
+        - if item_type == "Invoice"
+          = render partial: "invoice", locals: {item: item, base_name: org_path}
+        - elsif ["BankAccount::Check", "BankAccount::Deposit", "BankAccount::AccountTransfer"].include? item_type
+          = render partial: "bank_item", locals: {item: item, base_name: org_path}
+        - elsif ["CreditCard::Charge", "CreditCard::Payment"].include? item_type
+          = render partial: "credit_card_item", locals: {item: item, base_name: org_path}
+        - elsif item_type == "BatchUpload"
+          = render partial: "batch_upload", locals: {item: item, base_name: org_path}
+        - elsif item_type == "PurchaseOrder"
+          = render partial: "purchase_order", locals: {item: item, base_name: org_path}
+        - elsif item_type == "Entry"
+          = render partial: "entry", locals: {item: item, base_name: org_path}
+        - elsif ["Vendor", "Customer"].include? item_type
+          = render partial: "customer_vendor", locals: {item: item, base_name: org_path}
+        - elsif ["BankAccount", "CreditCard"].include? item_type
+          = render partial: "customer_vendor", locals: {item: item, base_name: org_path}
+
+        / "BankAccount"
+        / "CreditCard"
+
+  hr

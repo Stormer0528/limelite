@@ -1,0 +1,18 @@
+query userGroup($id: ID, $organizationId: ID) {
+  userGroup(id: $id, organizationId: $organizationId) {
+    id
+    name
+    users {
+      id
+      avatarUrl
+      fullName
+      email
+    }
+  }
+  users {
+    id
+    avatarUrl
+    fullName
+    email
+  }
+}

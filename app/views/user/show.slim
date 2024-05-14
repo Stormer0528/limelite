@@ -1,0 +1,11 @@
+- content_for :head do
+  css:
+    #user_index_root {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+  = javascript_pack_tag 'render_user_routes', defer: true, charset: 'utf-8'
+
+#user_index_root

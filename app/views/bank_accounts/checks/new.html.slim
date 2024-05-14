@@ -1,0 +1,27 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "bank_account", icon_options: "medium"
+    span.text
+      = link_to bank_accounts_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Bank Accounts
+      '
+      = link_to bank_account_path(@bank_account), class: "breadcrumb" do
+        span.link-text
+          = @bank_account.name
+      '
+      span.breadcrumb
+        span.link-text
+          | Checks
+      '
+      span.breadcrumb
+        '
+        ' New
+
+
+h3.page-header
+  = class_icon "check", icon_options: "medium"
+  span.text
+    '  Manual Check
+
+== render partial: 'form', locals: { back_path: bank_account_path(@bank_account) }

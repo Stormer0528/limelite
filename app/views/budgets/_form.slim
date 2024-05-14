@@ -1,0 +1,15 @@
+.card.nested-fields style="box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12);"
+  .card-content style="padding: 8px;"
+    span.card-title
+      .pull-right
+        = link_to_remove_association f,
+          style: "position: absolute; top: 8px; right: 8px;",
+          class: 'btn waves-effect waves-light btn-flat red-text icon-btn' do
+          i.material-icons.medium cancel
+
+    .row
+      .col.s6
+        = f.input :fiscal_year, collection: @fiscal_years, include_blank: false
+
+      .col.s6
+        = f.input :amount, icon: "attach_money"

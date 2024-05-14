@@ -1,0 +1,64 @@
+ - @report.data["reports"].each do |fund_name, report|
+  #profit_and_loss_statement
+    table.header
+      tbody
+        tr
+          td style="width: 25%"
+            p Fiscal Year: #{@report.end_date&.year}
+            p Report Date: #{Date.today.to_formatted_s(:std)}
+          td
+            h1.title = @current_org['name']
+            h2.subtitle style="font-weight: bold;" Financial Summary for Period Ending:&nbsp;#{@report.end_date&.to_formatted_s(:std)}
+
+            - filter_string = @report.account_search_params.map {|k,v| next if !v&.present?; "#{k.gsub(/_code/, '').titleize}: #{v.join(", ")}" }.compact.join(", ")
+            h3.subsubtitle style="font-weight: bold;" #{filter_string}
+
+          td style="width: 25%"
+
+    table.report-table.condensed
+      thead
+        tr
+          th.spacer
+          th
+          th
+          th style="border-bottom: 2px solid black; text-align: right"
+      tbody
+        / ASSETS
+        tr.total-row
+          td colspan="3" Assets
+          - @report.data["titles"].each do |resource|
+            td.account-balance-cell = resource
+          td.account-balance-cell Ending Balance
+
+        - report["assets"].select{|a| a["balance"] != "$0.00" }.each do |acc_obj|
+          = render "table_row", acc_obj: acc_obj
+        = render "table_total_row", acc_obj: report["total_assets"], title: "Total Assets"
+
+        / LIABILITIES
+        tr.total-row
+          td colspan="3" Liabilities
+          - @report.data["titles"].each do |resource|
+            td.account-balance-cell = resource
+          td.account-balance-cell Ending Balance
+
+        - report["liabilities"].select{|a| a["balance"] != "$0.00" }.each do |acc_obj|
+          = render "table_row", acc_obj: acc_obj
+        = render "table_total_row", acc_obj: report["total_liabilities"], title: "Total Liabilities"
+
+        / EQUITIES
+        tr.total-row
+          td colspan="3" Equity
+          - @report.data["titles"].each do |resource|
+            td.account-balance-cell = resource
+          td.account-balance-cell Ending Balance
+
+        - report["liabilities"].select{|a| a["balance"] != "$0.00" }.each do |acc_obj|
+          = render "table_row", acc_obj: acc_obj
+
+        = render "table_total_row", acc_obj: report["total_equities"], title: "Total Equities"
+
+        = render "table_total_row", title: "Net Income (Loss)", acc_obj: report["net_income_loss"]
+
+        = render "table_total_row", title: "Total Equity", acc_obj: report["equity_balance"]
+
+        = render "table_total_row", title: "Total Liabilities and Equity", acc_obj: report["net_fund_balance"]

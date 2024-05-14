@@ -1,0 +1,25 @@
+query findCreditCardItems(
+  $start_date: String
+  $end_date: String
+  $credit_card_account_id: ID
+  $reconciled: Boolean
+  $aasm_state: String
+  $type: String
+) {
+  creditCardItemSearch(
+    start_date: $start_date
+    end_date: $end_date
+    credit_card_id: $credit_card_account_id
+    reconciled: $reconciled
+    aasm_state: $aasm_state
+    type: $type
+  ) {
+    id
+    amount
+    amountInCents
+    memo
+    type
+    date
+    amount
+  }
+}

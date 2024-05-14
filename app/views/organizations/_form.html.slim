@@ -1,0 +1,50 @@
+= simple_form_for(@organization, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @organization }
+
+  .form-inputs
+    .card
+      .card-content
+        .row
+          .col.s12
+            - if local_assigns[:class_name]
+              span.card-title = local_assigns[:class_name]
+        .row
+          .col.s6
+            = f.input :name
+
+          .col.s3
+            = f.input :alias
+
+          .col.s3
+            = f.input :subdomain, required: true
+
+        .row
+          .col.s12
+            = f.input :description
+
+        .row
+          .col.s6
+            = f.input :email
+
+          .col.s6
+            = f.input :phone
+
+    #address_fields
+      h5.page-title style="border-bottom: 1px solid #ccc; margin-top: .5em; margin-bottom: .75em; padding-bottom: .5em;"
+        = class_icon "Address", icon_options: "small"
+        '  &nbsp; Addresses
+
+      = f.simple_fields_for :addresses do |address|
+
+        = render partial: 'shared/address/form', locals: { f: address }
+      .links
+        = link_to_add_association f, :addresses,
+          class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn',
+          style: "display: flex; text-align: center; place-content: center",
+          partial:  'shared/address/form' do
+            i.material-icons style="position: relative; top: -1px;" add
+            '  &nbsp; Add Address
+
+    .divider.spaced
+    .pull-right
+      = f.button :submit

@@ -1,0 +1,27 @@
+.date-row style="display: flex; align-items: center;"
+  div style="flex-grow: 1; margin-right: 1em;"
+    h5 AR Aging Report
+  div style="margin-right: 1em"
+    b Start Date:
+    '  #{@report.start_date.to_formatted_s(:std)}
+  div
+    b End Date:
+    '  #{@report.end_date.to_formatted_s(:std)}
+
+table.ar-aging-report.table.table.striped.bordered
+  thead
+    tr
+      th style="width: 35%" vendor
+      - @report.period_names.each do |p_name|
+        th = p_name&.to_s
+      th
+        b Total
+
+  tbody
+    - @report.data["periods_by_customer"].each do |id, customer|
+      tr
+        td.customer style="width: 35%"
+          = customer["name"]
+        - customer["periods"].each do |period_name, value|
+          td class="#{period_name}" = number_to_currency value
+        td.total_balance = number_to_currency customer["total_balance"]

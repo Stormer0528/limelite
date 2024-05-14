@@ -1,0 +1,14 @@
+.btn-group
+  - unless local_assigns[:hide_show]
+    = link_to show_path,
+              class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn'  do
+      i.material-icons find_in_page
+  - unless local_assigns[:hide_edit]
+    = link_to edit_path,
+              class: 'btn waves-effect waves-light btn-flat green-text icon-btn' do
+      i.material-icons edit
+  - unless local_assigns[:hide_destroy]
+    = link_to show_path,
+              class: 'btn waves-effect waves-light btn-flat red-text icon-btn',
+              data: { confirm: 'Are you sure?' }, method: :delete do
+      i.material-icons delete

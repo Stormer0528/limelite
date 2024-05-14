@@ -1,0 +1,10 @@
+= content_for :page_title
+  '&nbsp; :: Credit Cards > New
+
+h2.page-header
+  = class_icon "credit_card", icon_options: "medium"
+  span.text
+    '  New Credit Card Account
+
+== render partial: 'form', locals: { \
+  back_path: credit_cards_path }

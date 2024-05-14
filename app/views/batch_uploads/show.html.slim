@@ -1,0 +1,47 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "batch_upload", icon_options: "medium"
+    span.text
+      = link_to batch_uploads_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Batch Upload
+      '
+      span.breadcrumb
+        '
+        '  <b>ID:</b> #{@batch_upload.id}
+
+.card
+  .card-content
+    .card-title
+      h5
+        | Batch Upload
+        .pull-right
+          => link_to 'Edit', edit_batch_upload_path(@batch_upload), class:"btn btn-flat"
+          '|
+          =< link_to 'All Uploads', batch_uploads_path, class:"btn btn-flat"
+    .row
+      .col.s3
+        strong Total invoices:
+        '&nbsp;
+        = @batch_upload.total_invoices
+      .col.s3
+        strong Critical invoices:
+        '&nbsp;
+        = @batch_upload.critical_invoices
+
+    - unless @batch_upload.notes.empty?
+      .row
+        .col.s12
+          b Notes:
+          p
+            = @batch_upload.notes
+
+
+ul.collection.with-header.z-depth-1
+  li.collection-header
+    h5 style="display: flex; align-content: center;"
+      = class_icon "batch_upload", icon_options: "small"
+      div style="margin-left:1rem; position: relative; top: .25rem" Uploaded Files
+  - @batch_upload.files.each.with_index do |file, index|
+    li.collection-item
+      = link_to "View File #{index + 1}", fs_link(file.url), class: "btn btn-flat"

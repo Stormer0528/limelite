@@ -1,0 +1,19 @@
+w.card.entry-show
+  .card-content style="padding: 24px 0.5em 0"
+    span.card-title
+      i.material-icons style="position: relative !important; top: 4px;" receipt
+      '
+      span.text
+        | Entry
+
+    .divider.spaced
+    .row
+      .col.s3
+        b Date: &nbsp;
+        = entry&.date&.to_formatted_s(:std)
+      .col.s3
+        b Type:&nbsp;
+        = entry&.entry_type
+    .row
+      .col.s12
+        = render partial: "entries/entry_items_table", locals: { entry: entry }

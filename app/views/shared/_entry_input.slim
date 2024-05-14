@@ -1,0 +1,37 @@
+- default_object_code = local_assigns[:default_object_code] || "9500"
+- default_autofill_type = local_assigns[:default_autofill_type] || "Credit"
+- add_item_label = local_assigns[:add_item_label] || "+ Item"
+- summary_row_fund = local_assigns[:summary_row_fund] || nil
+- amount_type = local_assigns[:amount_type] || "both"
+- entry = local_assigns[:entry] || local_assigns[:journalable]&.entry || nil
+- default_entry_type = local_assigns[:default_entry_type] || entry&.entry_type || "Transaction"
+
+- content_for :head do
+  javascript:
+    const code = #{{default_object_code}};
+    const defaultAutofillType = "#{{default_autofill_type}}";
+    const defaultEntryType = "#{{default_entry_type}}";
+    const amountType = "#{amount_type}"
+    window.initial_data = Object.assign({}, (window.initial_data || {}),
+      {defaultObjectCode: code.toString(10), defaultAutofillType, defaultEntryType, amountType, entry: {
+        type: defaultEntryType,
+        entry_type: defaultEntryType,
+        entryType: defaultEntryType,
+        amountType
+      }}
+    );
+
+  - if entry
+    javascript:
+      window.initial_data = Object.assign({}, window.initial_data,
+        {entry: #{{ render 'entries/show', entry: entry }}},
+      );
+
+  = javascript_pack_tag 'render_entry_input', defer: true
+
+= content_for :bottom_javascript
+  / Preload page info
+  javascript:
+    window.initial_data = Object.assign({}, (window.initial_data || {}));
+
+#entry_input data-parent-class="#{parent_class}" data-invoice-remaining="#{invoice_remaining}" data-add-item-label="#{add_item_label}" data-amount-type="#{amount_type}" data-summary-row-fund="#{summary_row_fund}"

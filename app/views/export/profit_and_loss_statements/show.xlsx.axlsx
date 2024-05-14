@@ -1,0 +1,232 @@
+wb = xlsx_package.workbook
+@wb = wb
+wb.styles do |s|
+  require_relative "../report_functions"
+
+  def multi_style(style)
+    Array.new(@report.data["account_funds"].length, style)
+  end
+
+  def end_col
+    column_name(@report.colspan_width - 1)
+  end
+
+  def col_empty?(account)
+    [*fund_codes, "balance"].map {|code| account[code] }.all? {|val| val == "$0.00" }
+  end
+
+  def vertical_sum_for_array(sheet, horizontal_length:, vertical_length:, start_index:)
+    start_row = 1 + sheet.rows.length - vertical_length
+    end_row = sheet.rows.count
+
+    Array.new(horizontal_length) do |i|
+      # If there are no rows to total, just make it zero
+      if vertical_length == 0
+        0.00
+      else
+        sum_for_cell(col_index: start_index + i, row_start: start_row, row_end: end_row)
+      end
+    end
+  end
+
+  def horizontal_sum(ary, current_col)
+    start_cell = "#{column_name(current_col)}#{current_row_num + 1}"
+    end_cell   = "#{column_name(current_col + ary.length - 1)}#{current_row_num + 1}"
+    "=SUM(#{start_cell}:#{end_cell})"
+  end
+
+  def fund_codes
+    @report.account_funds.pluck("code")
+  end
+
+  # Style Definitions
+  # double_border      = s.add_style num_fmt: 44, b: true, border: {style: :double, color: "00", edges: [:bottom]}
+  # bold_centered      = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  left_align         = s.add_style alignment: {horizontal: :left}
+  title_cell         = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  total_title_cell   = s.add_style fg_color: "00", b: true, alignment: {indent: 8}
+  section_cell       = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  section_cell_right = s.add_style fg_color: "00", b: true, alignment: {horizontal: :right}
+  range_cell         = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  grey_cell          = s.add_style bg_color: "D8D8D8", fg_color: "00", b: true, alignment: {horizontal: :center}
+  thin_border        = s.add_style num_fmt: 43, border: {style: :thin, color: "00", edges: %i[top bottom]}
+  thin_double_border = s.add_style num_fmt: 44, border: {style: :double, color: "00", edges: [:bottom]}
+  border = s.borders[s.cellXfs[thin_double_border].borderId]
+  border.prs << Axlsx::BorderPr.new(name: :top, color: Axlsx::Color.new(rgb: "000000"), style: :thin)
+
+  currency = wb.styles.add_style num_fmt: 43
+  currency_with_sign = wb.styles.add_style num_fmt: 44
+  bold_currency_with_sign = wb.styles.add_style num_fmt: 44, b: true,
+                                                border: {style: :double, color: "00", edges: [:bottom]}
+  bold_currency = wb.styles.add_style num_fmt: 43, b: true, border: {style: :thin, color: "00", edges: [:bottom]}
+
+  wb.add_worksheet(name: "Profit And Loss Statement") do |sheet|
+    sheet.add_row [@current_org.name.upcase], style: [title_cell]
+    sheet.merge_cells("A1:#{end_col}1")
+
+    sheet.add_row ["PROFIT & LOSS STATEMENT"], style: [title_cell]
+    sheet.merge_cells("A2:#{end_col}2")
+
+    sheet.add_row [
+      "#{@report.start_date.to_formatted_s(:long)} THROUGH #{@report.end_date.to_formatted_s(:long)}".upcase
+    ], style: [title_cell]
+    sheet.merge_cells("A3:#{end_col}3")
+
+    sheet.add_row ["FUND: #{@report.data['fund_code']}"], style: [title_cell]
+    sheet.merge_cells("A4:#{end_col}4")
+
+    filter_string = @report.account_search_params.map {|k, v|
+ next unless v&.present?; next if k == "fund_code"; "#{k.gsub(/_code/, '').upcase}: #{v}"
+}                    .compact.join(", ")
+
+    sheet.add_row([filter_string], style: title_cell) unless filter_string.empty?
+    sheet.merge_cells "A5:#{end_col}5" unless filter_string.empty?
+
+    sheet.add_row
+    fund_codes = @report.data["account_funds"].map {|f| f["code"] }
+    sheet.add_row ["", "", *fund_codes, "Total"], style: [grey_cell, grey_cell, *multi_style(grey_cell), grey_cell]
+
+    sheet.add_row ["REVENUES"],
+                  style: [section_cell, nil, *multi_style(section_cell_right), section_cell_right]
+    first_row = true
+    revenue_total_rows = []
+    @report.data["revenues"]&.each do |account_range, acc_obj|
+      nonzero_accounts = acc_obj["accounts"].each do |account|
+        balance_style = first_row ? currency_with_sign : currency
+
+        sheet.add_row [account["code"], account["description"], *fund_codes.map {|code|
+ parse_num account[code]
+}                                                                 , horizontal_sum(fund_codes, 3)],
+                      style: [left_align, nil, *multi_style(balance_style), balance_style]
+
+        first_row = false
+        current_row.hidden = col_empty?(account)
+      end
+
+      sheet.add_row [account_range, acc_obj["title"],
+                     *vertical_sum_for_array(
+                       sheet,
+                       horizontal_length: fund_codes.length,
+                       vertical_length: nonzero_accounts.length,
+                       start_index: 3
+                     ),
+                     horizontal_sum(fund_codes, 3)],
+                    style: [range_cell, nil, *multi_style(thin_border), thin_border]
+      revenue_total_rows << current_row_num
+    end
+
+    revenue_totals = cell_names_for_array(fund_codes, start_col: 3).map {|col|
+                       "=" + revenue_total_rows.map {|n|
+ "#{col}#{n}"
+}                                                                                     .join("+")
+}
+
+    sheet.add_row ["TOTAL, REVENUES", "", *revenue_totals, horizontal_sum(fund_codes, 3)],
+                  style: [total_title_cell, nil, *multi_style(bold_currency), bold_currency]
+    total_revnue_row = current_row_num
+    sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+    sheet.add_row
+
+    first_row = true
+    expenditures_total_rows = []
+    sheet.add_row ["EXPENSES"], style: section_cell
+    @report.data["expenses"]&.each do |account_range, acc_obj|
+      nonzero_accounts = acc_obj["accounts"].each do |account|
+        balance_style = currency
+
+        sheet.add_row [account["code"], account["description"], *fund_codes.map {|code|
+ parse_num account[code]
+}                                                                 , horizontal_sum(fund_codes, 3)],
+                      style: [left_align, nil, *multi_style(balance_style), balance_style]
+        current_row.hidden = col_empty?(account)
+      end
+
+      sheet.add_row [account_range, acc_obj["title"],
+                     *vertical_sum_for_array(
+                       sheet,
+                       horizontal_length: fund_codes.length,
+                       vertical_length: nonzero_accounts.length,
+                       start_index: 3
+                     ),
+                     horizontal_sum(fund_codes, 3)],
+                    style: [range_cell, nil, *multi_style(thin_border), thin_border]
+      expenditures_total_rows << current_row_num
+    end
+
+    expenditures_totals = cell_names_for_array(fund_codes,
+start_col: 3).map {|col|
+                            "=" + expenditures_total_rows.map {|n|
+ "#{col}#{n}"
+}                                                                                          .join("+")
+}
+    sheet.add_row ["TOTAL, EXPENSES", "", *expenditures_totals, horizontal_sum(fund_codes, 3)],
+                  style: [total_title_cell, nil, *multi_style(bold_currency), bold_currency]
+    total_expenditures_row = current_row_num
+    sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+    sheet.add_row
+
+    excess_revenues_sums = cell_names_for_array(fund_codes, start_col: 3).map {|col|
+ "=#{col}#{total_revnue_row}-#{col}#{total_expenditures_row}"
+}
+    sheet.add_row ["EXCESS (DEFICIENCY) OF REVENUES OVER EXPENSES", nil, *excess_revenues_sums, horizontal_sum(fund_codes, 3)],
+                  style: [section_cell, nil, *multi_style(bold_currency), bold_currency]
+    excess_revenues_row = current_row_num
+    sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+    sheet.add_row
+
+    # OTHER FINANCING SOURCES/USES
+    other_income_rows = []
+    sheet.add_row ["OTHER FINANCING SOURCES/USES"], style: section_cell
+    @report.data["other_financing"]&.each do |account_range, acc_obj|
+      nonzero_accounts = acc_obj["accounts"].each do |account|
+        balance_style = first_row ? currency_with_sign : currency
+
+        sheet.add_row [account["code"], account["description"], *fund_codes.map {|code|
+ parse_num account[code]
+}                                                                 , horizontal_sum(fund_codes, 3)],
+                      style: [left_align, nil, *multi_style(balance_style), balance_style]
+        first_row = false
+        current_row.hidden = col_empty?(account)
+      end
+
+      sheet.add_row [account_range, acc_obj["title"],
+                     *vertical_sum_for_array(
+                       sheet,
+                       horizontal_length: fund_codes.length,
+                       vertical_length: nonzero_accounts.length,
+                       start_index: 3
+                     ),
+                     horizontal_sum(fund_codes, 3)],
+                    style: [range_cell, nil, *multi_style(thin_border), thin_border]
+      other_income_rows << current_row_num
+    end
+
+    other_expenses_totals = cell_names_for_array(fund_codes, start_col: 3).map {|col|
+                              "=" + other_income_rows.map {|n|
+ "#{col}#{n}"
+}                                                                                            .join("+")
+}
+    sheet.add_row ["TOTAL, OTHER FINANCING SOURCES/USES", "", *other_expenses_totals, horizontal_sum(fund_codes, 3)],
+                  style: [total_title_cell, nil, *multi_style(bold_currency), bold_currency]
+    other_income_rows_row = current_row_num
+    sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+    sheet.add_row
+
+    # excess_revenue_value + other_financing_value
+    net_position_sums = cell_names_for_array(fund_codes, start_col: 3).map {|col|
+ "=#{col}#{other_income_rows_row}+#{col}#{excess_revenues_row}"
+}
+    sheet.add_row ["NET INCREASE (DECREASE) IN NET POSITION", "", *net_position_sums, horizontal_sum(fund_codes, 3)],
+                  style: [total_title_cell, nil, *multi_style(bold_currency_with_sign), bold_currency_with_sign]
+    sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+    # Column Widths
+    sheet.column_info.first.width = 12
+    sheet.column_info[1].width    = 65
+    sheet.column_info[2..sheet.column_info.length - 2].each {|col| col.width = 15 }
+    sheet.column_info.last.width = 15
+  end
+end

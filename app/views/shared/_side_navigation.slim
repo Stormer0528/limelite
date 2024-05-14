@@ -1,0 +1,162 @@
+/ Side Menu
+ul class="sidenav" id="side-site-nav"
+  / User Info
+  / ----------------------------------------------------------------------------
+  li
+    div class="user-view"
+      .background
+        = image_tag "office.jpg", size: '1000x700', alt: 'User Background'
+
+      .row
+        .col.s6
+          .name
+            .circle.green
+              b.white-text.center-align
+                = current_user.initials
+        .col.s6
+          b.name.white-text
+            | Logged In as:
+            br
+            = link_to admin_user_path(current_user) do
+              = current_user.full_name
+      .row
+        .col.s6.offset-s6
+          span.version
+            = "v. #{APP_VERSION["number"]}"
+
+  / Dashboard
+  / ----------------------------------------------------------------------------
+  li
+    // = link_to dashboard_path, class: 'item' do
+      // i.material-icons.left dashboard
+      // ' Dashboard
+  li
+    = link_to reports_path, class: 'item' do
+      = class_icon "report"
+      | Reports
+
+  - if policy(Entry).create?
+    li
+      a.item
+        #addEntry data-import-entries="#{policy(Entry::Import.new).create?}"
+    li.divider.no-padding
+
+  li
+      = link_to destroy_user_session_path, method: :delete do
+        = class_icon "cancel"
+        |  Logout
+  li.divider.no-padding
+  li
+    a.subheader Current Organization
+  li
+    a class="dropdown-trigger" href="#!" data-target="orgDropdown" data-constrainWidth="false" data-belowOrigin="true"
+      i.material-icons.left account_balance
+      = @current_org.alias.present? ? @current_org.alias : @current_org.name
+
+  - if @current_org
+
+    li.divider.no-padding
+    - if policy(BankAccount).index?
+      li
+        = link_to bank_accounts_path, class: 'item' do
+          = class_icon "bank_account"
+          | Banking
+    - if policy(Customer).index?
+      li
+        = link_to customers_path, class: 'item' do
+          = class_icon "customer"
+          | Customers
+      li
+        = link_to entries_path, class: 'item' do
+          = class_icon "entry"
+          | General Ledger
+    - if policy(CreditCard).index?
+      li
+        = link_to credit_cards_path, class: 'item' do
+          = class_icon "credit_card"
+          | Credit Cards
+    - if policy(Vendor).index?
+      li
+        = link_to vendors_path, class: 'item' do
+          = class_icon "Vendor"
+          | Vendors
+
+    - if policy(Account).index?
+      li.no-padding
+        ul.collapsible.collapsible-accordion
+          / Accounts
+          li.divider.no-padding
+          li
+            a.collapsible-header
+              i.material-icons.left assignment
+              | Accounts
+            .collapsible-body
+              ul
+                li
+                  = link_to accounts_path, class: 'item' do
+                    = class_icon "account"
+                    | All Accounts
+                li.divider
+                - if @current_org
+                  li
+                    = link_to account_funds_path, class: 'item' do
+                      = class_icon "fund"
+                      ' Funds
+                  li
+                    = link_to account_resources_path, class: 'item' do
+                      = class_icon "resource"
+                      ' Resources
+                  li
+                    = link_to account_years_path, class: 'item' do
+                      = class_icon "year"
+                      ' Years
+                  li
+                    = link_to account_goals_path, class: 'item' do
+                      = class_icon "goal"
+                      ' Goals
+                  li
+                    = link_to account_functions_path, class: 'item' do
+                      = class_icon "function"
+                      ' Functions
+                  li
+                    = link_to account_objects_path, class: 'item' do
+                      = class_icon "object"
+                      ' Objects
+                  li
+                    = link_to account_locations_path, class: 'item' do
+                      = class_icon "location"
+                      ' Locations
+
+    / Admin Panel
+    / ----------------------------------------------------------------------------
+    - if policy(Organization).update?
+      / Admin
+      li.no-padding
+        ul.collapsible.collapsible-accordion
+          li.divider.no-padding
+          li
+            a.collapsible-header
+              i.material-icons.left assignment_ind
+              ' Admin
+            .collapsible-body
+              ul
+                li
+                  = link_to import_entries_path, class: 'item' do
+                    i.material-icons.left library_add
+                    '  Import Entries
+                li.divider
+
+                - if @current_user.admin?
+                  li
+                    = link_to '/admin', class: 'item' do
+                      i.material-icons.left dashboard
+                      ' Admin Dashboard
+                  li.divider
+                  li
+                    = link_to organizations_path, class: "item #{active_class(organizations_path)}" do
+                      = class_icon "organization"
+                      '  Organizations
+                  li
+                    = link_to admin_users_path, class: "item #{active_class(admin_users_path)}" do
+                      = class_icon "user"
+                      |  Users

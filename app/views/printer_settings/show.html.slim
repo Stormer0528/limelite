@@ -1,0 +1,14 @@
+p#notice = notice
+
+h5.page-header
+  | Printer Setting
+  .pull-right.right-align
+    = link_to printer_settings_path, class: "waves-effect waves-teal btn-flat" do
+      i.material-icons list
+      '  All Settings
+    '  |
+    = link_to edit_printer_setting_path(@printer_setting), class: "waves-effect waves-teal btn-flat" do
+      i.material-icons edit
+      '  Edit
+
+= render partial: 'form', locals: { disabled: true }

@@ -1,0 +1,6 @@
+mutation updateFinalFileURL($invoiceID: ID, $fileURL: String!) {
+  updateFinalPaymentUrl(finalPaymentUrl: $fileURL, invoiceID: $invoiceID) {
+    success
+    errorMessages
+  }
+}

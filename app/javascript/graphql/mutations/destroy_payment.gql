@@ -1,0 +1,5 @@
+mutation destroyPayment($id: ID!) {
+  destroyPayment(id: $id) {
+    id
+  }
+}

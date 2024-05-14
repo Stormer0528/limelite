@@ -1,0 +1,6 @@
+mutation unArchiveUser($id: ID!) {
+  unArchiveUser(userId: $id) {
+    success
+    errorMessages
+  }
+}

@@ -1,0 +1,3 @@
+mutation updateFiscalYear($year: Int) {
+  updateFiscalYear(fiscalYear: $year)
+}

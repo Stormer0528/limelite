@@ -1,0 +1,22 @@
+query vendorInvoices($vendorId: ID, $currentId: ID!) {
+  invoices: invoiceSearch(
+    invoiceable_id: $vendorId
+    invoiceable_type: "Vendor"
+    without_purchase_order: true
+    order: CREATED_AT
+  ) {
+    id
+    number
+    amount
+    date
+    dueDate
+  }
+
+  current: invoice(id: $currentId) {
+    id
+    number
+    amount
+    date
+    dueDate
+  }
+}

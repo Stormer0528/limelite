@@ -1,0 +1,76 @@
+mutation runMonthlyCashFlowReport(
+  $start_date: String
+  $end_date: String
+  $account: AccountCodeInputObject
+) {
+  createMonthlyCashFlowReport(
+    start_date: $start_date
+    end_date: $end_date
+    account: $account
+  ) {
+    months
+    monthTitles
+    colspanWidth
+    valid
+    errors
+    startDate
+    endDate
+    organizationName
+    cashAtBeginning
+    cashAtEnd
+    financingActivities {
+      name
+      code
+      balances
+    }
+    financingActivitiesTotal
+    fiscalYear
+    investigatingActivities {
+      name
+      code
+      balances
+    }
+    investingActivities {
+      name
+      code
+      balances
+    }
+    investingActivitiesTotal
+    netCash
+    netCashIncrease
+    netIncome
+    netOperationsCash
+    otherIncome {
+      name
+      code
+      balances
+    }
+    otherIncomeTotal
+    reportDate
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+
+    pdfUrl
+    xlsxUrl
+  }
+}

@@ -1,0 +1,172 @@
+query AuthorizableItems($cursor: String, $first: Int) {
+  authableItemConnection(after: $cursor, first: $first) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+
+    nodes {
+      __typename
+      ... on DenialNotification {
+        reason
+        authorizable {
+          __typename
+
+          ... on Entry {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+          ... on Deposit {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+          ... on Check {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+          ... on AccountTransfer {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+          ... on Invoice {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+          ... on Customer {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+
+          ... on Vendor {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+          ... on PurchaseOrder {
+            path
+            editPath
+          }
+          ... on BatchUpload {
+            path
+            editPath
+            creator {
+              fullName
+            }
+          }
+        }
+      }
+      ... on Entry {
+        amount
+        path
+        editPath
+        creator {
+          fullName
+        }
+      }
+      ... on Deposit {
+        amount
+        bankAccount {
+          name
+        }
+        path
+        editPath
+        creator {
+          fullName
+        }
+      }
+      ... on Check {
+        amount
+        bankAccount {
+          name
+        }
+        path
+        editPath
+        creator {
+          fullName
+        }
+      }
+      ... on AccountTransfer {
+        amount
+        bankAccount {
+          name
+        }
+        path
+        editPath
+        creator {
+          fullName
+        }
+      }
+      ... on Invoice {
+        id
+        date
+        number
+        path
+        editPath
+        creator {
+          fullName
+        }
+      }
+      ... on Customer {
+        id
+        name: displayName
+        path
+        editPath
+      }
+      ... on Vendor {
+        id
+        name: displayName
+        path
+        editPath
+        creator {
+          fullName
+        }
+      }
+      ... on PurchaseOrder {
+        id
+        vendorName
+        number
+        date
+        dateNeeded
+        aasmState
+        path
+        editPath
+
+        permissions {
+          view
+          edit
+        }
+      }
+      ... on BatchUpload {
+        id
+        path
+        editPath
+        createdAt
+        updatedAt
+        permissions {
+          view
+          edit
+        }
+      }
+    }
+  }
+}

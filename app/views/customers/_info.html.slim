@@ -1,0 +1,110 @@
+.card
+  .card-content
+    h5.card-title style="display:flex; align-items: center;"
+      - unless !@customer&.logo_url&.present?
+        img.circle.responsive-img src="#{fs_avatar_link @customer.logo_url}"
+      - else
+        = class_icon "customer"
+      '
+      span style="display: inline-block; margin-left: 1em;"
+        | Customer Information
+    .divider
+    - unless @customer.full_name&.present?
+      .row
+        .col.s2.right-align
+          b.text-label
+            i.material-icons perm_identity
+            | Name:
+        .col.s9
+          = @customer.full_name
+    .row
+      .col.s2.right-align
+        b.text-label
+          i.material-icons business
+          | Company:
+      .col.s6
+        = @customer.company
+      - if @customer&.number
+        .col.s4
+          b Number:&nbsp;
+          = @customer.number
+
+    .row
+      .col.s2.right-align
+        b.text-label
+          i.material-icons email
+          | Email:
+      .col.s4
+        = @customer.email
+      .col.s2.right-align
+        b.text-label
+          i.material-icons language
+          | Website:
+      .col.s4
+        = link_to @customer.website
+
+    / Phones
+    .divider.spaced
+    .row
+      - if @customer.home_phone_number && !@customer.home_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+                b.text-label
+                  i.material-icons store
+                  | Home:
+            .col.s8
+              = number_to_phone @customer.home_phone_number, area_code: true
+
+      - if @customer.mobile_phone_number && !@customer.mobile_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+              b.text-label
+                i.material-icons phonelink_ring
+                | Mobile:
+
+            .col.s8 = number_to_phone @customer.mobile_phone_number, area_code: true
+
+      - if @customer.work_phone_number && !@customer.work_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+                b.text-label
+                  i.material-icons settings_phone
+                  | Work:
+            .col.s8 = number_to_phone @customer.work_phone_number, area_code: true
+
+      - if @customer.fax_phone_number && !@customer.fax_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+              b.text-label
+                i.material-icons print
+                | Fax:
+            .col.s8 = number_to_phone @customer.fax_phone_number, area_code: true
+
+  / Approval Btns
+  = render partial: "customers/approval_footer",
+           locals: {form_path: customer_path(@customer), hide_draft: true}
+
+ul class="collapsible" data-collapsible="expandable"
+  - @customer.addresses.each do |address|
+    li.active
+      .collapsible-header
+        i.material-icons markunread_mailbox
+        = address.name
+      .collapsible-body
+        = render partial: 'shared/address/show', locals: { address_model: address }
+
+- if @customer.notes.try(:present?)
+  .card
+    .card-content
+      span.card-title
+        .material-icons subject
+        '  Notes
+      = @customer.notes
+
+
+  / Approval Log
+  = render partial: "shared/state_change_log", locals: {model: @customer}

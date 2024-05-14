@@ -1,0 +1,31 @@
+= content_for :page_title
+  '&nbsp; :: Admin > Users > #{@user.full_name} > Edit
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "user", icon_options: "medium"
+    span.text
+      = link_to admin_users_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Users
+      '
+      = link_to admin_user_path(@user), class: "breadcrumb" do
+        span.link-text
+          = @user.full_name.titleize
+      '
+      span.breadcrumb Edit
+
+
+h2.page-header
+  = class_icon "user", icon_options: "medium"
+  span.text
+    '  Edit:&nbsp;
+  small
+    '  #{@user.full_name.titleize}
+
+== render partial: 'users/form',
+          locals: { \
+            admin: true,
+            form_method: :patch,
+            form_path: admin_user_path(@user),
+            back_path: admin_user_path(@user) }

@@ -1,0 +1,36 @@
+scss:
+  #top-navbar{
+    position: fixed;
+    top: 0;
+    z-index: 1101;
+  }
+  .alt-breadcrumb { top: 64px; }
+
+  main.container.with-breadcrumb {
+    padding-top: 85px;
+
+    &.with-left-sidebar {
+      padding-left: 45px;
+      width: calc(90% - 90px);
+    }
+
+    &.with-right-sidebar {
+      width: calc(90% - 50px); /* padding already added on html element */
+      padding-left: 1rem; /* retain spacing on left side */
+    }
+
+    &.with-left-sidebar.with-right-sidebar {
+      width: calc(90% - 270px);
+      padding-left: 45px;
+    }
+  }
+
+
+= javascript_pack_tag 'render_topbar', defer: true, charset: 'utf-8'
+
+#top-navbar [
+    data-title="#{@current_org.alias.present? ? @current_org.alias : @current_org.name.truncate(45)}"
+    data-logo-path="#{image_url("LOGO-1.png")}"
+    data-fiscal-year="#{@fiscal_year.year}"
+    data-latest-fiscal-year="#{FiscalYear.current_fiscal_year.year}"
+    data-earliest-fiscal-year="#{@current_org.earliest_fiscal_year.year}" ]

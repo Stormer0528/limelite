@@ -1,0 +1,18 @@
+// Customer Payments Form
+#new_customer_payment,
+#edit_customer_payment {
+  .well.condensed.blue-grey.lighten-5 label {
+    color: #455a64;
+    font-weight: 600;
+  }
+}
+
+// Inline account finder input
+.account_finder_input-cell {
+  margin-left: -1rem;
+}
+
+.account-label + .account_finder_input-cell {
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+}

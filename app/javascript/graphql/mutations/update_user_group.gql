@@ -1,0 +1,33 @@
+mutation updateUserGroup(
+  $id: ID!
+  $name: String
+  $parentId: ID
+  $approvalAmount: Int
+  $modulePermissions: ModulePermissionsAttributes,
+  $organizationId: ID!
+) {
+  updateUserGroup(
+    userGroupId: $id
+    name: $name
+    parentId: $parentId
+    approvalAmount: $approvalAmount
+    modulePermissions: $modulePermissions,
+    organizationId: $organizationId
+  ) {
+    id
+    name
+    parentId
+    approvalAmount
+
+    modulePermissions {
+      Report
+      Vendor
+      Account
+      Customer
+      CreditCard
+      BankAccount
+      BatchUpload
+      approvalAmount
+    }
+  }
+}

@@ -1,0 +1,34 @@
+mutation createAccount(
+  $budget: Float
+  $fundCode: String
+  $resourceCode: String
+  $yearCode: String
+  $goalCode: String
+  $objectCode: String
+  $functionCode: String
+  $locationCode: String
+) {
+  createAccount(
+    budget: $budget
+    fundCode: $fundCode
+    resourceCode: $resourceCode
+    yearCode: $yearCode
+    goalCode: $goalCode
+    objectCode: $objectCode
+    functionCode: $functionCode
+    locationCode: $locationCode
+  ) {
+    id
+    name
+    number
+    errors
+    fundCode
+    resourceCode
+    yearCode
+    goalCode
+    objectCode
+    functionCode
+    locationCode
+    valid
+  }
+}

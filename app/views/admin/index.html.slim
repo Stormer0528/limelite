@@ -1,0 +1,36 @@
+scss:
+  body main.container {
+    height: calc(100vh - 35px);
+  }
+
+  body main > .container {
+    width: 90%;
+  }
+
+  .LandingPage {
+    grid-template-columns: repeat(3, minmax(20vh, 1fr));
+    grid-template-rows: 0.5fr 1fr 1fr;
+  }
+
+= content_for :page_title
+  '&nbsp; :: Admin
+
+- content_for :header_content do
+  h2.page-header
+    i.material-icons.medium lock_outline
+    span.text
+      '  Admin
+
+.container
+  .LandingPage
+    = link_to "/admin/users", class: 'item user' do
+      = class_icon 'user', icon_options: "small"
+      span.text Manage Users
+
+    = link_to organizations_path, class: 'item organization' do
+      = class_icon 'organization', icon_options: "small"
+      span.text Manage Organizations
+
+    = link_to "/admin/approval-logs", class: 'item log-report' do
+      = class_icon 'report', icon_options: "small"
+      span.text Approval Log Report

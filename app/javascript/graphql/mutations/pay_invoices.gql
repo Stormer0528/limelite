@@ -1,0 +1,16 @@
+mutation createCheck(
+  $ids: [ID]!
+  $vendorId: ID!
+  $addressId: ID
+  $cashAccountId: ID!
+) {
+  createCheckForPayments(
+    invoiceIds: $ids
+    vendorId: $vendorId
+    addressId: $addressId
+    cashAccountId: $cashAccountId
+  ) {
+    success
+    errorMessages
+  }
+}

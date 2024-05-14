@@ -1,0 +1,97 @@
+- content_for :head do
+  css:
+    #organizations {
+      display: grid;
+      grid-template-columns: calc(50% - 1em) 50%;
+      grid-column-gap: 1em;
+    }
+
+    #organizations .card span.card-title a {
+      color: #039be5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      display: flex;
+      align-items: end;
+    }
+
+    #organizations .card span.card-title a > i{
+      display: inline-block;
+      margin-right: .25em;
+    }
+
+    #organizations .card h5.subtitle {
+      color: #90A4AE;
+      font-weight: 200;
+      font-size: 16px;
+      margin-left: 2em;
+      margin-top: -.35em;
+    }
+
+    body.no-breadcrumb {
+      margin: 0;
+      grid-template-rows: 1fr;
+      padding-top: 45px;
+    }
+
+h2 style="padding-bottom: .15em; border-bottom: 1px solid #E0E0E0;"
+  = class_icon "Organization", icon_options: "small"
+  ' Organizations
+
+#organizations
+  - rendered = { :archived_clients => false, :independent_clients => false, :ap => false, :admin => false }
+
+  - @organizations.each do |org|
+    - if local_assigns[:home]
+      - if (@current_user.super_admin? or @current_user.back_office or @current_user.ap) and "ap" < org.name.downcase and !rendered[:ap]
+        - rendered[:ap] = true
+        .card
+          .card-content
+                span.card-title
+                  - files = Rails.env.production? ?  "https://limeliteds.com/files" : "#{request.protocol}#{request.host_with_port}/files"
+                  = link_to files do
+                    = class_icon "Organization"
+                    = "AP"
+
+      - if "archived clients" < org.name.downcase and !rendered[:archived_clients]
+        - rendered[:archived_clients] = true
+
+        .card
+          .card-content
+                span.card-title
+                  - archived_clients = Rails.env.production? ?  "https://limeliteds.com/archived" : "#{request.protocol}#{request.host_with_port}/archived"
+                  = link_to archived_clients do
+                    = class_icon "Organization"
+                    = "Archived Clients"
+
+      - if "independent clients" <  org.name.downcase and !rendered[:independent_clients]
+        - rendered[:independent_clients] = true
+
+        .card
+          .card-content
+                span.card-title
+                  - archived_clients = Rails.env.production? ?  "https://limeliteds.com/independent" : "#{request.protocol}#{request.host_with_port}/independent"
+                  = link_to archived_clients do
+                    = class_icon "Organization"
+                    = "Independent Clients"
+
+      - if @current_user.super_admin? and "admin" < org.name.downcase and !rendered[:admin]
+        - rendered[:admin] = true
+
+        .card
+          .card-content
+                span.card-title
+                  = link_to '/admin' do
+                    = class_icon "Organization"
+                    = "Admin"
+
+    .card
+      .card-content
+        span.card-title
+          - org_path = Rails.env.production? ?  "https://#{org.subdomain}.limeliteds.com" : "#{request.protocol}#{org.subdomain}.#{request.host_with_port}"
+          = link_to org_path do
+            = class_icon "Organization"
+            = org&.alias&.present? ? org.alias : org.name.truncate(35)
+        - if org&.alias&.present?
+          h5.subtitle = org.name

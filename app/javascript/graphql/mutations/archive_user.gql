@@ -1,0 +1,6 @@
+mutation archiveUser($id: ID!) {
+  archiveUser(userId: $id) {
+    success
+    errorMessages
+  }
+}

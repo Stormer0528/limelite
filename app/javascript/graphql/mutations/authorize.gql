@@ -1,0 +1,16 @@
+mutation authorize(
+  $authableType: String!
+  $authableAction: String!
+  $authableId: ID!
+  $reason: String
+) {
+  authorization: authorizeAuthable(
+    authableType: $authableType
+    authableId: $authableId
+    authableAction: $authableAction
+    reason: $reason
+  ) {
+    success
+    errorMessages
+  }
+}

@@ -1,0 +1,6 @@
+mutation markChecksPrinted($bankAccountId: ID, $checks: [CheckPrintAttributes]) {
+  markChecksPrinted(bankAccountId: $bankAccountId, checks: $checks){
+    success
+    errorMessages
+  }
+}

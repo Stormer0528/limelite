@@ -1,0 +1,97 @@
+
+/ Set Defaults for form path
+- form_path ||= @check.new_record? ? bank_account_checks_path(@bank_account, @check) : bank_account_check_path(@bank_account, @check)
+
+- content_for :head do
+  / = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+  javascript:
+    $(document).ready(function() {
+      $("input[name=\"bank_account_check[memo]\"]").characterCounter();
+    });
+
+= simple_form_for(@check, url: form_path, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  - if f.error_notification
+    = render partial: 'shared/validation_errors', locals: { f:f, resource: @check }
+
+  .form-inputs
+    .card
+      .card-content
+        .row
+          .col.s6
+            - fix_number = @check.printed? && @check.number.present?
+            = f.input :number, disabled: fix_number
+          .col.s6
+            = f.input :check_type,
+                      label: "Check Type",
+                      collection: BankAccount::Check::CHECK_TYPES,
+                      disabled: @check.printed?
+
+          .col.s3
+            .right-align style="margin-left: 1em; flex-grow: 1"
+            .filestack-btn[data-inputId="bank_account_check_file_url"
+                            data-name="bank_account_check[file_url]"
+                            data-value="#{@check.file_url}"
+                            data-apikey="#{get_client_and_api_key[1]}"
+                            data-policy="#{get_fresh_policy_and_signature[1]}"
+                            data-signature="#{get_fresh_policy_and_signature[0]}"]
+        .row
+          .col.s9
+            = f.input :vendor_id,
+                      collection: @vendors,
+                      label_method: :display_name,
+                      value_method: :id,
+                      disabled: @check.printed?
+        - unless @check.payment
+          .row
+            .col.s12
+              = f.input :memo, as: :string,
+                input_html: {data: {counter: 120}},
+                disabled: (@check.printed? || @check.payment)
+
+        / - if @check.persisted? && @check.vendor
+        /   .row
+        /       .col.s12
+        /         = f.association :address,
+        /           collection: @addresses,
+        /           label_method: :name,
+        /           include_blank: false,
+        /           disabled: @check.printed?
+
+    .row
+      - if @check.printed?
+        .col.s12
+          b Check has been printed
+      - elsif @check.payment
+        .col.s6
+          b Created w payment process.
+        .col.s6
+          = f.input :amount, disabled: true
+      - elsif @check.voided?
+        .col.s12
+          b Check has been voided
+      - elsif @check.entry && @check.payment_id.nil?
+        .col.s12
+          = render  partial: "shared/entry_input",
+            locals: { \
+              journalable: @check,
+              parent_class: "bank_account_check",
+              default_object_code: @bank_account.object_code,
+              default_entry_type: "Payment",
+              invoice_remaining: 0}
+
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @check.aasm_state.titleize
+
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @check,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "bank_accounts/checks/state_btn"}
+  = render "shared/reason_modal", f: f

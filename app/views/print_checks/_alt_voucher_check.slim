@@ -1,0 +1,55 @@
+.check
+  .date-wrapper
+    .row.check-date-row
+      .col.s12
+        .check-date.right-align style="top:#{@printer_settings.date_offset_y * 5}pt; left: #{@printer_settings.date_offset_x * 5}pt"
+          = (check.date || Date.today).to_formatted_s(:std)
+
+  .payee-wrapper
+    .row.payee-row
+      .col.s9
+        .check-payee style="top:#{@printer_settings.payee_offset_y * 5}pt; left: #{@printer_settings.payee_offset_x * 5}pt"
+          = check.payee
+      .col.s3
+        .check-amount.right-align style="top:#{@printer_settings.amount_offset_y * 5}pt; left: #{@printer_settings.amount_offset_x * 5}pt"
+          = check.amount.format(symbol: false).rjust(16, "*")
+
+  .amount-text-wrapper
+    .row.amount-text-row style="top:#{@printer_settings.amount_text_offset_y * 5}pt; left: #{@printer_settings.amount_text_offset_x * 5}pt"
+      .col.s12
+        .check-amount-text style="top:#{@printer_settings.memo_offset_y * 5}pt; left: #{@printer_settings.memo_offset_x * 5}pt"
+          = "#{check.amount.to_i.to_words.titleize} Dollars and #{check.amount_cents} Cents".ljust(80, "*")
+
+  .address-wrapper
+    .row.address-row
+      .col.s12
+        .check-address style="top:#{@printer_settings.memo_offset_y * 5}pt; left: #{@printer_settings.memo_offset_x * 5}pt"
+          = check.payee
+          br /
+          - unless check.address&.attention.blank?
+            = check.address.attention
+            br /
+          - unless check.address&.department.blank?
+            = check.address.department
+            br /
+          = check.address.line1
+          br /
+          - unless check.address&.line2.blank?
+            = check.address.line2
+            br /
+          = "#{check.address&.city}, #{check.address&.state} #{check.address&.zip}"
+
+  .alt-memo-wrapper
+    .row.memo-row
+      .col.s9
+        .check-memo style="top:#{@printer_settings.memo_offset_y * 5}pt; left: #{@printer_settings.memo_offset_x * 5}pt"
+          - unless check.address&.addressable&.account_number.blank?
+            ' Account #: #{check.address.addressable.account_number}  #{check.memo}
+          - else
+            ' #{check.memo}
+
+      .col.s3
+        .check-signature style="top:#{@printer_settings.signature_offset_y * 5}pt; left: #{@printer_settings.signature_offset_x * 5}pt"
+
+= render partial: "alt_voucher_receipt", locals: {voucher_number: 1, check: check, offset: @printer_settings.voucher1_offset_y}
+= render partial: "alt_voucher_receipt", locals: {voucher_number: 2, check: check, offset: @printer_settings.voucher2_offset_y}

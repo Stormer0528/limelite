@@ -1,0 +1,20 @@
+h2.page-header
+  i.material-icons.medium payment
+  | Payments
+  .pull-right.right-align
+    - if @invoice
+      = link_to '< Invoice', vendor_invoice_path(@vendor,@invoice, anchor: "payments"), class: "waves-effect waves-teal btn-flat"
+    - if @purchase_order
+      = link_to '< Purchase Order', vendor_purchase_order_path(@vendor,@purchase_order, anchor: "payments"), class: "waves-effect waves-teal btn-flat"
+
+.row
+  .col.s12
+    = render partial: 'list', locals: { payments: @payments }
+
+.fixed-action-btn
+  - if @invoice
+    = link_to new_vendor_invoice_payment_path(@vendor, @invoice), class: "btn-floating btn-large green lighten-1" do
+      i class="material-icons large" add
+  - if @purchase_order
+    = link_to new_vendor_purchase_order_path(@vendor, @purchase_order), class: "btn-floating btn-large green lighten-1" do
+      i class="material-icons large" add

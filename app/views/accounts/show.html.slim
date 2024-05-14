@@ -1,0 +1,115 @@
+= content_for :page_title
+  '&nbsp; :: Accounts > #{@account.number}
+
+- content_for :head do
+  = javascript_pack_tag 'render_entries_table', defer: true
+
+  javascript:
+    window.initial_data = {
+      account: #{{render partial: 'accounts/account', locals: {account: @account}}}
+    }
+
+  css:
+    .tooltip {
+      background-color: rgba(55, 71, 79, 0.95);
+      color: #ECEFF1;
+      padding: .5rem;
+      border-radius: 2px;
+      box-shadow: 0 0 5px rgba(33,33,33,.5);
+    }
+
+    .shadow {
+      box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)
+    }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Account", icon_options: "medium"
+    span.text
+      = link_to accounts_path, class: "breadcrumb" do
+        span.link-text
+          '  Accounts
+      '
+      span.breadcrumb = @account.name
+
+.page-header.right-align.pull-right style="justify-content: flex-end"
+  = link_to accounts_path,
+    class: "waves-effect waves-teal btn btn-flat" do
+    i.material-icons style="top: 2px" list
+    '  All Accounts
+  - if policy(@account).edit?
+    span.separator style="font-size: 25px;"
+      '  |
+    = link_to edit_account_path(@account),
+      class: "waves-effect waves-teal btn btn-flat" do
+      i.material-icons style="top: 3px" edit
+      '  Edit
+
+ul.collapsible data-collapsible="accordion" style="box-shadow: none;"
+  li
+    .collapsible-header.shadow style="margin: 0; display: block;"
+      .row style="margin: 0 0 8px;"
+        .col.s6 style="display: flex; justify-content: space-around;"
+          b Name:
+          span = @account.name
+        .col.s6 style="display: flex; justify-content: space-around;"
+          b Number:
+          span = @account.number
+      .row style="margin: 0 0 8px;"
+        .col.s2.offset-s1
+          b style="display: flex; justify-content: flex-end;" Submitted&nbsp;Balance:
+        .col.s3
+          = @account.submitted_balance.format
+          | &nbsp;/&nbsp;
+          = @account.current_budget(@fiscal_year.year).format
+          small.grey-text style="margin-left: .5rem" Budgeted
+          .progress style="background-color: #eee; overflow: visible;"
+            .determinate data-tooltip="Pending Balance" style="width: #{@account.submitted_budget_balance_percentage(@fiscal_year.year)&.clamp(0, 100)}%; background-color: #29b6f6; border-radius: 3px;"
+
+        .col.s2.offset-s1
+          b style="display: flex; justify-content: flex-end;" Approved&nbsp;Balance:&nbsp;
+        .col.s3
+          = @account.approved_balance.format
+          | &nbsp;/&nbsp;
+          = @account.current_budget(@fiscal_year.year).format
+          small.grey-text style="margin-left: .5rem" Budgeted
+          .progress style="background-color: #eee; overflow: visible;"
+            .determinate data-tooltip="Approved Balance" style="width: #{@account.approved_budget_balance_percentage(@fiscal_year.year)&.clamp(0, 100)}%; border-radius: 3px;"
+      - if @account.bank_account
+        .row style="margin: 0;"
+          .col.s2.offset-s1
+            b style="display: flex; justify-content: flex-end;" Bank Account:&nbsp;
+          .col.s4
+            = link_to @account.bank_account.name, @account.bank_account
+    .collapsible-body
+      .collection
+        .collection-item
+          b Fund:
+          '
+          = @account.account_fund.try :name
+        .collection-item
+          b Resource:
+          '
+          = @account.account_resource.try :name
+        .collection-item
+          b Year:
+          '
+          = @account.account_year.try :name
+        .collection-item
+          b Goal:
+          '
+          = @account.account_goal.try :name
+        .collection-item
+          b Function:
+          '
+          = @account.account_function.try :name
+        .collection-item
+          b Object:
+          '
+          = @account.account_object.try :name
+        .collection-item
+          b Location:
+          '
+          = @account.account_location.try :name
+
+#accountEntriesTable data-fiscal-year="#{@fiscal_year.year}"

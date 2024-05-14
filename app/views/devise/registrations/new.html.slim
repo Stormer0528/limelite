@@ -1,0 +1,21 @@
+.login-box
+  .ui.top.attached.info.message
+    = image_tag 'LOGO-1.png', size: '183x55', class: 'logo pull-right'
+    h2.ui.header 
+      i.sign.in.icon
+      .content
+        | Sign up
+
+  = simple_form_for resource, 
+    as: resource_name, url: registration_path(resource_name), 
+    html: { method: :post, class: 'ui form attached fluid segment' } do |f|
+    .field
+      = f.input :email, required: true, autofocus: true
+    .field
+      = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length)
+    .field
+      = f.input :password_confirmation, required: true
+    .form-actions
+      = f.button :submit, "Sign Up", class: 'ui primary fluid button'
+
+  = render "devise/shared/links"

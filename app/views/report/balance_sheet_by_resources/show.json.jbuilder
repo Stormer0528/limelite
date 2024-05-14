@@ -1,0 +1,1 @@
+json.partial! "report_balance_sheet_by_resources/report_balance_sheet_by_resource", report_balance_sheet_by_resource: @report_balance_sheet_by_resource

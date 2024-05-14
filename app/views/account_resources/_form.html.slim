@@ -1,0 +1,18 @@
+= simple_form_for(@account_resource, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  - if f.error_notification
+    = render partial: 'shared/validation_errors', locals: { f:f, resource: @account_resource }
+
+  .card
+    .card-content
+      .row
+        .col.s3
+          = f.input :code
+
+        .col.s6
+          = f.input :name
+          = f.input :organization_id, as: :hidden
+
+        .col.s3 style="margin-top: 2.25em;"
+          = f.input :restricted, as: :boolean
+
+    = render partial: "shared/form_footer", locals: {f:f, back_path: back_path}

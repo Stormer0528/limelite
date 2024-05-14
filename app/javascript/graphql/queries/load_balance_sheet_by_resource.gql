@@ -1,0 +1,37 @@
+query {
+  report: balanceSheetByResource {
+    accountFundCode
+    accountFundName
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+    data
+    startDate
+    endDate
+    updatedAt
+    errors
+    organizationName
+    xlsxUrl
+    pdfUrl
+    resourceTitles
+    colspanWidth
+  }
+}

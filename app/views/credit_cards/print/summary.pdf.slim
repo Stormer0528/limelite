@@ -1,0 +1,12 @@
+= wicked_pdf_stylesheet_link_tag 'pdf'
+
+section#bank-info
+  .name
+    = @credit_card.name
+  .number
+    b Acct. #
+    | xxxx
+    = @credit_card.number
+
+section#ledger
+  == render partial: "credit_cards/ledger"

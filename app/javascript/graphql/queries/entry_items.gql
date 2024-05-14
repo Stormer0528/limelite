@@ -1,0 +1,68 @@
+query entryItems(
+  $organization_id: ID
+  $aasm_state: String
+  $entry_type: String
+  $type: String
+  $payable_type: String
+  $vendor_id: ID
+  $customer_id: ID
+  $start_date: String
+  $end_date: String
+  $min_amount: String
+  $max_amount: String
+  $memo: String
+  $account: AccountCodeInputObject
+  $cursor: String
+  $first: Int
+) {
+  entryItemsSearchConnection(
+    organization_id: $organization_id
+    aasm_state: $aasm_state
+    entry_type: $entry_type
+    type: $type
+    start_date: $start_date
+    end_date: $end_date
+    account: $account
+    payable_type: $payable_type
+    min_amount: $min_amount
+    max_amount: $max_amount
+    memo: $memo
+    after: $cursor
+    first: $first
+    vendor_id: $vendor_id
+    customer_id: $customer_id
+  ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    nodes {
+      id
+      entryId
+      entryType
+      type
+      memo
+      date
+      aasmState
+      accountNumber
+      debit
+      credit
+      amount
+      payable {
+        ... on Vendor {
+          name
+          path
+          __typename
+        }
+        ... on Customer {
+          name
+          path
+          __typename
+        }
+        __typename
+      }
+      url
+      aasmState
+    }
+  }
+}

@@ -1,0 +1,29 @@
+mutation runVendorReport($start_date: String, $end_date: String) {
+  createVendorReport(start_date: $start_date, end_date: $end_date) {
+    valid
+    persisted
+    pdfUrl
+    xlsxUrl
+    organizationName
+    startDate
+    endDate
+    vendors {
+      code
+      vendorName
+      vendorNumber
+      amount
+      phone
+      address {
+        id
+        line1
+        line2
+        city
+        state
+        zip
+        name
+        attention
+        department
+      }
+    }
+  }
+}

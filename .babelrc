@@ -1,0 +1,45 @@
+{
+    "presets": [
+        [
+            "@babel/env",
+            {
+                "modules": false,
+                "forceAllTransforms": true,
+                "useBuiltIns": "usage",
+                "corejs": {
+                    "version": 3,
+                    "proposals": true
+                }
+            }
+        ],
+        "@babel/react"
+    ],
+    "plugins": [
+        "react-hot-loader/babel",
+        "@babel/plugin-transform-destructuring",
+        "@babel/plugin-syntax-dynamic-import",
+        [
+            "@babel/plugin-proposal-object-rest-spread",
+            {
+                "useBuiltIns": true
+            }
+        ],
+        [
+            "@babel/plugin-proposal-class-properties",
+            {
+                "spec": true
+            }
+        ],
+        [
+            "@babel/plugin-transform-runtime",
+            {
+                "helpers": true,
+                "regenerator": true,
+                "corejs": {
+                    "version": 3,
+                    "proposals": true
+                }
+            }
+        ]
+    ]
+}

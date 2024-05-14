@@ -1,0 +1,5 @@
+mutation markFileDownloaded($fileUploadId: ID) {
+  markFileDownloaded(fileUploadId: $fileUploadId) {
+    success
+  }
+}

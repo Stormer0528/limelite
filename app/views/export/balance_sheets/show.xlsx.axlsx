@@ -1,0 +1,166 @@
+wb = xlsx_package.workbook
+@wb = wb
+wb.styles do |s|
+  def parse_num(num)
+    num.gsub(/[\$\,]/, "").to_f
+  end
+
+  def multi_style(style)
+    Array.new(@report.data["account_funds"].length, style)
+  end
+
+  def end_col
+    ("A"..."Z").to_a[@report.colspan_width - 2]
+  end
+
+  def horizontal_sum_for_array(sheet, horizontal_length:, vertical_length:, start_index:)
+    start_row = 1 + sheet.rows.length - vertical_length
+    end_row = sheet.rows.count
+
+    Array.new(horizontal_length) {|i|  sum_for_cell(col_index: start_index + i, row_start: start_row, row_end: end_row)}
+  end
+
+  def sum_for_cell(col_index:1, row_start:, row_end:)
+    col = column_name(col_index)
+    "=SUM(#{col}#{row_start}:#{col}#{row_end})"
+  end
+
+  # Given an Int, returns Excel column name e.g. AC
+  def column_name(int)
+    name = "A"
+    (int - 1).times { name.succ! }
+    name
+  end
+
+  def current_sheet
+    @wb.worksheets.last
+  end
+
+  def current_row
+    current_sheet.rows.last
+  end
+
+  def current_row_num
+    current_sheet.rows.count
+  end
+
+
+  # Style Definitions
+  title_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  code_cell  = s.add_style alignment: {horizontal: :left}
+  bold_cell  = s.add_style b: true, alignment: {horizontal: :left}
+  section_title_cell = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  thin_border = s.add_style num_fmt: 44, b: true, border: {style: :double, color: "00", edges: [:bottom]}
+  double_border = s.add_style num_fmt: 44, b: true, border: {style: :double, color: "00", edges: [:bottom]}
+  grey_cell          = s.add_style bg_color: "D8D8D8", b: true, fg_color: "00", alignment: {horizontal: :center}
+  thin_double_border = s.add_style num_fmt: 44, b: true, border: {style: :double, color: "00", edges: [:bottom]}
+  thin_double_border_without_sign = s.add_style num_fmt: 43, b: true, border: {style: :double, color: "00", edges: [:bottom]}, alignment: {horizontal: :left}
+
+  border = s.borders[s.cellXfs[thin_double_border].borderId]
+  border.prs << Axlsx::BorderPr.new(name: :top, color: Axlsx::Color.new(rgb: "000000"), style: :thin)
+
+  border = s.borders[s.cellXfs[thin_double_border_without_sign].borderId]
+  border.prs << Axlsx::BorderPr.new(name: :top, color: Axlsx::Color.new(rgb: "000000"), style: :thin)
+
+  currency = wb.styles.add_style num_fmt: 43
+  currency_with_sign = wb.styles.add_style num_fmt: 44
+
+  wb.add_worksheet(name: "Balance Sheet") do |sheet|
+    # Header
+    sheet.add_row [@current_org.name.upcase], style: [title_cell]
+    sheet.merge_cells("A1:#{end_col}1")
+
+    sheet.add_row ["BALANCE SHEET"], style: [title_cell]
+    sheet.merge_cells("A2:#{end_col}2")
+
+    sheet.add_row ["AS OF #{@report.end_date&.to_formatted_s(:long)&.upcase}"], style: [title_cell]
+    sheet.merge_cells("A3:#{end_col}3")
+
+    sheet.add_row ["FUND: #{@report.data['account_funds'].map {|f| f['code']}.join(', ')} - #{@report.data['account_funds'].map {|f| f['name']}.join(', ')}"], style: [title_cell]
+    sheet.merge_cells("A4:#{end_col}4")
+
+    filter_string = @report.account_search_params.map {|k,v| next if !v&.present?; next if k == "fund_code"; "#{k.gsub(/_code/, '').upcase}: #{v.join(", ")}" }.compact.join(", ")
+    sheet.add_row([filter_string], style: title_cell) unless filter_string.empty?
+    sheet.merge_cells "A5:#{end_col}5" unless filter_string.empty?
+
+    sheet.add_row
+
+    fund_codes = @report.data["account_funds"].map {|f| f["code"]}
+
+    sheet.add_row ["", "", *fund_codes, "Total"], style: [grey_cell, grey_cell, *multi_style(grey_cell), grey_cell]
+    sheet.add_row ["ASSETS", nil, nil, nil], style: section_title_cell
+    first_row = true
+    nonzero_assets = @report.data["assets"].select{|a| a["balance"] != "$0.00" or a["account_funds"].values.any? { |v| v != "$0.00" } }
+    nonzero_assets.each.with_index do |asset, index|
+      balance_style = first_row ? currency_with_sign : currency
+      first_row = false
+      sheet.add_row [asset["code"], asset["name"], *asset["account_funds"].values.map{|val| parse_num(val)}, parse_num(asset["balance"])],
+       style: [code_cell, nil, *multi_style(balance_style), balance_style]
+    end
+
+    sheet.add_row ["TOTAL ASSETS", "",
+      *horizontal_sum_for_array(
+        sheet,
+        horizontal_length: @report.data["total_assets_by_account_funds"].length + 1,
+        vertical_length: nonzero_assets.length,
+        start_index: 3)
+      ],
+      style: [title_cell, nil, *multi_style(thin_double_border), thin_double_border]
+    sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+    total_assets_row = current_row_num
+
+    sheet.add_row
+
+    sheet.add_row ["LIABILITIES AND EQUITY"], style: section_title_cell
+    sheet.merge_cells "A#{sheet.rows.length}:C#{sheet.rows.length}"
+
+    sheet.add_row ["LIABILITIES", nil, nil, nil], style: bold_cell
+    first_row = true
+    nonzero_liabilities = @report.data["liabilities"].select{|a| a["balance"] != "$0.00" or a["account_funds"].values.any? { |v| v != "$0.00" } }
+    nonzero_liabilities.each.with_index do |asset, index|
+      balance_style = first_row ? currency_with_sign : currency
+      first_row = false
+      sheet.add_row [asset["code"], asset["name"], *asset["account_funds"].values.map{|val| parse_num(val)}, parse_num(asset["balance"])],
+        style: [code_cell, nil, *multi_style(balance_style), balance_style]
+    end
+
+    sheet.add_row ["TOTAL LIABILITIES", "",
+      *horizontal_sum_for_array(
+        sheet,
+        horizontal_length: @report.data["account_funds"].length + 1,
+        vertical_length: nonzero_liabilities.length,
+        start_index: 3)
+      ],
+      style: [title_cell, nil, *multi_style(thin_double_border), thin_double_border]
+    sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+    total_liabilities_row = current_row_num
+
+    sheet.add_row
+    sheet.add_row ["EQUITY"], style: bold_cell
+    equities_start_row = current_row_num + 1
+    @report.data["equities"].select{|a| a["balance"] != "$0.00" or a["account_funds"].values.any? { |v| v != "$0.00" } }.each do |asset|
+      balance_style = currency
+      sheet.add_row [asset["code"], asset["name"], *asset["account_funds"].values.map{|val| parse_num(val)}, parse_num(asset["balance"])],
+        style: [code_cell, nil, *multi_style(balance_style), balance_style]
+    end
+    equities_end_row = current_row_num
+
+    sheet.add_row ["", "Net Income (Loss)", *@report.data["net_income_loss_by_account_funds"].values.map {|v| parse_num v}, parse_num(@report.data["net_income_loss"])], style: [nil, nil, *multi_style(currency), currency]
+    net_income_row = current_row_num
+
+    total_equity_ary = (3..@report.account_funds.length + 3).to_a.map {|col| col_name = column_name(col); "=(SUM(#{col_name}#{equities_start_row}:#{col_name}#{equities_end_row}))+#{col_name}#{net_income_row}"}
+    sheet.add_row ["TOTAL EQUITY", "", *total_equity_ary], style: [title_cell, nil, *multi_style(thin_double_border_without_sign), thin_double_border_without_sign]
+    sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+    total_equity_row = current_row_num
+
+    total_liabilites_equity_ary = (3..@report.account_funds.length + 3).to_a.map {|col| col_name = column_name(col); "=#{col_name}#{total_equity_row}+#{col_name}#{total_liabilities_row}"}
+      sheet.add_row ["TOTAL LIABILITIES AND EQUITY", "", *total_liabilites_equity_ary],
+                    style: [title_cell, nil, *multi_style(double_border), double_border]
+      sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+
+    # column widths
+    sheet.column_info.first.width = 10
+    sheet.column_info[1].width = 50
+    sheet.column_info.last.width = 15
+  end
+end

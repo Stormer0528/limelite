@@ -1,0 +1,80 @@
+.navbar-fixed {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background-color: #263238;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+
+nav {
+  border-bottom: 1px solid #546e7a;
+  background-color: transparent;
+  box-shadow: none;
+
+  a.dropdown-trigger {
+    &:hover {
+      color: color("light-blue", "lighten-2");
+    }
+  }
+}
+
+.spacer {
+  display: inline-block;
+  width: 0.75rem;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+// Top Header
+nav.navbar-fixed.top-menu {
+  display: grid;
+  grid-template-columns: 64px 150px 1fr 195px;
+
+  @media only screen and (max-width: 775px) {
+    grid-template-columns: 32px 145px 1fr 190px;
+  }
+
+  a.logo-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h2.page-header {
+    display: flex;
+    font-size: 2.5rem;
+    font-weight: 200;
+    line-height: 1rem;
+    margin: 0;
+    place-content: center;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    & > i.material-icons {
+      color: #cfd8dc;
+    }
+
+    span.text {
+      display: inline-block;
+      line-height: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media only screen and (max-width: 775px) {
+      font-size: 1.8rem;
+      text-align: left;
+      place-content: flex-start;
+    }
+  }
+}

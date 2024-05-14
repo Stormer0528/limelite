@@ -1,0 +1,51 @@
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    #credit_card_index, .CreditCardShow {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+  javascript:
+    window.initial_data = {
+        permissions: {
+          canCreatePayment: #{{policy(@credit_card_for_auth).create?}},
+          canCreateCharge: #{{policy(@credit_card_for_auth).create?}},
+        }
+      };
+
+  = javascript_pack_tag 'render_credit_card_page', defer: true, charset: 'utf-8'
+
+= content_for :page_title
+  '&nbsp; :: Credit Cards
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "credit_card", icon_options: "medium"
+    span.text
+      '  Credit Cards
+
+
+#credit_card_index data-fiscal-year="#{@fiscal_year.year}"

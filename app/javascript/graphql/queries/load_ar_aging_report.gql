@@ -1,0 +1,18 @@
+query {
+  ar_aging_report {
+    periodNames
+    customersByPeriod
+    periodsByCustomer
+    persisted
+    valid
+    errors
+    startDate
+    endDate
+    daysPerPeriod
+    showActiveColumns
+    showActiveRows
+    periods
+    pdfUrl
+    xlsxUrl
+  }
+}

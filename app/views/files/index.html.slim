@@ -1,0 +1,38 @@
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    #top-navbar { position: static !important; }
+    main {
+      padding-top: 8px
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+  javascript:
+    window.initial_data = {};
+
+  = javascript_pack_tag 'render_files_page', defer: true, charset: 'utf-8'
+
+= content_for :page_title
+  '&nbsp; :: Uploads
+
+#files_index data-fiscal-year="#{@fiscal_year.year}" data-organization-id="#{@current_org ? @current_org.id : ''}"

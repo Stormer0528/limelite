@@ -1,0 +1,14 @@
+h2.page-header
+  i.material-icons.medium list
+  | Invoices
+  .pull-right.right-align
+    = link_to '< customer', customer_path(@customer, anchor: "invoices"), class: "waves-effect waves-teal btn-flat"
+
+.row
+  .col.s12
+    = render partial: 'list', locals: { invoices: @invoices }
+
+
+.fixed-action-btn
+  = link_to new_customer_invoice_path(@customer), class: "btn-floating btn-large green lighten-1" do
+    i class="material-icons large" add

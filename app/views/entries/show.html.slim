@@ -1,0 +1,20 @@
+= content_for :head do
+  = javascript_pack_tag 'render_entries_index'
+
+= content_for :page_title
+  '&nbsp; :: Entries > #{@entry.id}
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "entry", icon_options: "medium"
+    span.text
+      a.breadcrumb.primary
+        span.link-text
+          '  Entries
+      '
+      span.breadcrumb
+        span.link-text
+          b Id:&nbsp;
+          = @entry.id
+
+#entries_show data-id="#{@entry.id}"

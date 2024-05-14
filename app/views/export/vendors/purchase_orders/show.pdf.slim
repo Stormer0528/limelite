@@ -1,0 +1,140 @@
+scss:
+  table {
+    tr { border-bottom: none }
+
+    th {
+      font: 9pt Roboto, Arial;
+      padding: 5pt;
+      background: #E0E0E0;
+    }
+
+    &.bordered {
+      th, td {
+        border: 1px solid #e0e0e0;
+      }
+
+      td.unbordered {
+        border: 1px solid transparent;
+        border-right-color: #e0e0e0;
+      }
+    }
+  }
+
+  #totals table.bordered {
+    position: relative;
+    top: -1px;
+
+    td {
+      padding: 5pt;
+    }
+  }
+
+table style="border: none"
+    tbody
+      tr
+        td style="width: 15%"
+          b style="font-size: 10pt; font-weight: bold; font-family: Arial" DATE:
+          br
+          = @purchase_order.date&.to_formatted_s(:std)
+        td style="width: 15%"
+          b style="font-size: 10pt; font-weight: bold; font-family: Arial" DATE&nbsp;NEEDED:
+          br
+          = @purchase_order.date_needed&.to_formatted_s(:std)
+        td style="width: 70%"
+          h3 style="font-size: 20pt; text-align: right" PURCHASE ORDER
+
+header
+  table style="border: none"
+    tbody
+      tr
+        td style="width: 40%"
+          b style="font-size: 10pt; font-weight: bold; font-family: Arial" TO:
+          = render partial: "shared/address/show", locals: {address_model: @purchase_order.address}
+
+        td style="width: 40%"
+          b style="font-size: 10pt; font-weight: bold; font-family: Arial" SHIP TO:
+          = render partial: "shared/address/show", locals: {address_model: @purchase_order.vendor_address}
+
+        td style="width: 20%"
+          b style="font-size: 10pt; font-weight: bold; font-family: Arial" P. O. NUMBER
+          h3 style="margin: 0; font-size: 20pt; text-align: rightl font-style=italic;" = @purchase_order.number
+
+/ Remove empty values and put in tables with 4 columns a piece
+ruby:
+  data = [ \
+    {requested_by: @purchase_order.requested_by},
+    {requested_for: @purchase_order.requested_for},
+    {buyer: @purchase_order.buyer},
+    {requisition_number: @purchase_order.requisition_number},
+    {reference_number: @purchase_order.reference_number},
+    {quote_date: @purchase_order.quote_date&.to_formatted_s(:std)},
+    {quote_number: @purchase_order.quote_number},
+    {proposal_date: @purchase_order.proposal_date&.to_formatted_s(:std)},
+    {proposal_number: @purchase_order.proposal_number},
+    {payment_terms: @purchase_order.payment_terms},
+  ].filter {|item| item.values.first }.in_groups_of(4)
+
+- data.each do |data_group|
+  section#fields style="margin: 12pt 0 0"
+    table.bordered style="border: 1px solid #e0e0e0;"
+      thead
+        tr style="backround: #E0E0E0; border: 1pt solid #C1C1C1"
+          - data_group.map {|dg| dg.keys.first }.each do |title|
+            th = title.to_s.titleize.upcase
+
+      tbody
+        tr style="backround: #E0E0E0; border: 1pt solid #C1C1C1"
+          - data_group.map {|dg| dg.values.first }.each do |value|
+            td = value
+
+section#items style="margin: 12pt 0 0"
+  table.bordered style="border: 1px solid #e0e0e0;"
+    thead
+      tr style="backround: #E0E0E0; border: 1pt solid #C1C1C1"
+        th style="width: 10%; text-align: center;" QTY
+        th style="width: 60%;" DESCRIPTION
+        th style="width: 15%; text-align: center;" PRICE
+        th style="width: 15%; text-align: center;" TOTAL
+    tbody
+      - @purchase_order.purchase_order_items.each do |item|
+        tr
+          td style="text-align: center;" = item.quantity
+          td = item.description
+          td style="text-align: right;" = item.price.format
+          td style="text-align: right;" = item.total.format
+
+    tr
+      td.unbordered colspan="2"
+      td
+        b style="font-size: 10pt; font-weight: bold; font-family: Arial"
+          | SUBTOTAL
+      td style="text-align: right"
+        = @purchase_order.subtotal.format
+
+    tr
+      td.unbordered colspan="2"
+      td
+        b style="font-size: 10pt; font-weight: bold; font-family: Arial"
+          | SHIPPING
+      td style="text-align: right"
+        = @purchase_order.shipping_amount.format
+
+    tr
+      td.unbordered colspan="2"
+      td
+        b style="font-size: 10pt; font-weight: bold; font-family: Arial"
+          | SALES TAX
+      td style="text-align: right"
+        = @purchase_order.tax_amount.format
+
+    tr
+      td.unbordered colspan="2"
+      td
+        b style="font-size: 10pt; font-weight: bold; font-family: Arial"
+          | TOTAL
+      td style="text-align: right"
+        = @purchase_order.total.format
+
+section#signature style="border-top: 1px solid #E0E0E0; margin-top: 150pt; margin-left: 45%"
+    span style="display: inline-block; margin-right: 75pt" Authorization&nbsp;Signature
+    span style="display: inline-block;" Date

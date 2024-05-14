@@ -1,0 +1,117 @@
+query bankAccountTransfer(
+  $bank_account_slug: String!
+  $account_transfer_id: ID!
+) {
+  account_transfer(id: $account_transfer_id) {
+    id
+    aasmState
+    amountInCents
+    amount
+    creatorId
+    date
+    fileUrl
+    memo
+    bankAccountId
+    toBankAccountName
+    toBankAccountId
+    fromBankAccountName
+    fromBankAccountId
+
+    entry {
+      id
+      organizationId
+      entryType
+      date
+      aasmState
+      entryItems {
+        id
+        accountId
+        accountName
+        amount
+        type
+        memo
+        payableName
+        payableType
+        payableId
+        functionCode
+        fundCode
+        goalCode
+        locationCode
+        objectCode
+        resourceCode
+        yearCode
+        valid
+      }
+    }
+
+    permissions {
+      create
+      edit
+      view
+      show
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+
+    approvedAt
+    approver
+
+    stateChangeLogs {
+      loggableType
+      fromState
+      toState
+      createdAt
+      reason
+      user {
+        fullName
+      }
+    }
+  }
+
+  bank_account(slug: $bank_account_slug) {
+    id
+    path
+    startedAt
+    endedAt
+    balance
+    number
+    name
+    slug
+    number
+    description
+    startedAt
+    endedAt
+    edpNumber
+    pseudo
+    lastStatementBalance
+    accountObject {
+      code
+      name
+    }
+    permissions {
+      view
+      edit
+    }
+  }
+
+  bank_accounts {
+    id
+    name
+    slug
+    accountObject {
+      code
+      name
+    }
+  }
+
+  cashAccounts {
+    id
+    name
+    code
+  }
+}

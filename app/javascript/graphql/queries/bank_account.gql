@@ -1,0 +1,43 @@
+query bankAccount($slug: String!) {
+  bank_account(slug: $slug) {
+    id
+    path
+    startedAt
+    endedAt
+    balance
+    number
+    name
+    slug
+    number
+    description
+    startedAt
+    endedAt
+    edpNumber
+    pseudo
+    lastStatementBalance
+    lastReconciledDate
+    accountObject {
+      code
+      name
+    }
+    permissions {
+      view
+      edit
+    }
+  }
+  bank_accounts {
+    id
+    name
+    slug
+    accountObject {
+      code
+      name
+    }
+  }
+
+  cashAccounts {
+    id
+    name
+    code
+  }
+}

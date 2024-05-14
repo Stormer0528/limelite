@@ -1,0 +1,11 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "entry", icon_options: "medium"
+    span.text
+      a.breadcrumb.primary
+        span.link-text
+          '  Entries
+      '
+      span.breadcrumb New
+
+== render 'form'

@@ -1,0 +1,57 @@
+query invoices(
+  $aasm_state: String
+  $number: String
+  $invoiceable_type: String
+  $invoiceable_id: ID
+  $paid: Boolean
+  $voided: Boolean
+) {
+  invoiceSearch(
+    aasm_state: $aasm_state
+    number: $number
+    invoiceable_type: $invoiceable_type
+    invoiceable_id: $invoiceable_id
+    paid: $paid
+    show_voided: $voided
+    preload: true
+  ) {
+    id
+    aasmState
+    amount
+    date
+    displayLabel
+    dueDate
+    editPath
+    invoiceableId
+    invoiceableType
+    number
+    paid
+    path
+    invoiceable {
+      ... on Customer {
+        name
+        path
+      }
+      ... on Vendor {
+        name
+        path
+      }
+    }
+    checks {
+      number
+      date
+      path
+    }
+    permissions {
+      index
+      edit
+      view
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+  }
+}

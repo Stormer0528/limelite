@@ -1,0 +1,25 @@
+query userGroup($id: ID, $organizationId: ID) {
+  userGroup(id: $id, organizationId: $organizationId) {
+    id
+    name
+    approvalAmount
+    parentId
+    users {
+      id
+      avatarUrl
+      fullName
+      initials
+    }
+    approvalAmount
+    modulePermissions {
+      Report
+      Vendor
+      Account
+      Customer
+      CreditCard
+      BankAccount
+      BatchUpload
+      approvalAmount
+    }
+  }
+}

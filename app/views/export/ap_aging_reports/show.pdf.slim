@@ -1,0 +1,111 @@
+.date-row style="display: flex; align-items: center;"
+  div style="flex-grow: 1; margin-right: 1em;"
+    h5 AP Aging Report
+  div style="margin-right: 1em"
+    b Start Date:
+    '  #{@report.start_date.to_formatted_s(:std)}
+  div
+    b End Date:
+    '  #{@report.end_date.to_formatted_s(:std)}
+
+h6 style="margin-top: 1.5em" Report Summary
+table.ar-aging-report.table.table.bordered
+  thead
+    tr
+      th style="width: 35%" Vendor
+      - @report.period_names.each do |p_name|
+        th = p_name&.to_s.titleize
+      th
+        b Total
+
+  tbody
+    - @report.data["periods_by_vendor"].each do |id, vendor|
+      - next unless vendor["total_balance"] > 0.0
+
+      tr style="background-color: #f0f0f0"
+        td.vendor style="width: 35%"
+          = vendor["name"]
+        - vendor["periods"].each do |period_name, value|
+          td class="#{period_name}" = number_to_currency value
+        td.total_balance = number_to_currency vendor["total_balance"]
+
+      - vendor["balance_by_account"].each do |account|
+        - account.map do |account_title, totals|
+          tr style="background-color: #fff"
+            td.vendor style="width: 35%"
+              = account_title
+              - totals.each do |total|
+                td = number_to_currency total
+  tr
+    td <b>Total</b>
+    - total_totals = []
+    - @report.period_names.each do |p_name|
+      td
+        - total = @report.data["periods_by_vendor"].values.flatten.map{|a| a['periods'][p_name.to_s] || 0.0}.inject(0.0){|a,b| a+b}
+        - total_totals << total
+        = number_to_currency total
+    td
+      = number_to_currency total_totals.inject(0.0){|a,b| a+b}
+
+h6 style="margin-top: 1.5em" Report Detail
+table.ar-aging-report.table.table.bordered
+  thead
+    tr
+      td Date
+      td Transaction Type
+      td Num
+      td Vendor
+      td Due Date
+      td Days
+      td Amount
+      td Open Balance
+  tbody
+    - total_amounts = []
+    - total_opened = []
+
+    - @report.period_names.map(&:to_s).each do |key|
+      tr style="background-color: #f0f0f0"
+        td colspan="8"
+          = key.to_s.titleize
+
+      - @report.data["vendors_by_period"][key].each do |code, invoices|
+        tr style="background-color: #CFD8DC"
+          td colspan="8"
+            = "#{code} - #{invoices.first['fund_name']}"
+
+        - invoices.each do |invoice|
+          - if invoice["balance"] != 0.0
+              tr
+                td = invoice["date"]
+                td = invoice["transaction_type"]
+                td = invoice["number"]
+                td = invoice["name"]
+                td = invoice["due_date"]
+                td = invoice["past_due"]
+                td = number_to_currency invoice["amount"]
+                td = number_to_currency invoice["open_balance"]
+
+      - amount_total = @report.data["vendors_by_period"][key].values.flatten.reduce(Money.new 0) {|s, t| s + Money.from_amount(t["amount"])}
+      - open_total =  @report.data["vendors_by_period"][key].values.flatten.reduce(Money.new 0) {|s, t| s + Money.from_amount(t["open_balance"])}
+      - total_amounts << amount_total
+      - total_opened << open_total
+
+      tr
+        td
+          | Total for #{key} days past due
+        td
+        td
+        td
+        td
+        td
+        td = number_to_currency amount_total.to_f
+        td = number_to_currency open_total.to_f
+    tr
+      td TOTAL
+      td
+      td
+      td
+      td
+      td
+      td = number_to_currency total_amounts.inject(Money.new(0)){|s, t| s + t}.to_f
+      td = number_to_currency total_opened.inject(Money.new(0)){|s, t| s + t}.to_f

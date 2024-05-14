@@ -1,0 +1,52 @@
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+= simple_form_for(check, url: form_path, wrapper: :materialize_form) do |f|
+  .card-content
+    .row
+      .col.s4
+        = f.input :number, disabled: true
+      .col.s4.offset-s4
+        = f.input :date, as: :string, wrapper: :materialize_date
+    .row
+      .col.s9
+        = check.vendors.first&.name
+    - if check.address
+      .row
+          .col.s12
+            = check.address.name
+    .row
+      .col.s12
+        = f.input :amount, disabled: true
+    .row
+      .col.s12
+        - disabled = check.payments.count.positive? ? true : false
+        = f.input :memo, as: :string, disabled: true
+
+    .row
+      - if check.entry
+        .col.s12
+          = render  partial: "shared/entry_input",
+            locals: { journalable: check,
+            parent_class: "bank_account_check",
+            default_object_code: check.bank_account.object_code,
+            invoice_remaining: 0}
+
+    .card-action.state-btns style="position: relative; background-color: inherit; border-top: 1px solid rgba(160, 160, 160, 0.2); padding: 0; margin: 0 -30px -30px;"
+      .left
+        h5.current_state
+          b Status:
+          '
+          = check.aasm_state.titleize
+      - if check.payments.count.positive?
+        .center style="border-left: 1px solid #e0e0e0;"
+            .col.s6
+              b Created w payment process.
+      .right
+        - if check&.file_url.present?
+          .col.s3 style="display: flex; justify-content: space-between; align-items: center"
+              = link_to fs_link(check.file_url), class: 'btn btn-flat', target: "_blank" do
+                    i.material-icons.medium description
+                    '  View Check
+        - else
+          .center-align.grey-text No File Uploaded

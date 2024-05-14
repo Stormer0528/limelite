@@ -1,0 +1,32 @@
+= simple_form_for(@entry, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @entry }
+
+  / Fix: form submission needs at least on input if things are disabled
+  - if local_assigns[:disabled]
+    = f.input :entry_type, as: :hidden
+  .form_inputs
+    .card
+      .card-content
+        .row
+          .col.s12
+            = render  partial: "shared/entry_input",
+              locals: { entry: @entry,
+              parent_class: "entry",
+              add_item_label: "+ Account String",
+              invoice_remaining: 0}
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @entry.aasm_state.titleize
+
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @entry,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "shared/state_btn"}
+
+  = render "shared/reason_modal", f: f

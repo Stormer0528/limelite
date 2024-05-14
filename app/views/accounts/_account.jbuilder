@@ -1,0 +1,7 @@
+json.fundCode account.account_fund_code
+json.functionCode account.account_function_code
+json.objectCode account.account_object_code
+json.goalCode account.account_goal_code
+json.locationCode account.account_location_code
+json.resourceCode account.account_resource_code
+json.yearCode account.account_year_code

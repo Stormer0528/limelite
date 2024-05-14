@@ -1,0 +1,32 @@
+/ Vendor#index - root page for invoices, vendors and purchase orders
+= content_for :page_title
+  '&nbsp; :: Vendors
+
+
+- content_for :head do
+  / Preload page info
+  / Skip upload check until all pages converted to redux
+  javascript:
+    window.initial_data = {
+      purchaseOrders: #{{ render 'vendors/purchase_orders/index' }},
+      permissions: {
+        canCreateVendor: #{{policy(Vendor).create?}},
+      },
+    };
+
+  = javascript_pack_tag 'render_vendor_table', defer: true, charset: 'utf-8'
+
+  css:
+    #vendor_index, .VendorIndex {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "vendor", icon_options: "medium"
+    span.text
+      '  Vendors
+
+#vendor_index

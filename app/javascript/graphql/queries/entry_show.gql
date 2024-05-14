@@ -1,0 +1,132 @@
+query entry($entry_id: ID!) {
+  entry(id: $entry_id) {
+    id
+    entryType
+    date
+    totalDebits
+    totalCredits
+    path
+    editPath
+    journalablePath
+    journalableType
+    payableName
+    payablePath
+    payableType
+    aasmState
+    approvedAt
+    approver
+    fileUrl
+    entryItems {
+      id
+      type
+      memo
+      date
+      accountName
+      accountNumber
+      accountDisplayName
+      positiveAmount
+      debit
+      credit
+      payable {
+        ... on Vendor {
+          name
+          path
+          __typename
+        }
+        ... on Customer {
+          name
+          path
+          __typename
+        }
+        __typename
+      }
+      payableType
+      __typename
+    }
+    __typename
+
+    creditCardItems {
+      number: id
+      type
+      path
+      amount
+      memo
+      permissions {
+        show
+      }
+    }
+
+    bankAccountItems {
+      type
+      path
+      number
+      amount
+      memo
+      ... on Check {
+        permissions {
+          show
+        }
+      }
+      ... on Deposit {
+        permissions {
+          show
+        }
+      }
+      ... on AccountTransfer {
+        permissions {
+          show
+        }
+      }
+    }
+
+    invoice {
+      number
+      id
+      path
+      vendor {
+        fullName
+        path
+      }
+      date
+      amount
+    }
+
+    payments {
+      id
+      formattedDate
+      finalPay
+      amount
+      path
+      check {
+        aasmState
+        editPath
+      }
+    }
+
+    permissions {
+      index
+      create
+      edit
+      view
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+    aasmState
+    approvedAt
+    stateChangeLogs {
+      id
+      fromState
+      toState
+      reason
+      user {
+        fullName
+      }
+      createdAt
+    }
+  }
+}

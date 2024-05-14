@@ -1,0 +1,37 @@
+query accountElements {
+  funds: account_funds {
+    name
+    code
+    id
+  }
+  functions: account_functions {
+    name
+    code
+    id
+  }
+  years: account_years {
+    name
+    code
+    id
+  }
+  locations: account_locations {
+    name
+    code
+    id
+  }
+  objects: account_objects {
+    name
+    code
+    id
+  }
+  resources: account_resources {
+    name
+    code
+    id
+  }
+  goals: account_goals {
+    name
+    code
+    id
+  }
+}

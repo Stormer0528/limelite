@@ -1,0 +1,69 @@
+div
+  - case model.aasm_state.to_s
+    - when "draft"
+      - if !local_assigns[:hide_draft] && policy(model).save_draft?
+        = f.button :submit, value: "Save Draft", class: "btn btn-flat blue-text"
+        .separator &nbsp;
+      - if policy(model).send_for_approval?
+        = f.button :submit, value: "Send For Approval", class: "btn btn-flat green-text approval"
+
+    - when "needs_revision"
+      - if !local_assigns[:hide_draft] && policy(model).save_draft?
+        = f.button :submit, value: "Save Draft", class: "btn btn-flat blue-text draft"
+      - if policy(model).send_for_approval?
+        .separator &nbsp;
+        = f.button :submit, value: "Send For Approval", class: "btn btn-flat green-text approval"
+
+    - when "needs_approval"
+      - if policy(model).approve?
+        - if model.class.name == 'Invoice'
+          a href="#reason-modal" class="btn btn-flat red-text modal-trigger approval" Approve
+        - else
+          = f.button :submit, value: "Approve", class: "btn btn-flat green-text approval"
+
+      - if policy(model).deny?
+        .separator &nbsp;
+        a href="#reason-modal" class="btn btn-flat red-text modal-trigger denial" Deny
+
+    - when "approved"
+      - if policy(model).reverse_approval?
+        = f.button :submit, value: "Reverse Approval", class: "btn btn-flat blue-text"
+
+
+  - if local_assigns[:delete_path] && !local_assigns[:hide_delete]
+    - if policy(model).destroy?
+      = link_to local_assigns[:delete_path],
+        class: 'btn waves-effect waves-light red white-text',
+        data: { confirm: 'Are you sure?' }, method: :delete do
+        '  Delete
+
+
+- content_for :bottom_javascript do
+  javascript:
+    $(document).ready(function(){
+      $('.modal').modal();
+
+      const approveBtn = document.querySelector('a[href="#reason-modal"].approval');
+      const denyBtn = document.querySelector('a[href="#reason-modal"].denial');
+
+      const stateType = document.querySelector('#reason-modal #state-type');
+      const submitBtn = document.querySelector('#reason-modal input[type="submit"]')
+
+      if (approveBtn && denyBtn && stateType && submitBtn) {
+        approveBtn.onclick = (e) => {
+          stateType.innerHTML = 'Reason For Approval';
+          submitBtn.value = 'approve';
+
+          submitBtn.parentNode.classList.remove('denial');
+          submitBtn.parentNode.classList.add('approval');
+        }
+
+        denyBtn.onclick = (e) => {
+          stateType.innerHTML = 'Reason For Denial';
+          submitBtn.value = 'deny';
+
+          submitBtn.parentNode.classList.remove('approval');
+          submitBtn.parentNode.classList.add('denial');
+        }
+      }
+    })

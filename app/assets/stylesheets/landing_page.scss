@@ -1,0 +1,168 @@
+// Landing Page Styles
+//------------------------------------------------------------------------------
+.LandingPage {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(20vh, 1fr));
+  grid-template-rows: 1fr 1fr 1fr;
+  justify-content: space-between;
+
+  @media (max-width: 850px) {
+    grid-template-columns: repeat(2, minmax(20vh, 1fr));
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1490px) {
+    grid-template-columns: repeat(4, minmax(20vh, 25%));
+  }
+
+  .item {
+    font-size: 1.75rem;
+    font-weight: 900;
+    border-radius: 3px;
+    height: 20vh;
+    min-height: 200px;
+    margin: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+
+    transition: 0.3s cubic-bezier(0.47, 1.64, 0.41, 0.8);
+
+    &:hover {
+      transform: scale(1.075);
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    i.material-icons {
+      color: white;
+      opacity: 0.2;
+      font-size: 6em;
+      justify-content: center;
+      align-items: center;
+      -webkit-text-stroke: 0.5px #fff;
+    }
+
+    span.text {
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      justify-content: center;
+      align-items: center;
+    }
+
+    // Individual Colors
+    &.user {
+      background: linear-gradient(to bottom right, #1cb5e0 0%, #000851 100%);
+      color: #e8f5e9;
+      grid-row-start: 2;
+    }
+
+    &.log-report {
+      background: linear-gradient(to top left, #d53369 0%, #daae51 100%);
+      color: #fff;
+      grid-row-start: 2;
+    }
+
+    &.organization {
+      background: linear-gradient(to bottom right, #9ebd13 0%, #008552 140%);
+      color: #f1f8e9;
+
+      i.material-icons {
+        -webkit-text-stroke: 1.25px #86b228;
+      }
+      grid-row-start: 2;
+    }
+
+    &.dashboards {
+      background: linear-gradient(to bottom right, gray 0%, #000851 100%);
+      color: #e8f5e9;
+    }
+
+    &.account {
+      background: linear-gradient(to bottom right, #1cb5e0 0%, #000851 100%);
+      color: #e8f5e9;
+    }
+
+    &.bank-account {
+      background: linear-gradient(to bottom right, #9ebd13 0%, #008552 140%);
+      color: #f1f8e9;
+
+      i.material-icons {
+        -webkit-text-stroke: 1.25px #86b228;
+      }
+    }
+
+    &.credit-card {
+      background: linear-gradient(to top left, #ffee57 0%, #9abb14 100%);
+      color: #fbe9e7;
+
+      i.material-icons {
+        color: #277731;
+        -webkit-text-stroke: 0.5px #feed56;
+      }
+    }
+
+    &.vendor {
+      background: linear-gradient(to bottom right, #f7d118 0%, #c34e4e 100%);
+      color: #fff;
+    }
+
+    &.uploads {
+      background: linear-gradient(to bottom right, #c34e4e 0%, #000851 100%);
+      color: #fff;
+    }
+
+    &.admin {
+      // background: linear-gradient(to right, #4b6cb7 0%, #182848 100%);
+      // color: #e8eaf6;
+      // background: linear-gradient(to top left, #360033, #0b8793);
+      // background: linear-gradient(to bottom right, #485a2dbf 0%, #3dddf729),
+      //   linear-gradient(to top, #101961e6 0%, #da0505 100%);
+      background: linear-gradient(to bottom right, #485a2dbf 0%, #3dddf729),
+        linear-gradient(to top, #521a04 0%, #da0505 100%);
+      color: #e8eaf6;
+
+      i.material-icons {
+        -webkit-text-stroke: 0.5px #0f5d98;
+        position: relative;
+        top: 0.035em;
+      }
+    }
+
+    &.customer {
+      background: linear-gradient(to bottom right, #00d2ff 0%, #3a47d5 100%);
+      color: #fff;
+
+      i.material-icons {
+        -webkit-text-stroke: 0.75px #3965dfab;
+      }
+    }
+
+    &.batch_uploads {
+      background: linear-gradient(to bottom right, #4b6cb7 0%, #182848 100%);
+      color: #fff;
+
+      i.material-icons {
+        -webkit-text-stroke: 0.75px #4969b3ed;
+      }
+    }
+
+    &.reports {
+      background: linear-gradient(to top left, #d53369 0%, #daae51 100%);
+      color: #fff;
+
+      i.material-icons {
+        -webkit-text-stroke: 0.5px #e8bc46;
+      }
+    }
+  }
+}

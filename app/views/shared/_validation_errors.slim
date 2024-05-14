@@ -1,0 +1,11 @@
+- if resource.errors.any?
+  .card.validation-errors
+    .card-content
+      span.card-title.card-title style="display:flex;"
+        i.material-icons style="margin-right: .25em;" report_problem
+        == f.error_notification
+      ul.browser-default
+        - resource.errors.each do |field, error|
+          li
+            b.orange-text.text-darken-4 #{(defined?(model) ? model.human_attribute_name(field) : field.to_s.humanize).gsub(/\./, ' ')}
+            '  #{error}

@@ -1,0 +1,42 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon class_name, icon_options: "medium"
+    | Account #{class_name.pluralize}
+
+h2.page-header
+  = class_icon class_name, icon_options: "medium"
+  | Account #{class_name.pluralize}
+
+.card
+  .card-content
+    table.responsive-table.bordered.highlight
+      thead
+        tr
+          th Code
+          - if local_assigns[:show_restricted]
+            th Restricted
+          th Name
+          th Actions
+
+      tbody
+        - account_elements.each do |thing|
+          tr
+            td = thing.code
+            - if local_assigns[:show_restricted]
+              td style="padding-left: 1.5em"
+                - if thing.restricted
+                  i.material-icons check_box
+                - else
+                  i.material-icons check_box_outline_blank
+
+            td = thing.name
+            td
+              = render partial: "shared/view_links", locals: { \
+                show_path: thing,
+                hide_show: true,
+                edit_path: send("edit_#{element_name}_path", thing) }
+
+/ Add Btn
+.fixed-action-btn
+  = link_to send("new_#{element_name}_path"), class: "btn-floating btn-large green lighten-1" do
+    i class="material-icons large" add

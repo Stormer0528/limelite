@@ -1,0 +1,72 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+  # Style Definitions
+  header_title_cell  = s.add_style :fg_color => "00", :b => true, :sz => 14, :alignment => { :horizontal=> :left }
+  title_cell  = s.add_style :fg_color => "00", :b => true, :sz => 12, :alignment => { :horizontal=> :left }
+  month_title_cell  = s.add_style :fg_color => "00", :b => true, :sz => 9, :alignment => { :horizontal=> :center }, :border => { :style => :thin, :color =>"00", :edges => [:bottom] }
+  section_cell  = s.add_style :fg_color => "00", :b => true, :sz => 8, :alignment => { :horizontal=> :left }
+  range_cell  = s.add_style :fg_color => "00", :b => true, :sz => 10, :alignment => { :horizontal=> :right }
+  grey_cell   = s.add_style :bg_color => "D8D8D8", :fg_color => "00", :sz => 12, :alignment => { :horizontal=> :center }
+  thin_border = s.add_style :num_fmt => 43, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+  double_border = s.add_style :num_fmt => 44, :border => { :style => :double, :color =>"00", :edges => [:bottom] }
+  thin_double_border = s.add_style :num_fmt => 44, :border => { :style => :double, :color =>"00", :edges => [:bottom] }
+  border = s.borders[s.cellXfs[thin_double_border].borderId]
+  border.prs << Axlsx::BorderPr.new(:name => :top, :color => Axlsx::Color.new(:rgb => '000000'), :style => :thin)
+
+  currency = wb.styles.add_style :num_fmt => 43, :alignment => { :horizontal=> :right }
+  currency_with_sign = wb.styles.add_style :num_fmt => 44, :alignment => { :horizontal=> :right }
+
+  subtitle_cell = s.add_style :fg_color => "333333", :b => true, :sz => 12
+  total_border = s.add_style :num_fmt => 44, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+  total_bold_border = s.add_style :num_fmt => 44, :b => true, :border => { :style => :thin, :color =>"00", :edges => [:top] }
+  total_bold_double_border = s.add_style :num_fmt => 44, :b => true, :border => { :style => :thin, :color =>"00", :edges => [:top, :bottom] }
+
+  @report.data["account_funds"].each do |fund|
+    report = @report.data["reports"].find {|rep| rep["fund"]["code"] == fund["code"]}
+
+    wb.add_worksheet(name: "#{fund["code"]} - #{fund["name"]}".truncate(31)) do |sheet|
+      sheet.add_row ["", @current_org.name.upcase], style: [nil, header_title_cell]
+      sheet.add_row ["", "Statement of Cash Flows"], style: [nil, header_title_cell]
+      sheet.add_row ["", "#{@report.start_date.to_formatted_s(:long)} - #{@report.end_date.to_formatted_s(:long)}"], style: [nil, title_cell]
+
+      sheet.add_row
+
+      # Operating Activities Section
+      sheet.add_row ["OPERATING ACTIVITIES"], style: section_cell
+
+      sheet.add_row ["Net Income", nil, report["net_cash"]], style: [section_cell]
+      sheet.add_row ["Adjustments to reconcile Net Income to Net Cash provided by operations:"], style: section_cell
+      sheet.merge_cells("A8:B8")
+
+      report["other_income"].each do |account|
+        sheet.add_row [account["code"], account["name"], account["balance"]], style: [nil, section_cell]
+      end
+
+      sheet.add_row ["Total Adjustments to reconcile Net Income to Net Cash provided by operations:", nil, report["investing_activities_total"]], style: [section_cell, nil, total_bold_border]
+      sheet.add_row ["Net cash provided by operating activities", nil, report["net_operations_cash"]], style: [section_cell, nil, total_bold_border]
+
+      # Investing Activities Section
+      sheet.add_row ["INVESTING ACTIVITIES"], style: section_cell
+      report["investing_activities"].each do |account|
+        sheet.add_row [account["code"], account["name"], account["balance"]], style: [nil, section_cell]
+      end
+      sheet.add_row ["Net cash provided by investing activities", nil, report["investing_activities_total"]], style: [section_cell, nil, total_bold_border]
+
+      # Financing Activities Section
+      sheet.add_row ["FINANCING ACTIVITIES"], style: section_cell
+      report["financing_activities"].each do |account|
+        sheet.add_row [account["code"], account["name"], account["balance"]], style: [nil, section_cell, currency]
+      end
+      sheet.add_row ["Net cash provided by financing activities", nil, report["financing_activities_total"]], style: [section_cell, nil, total_bold_border]
+      sheet.add_row ["Net cash increase for period", nil, report["net_cash_increase"]], style: [section_cell, nil, total_bold_border]
+
+      sheet.add_row ["Cash at beginning of period", nil, report["cash_at_beginning"]], style: [section_cell]
+      sheet.add_row ["Cash at end of period", nil, report["cash_at_end"]], style: [section_cell, nil, total_bold_border]
+
+      sheet.add_row
+      sheet.add_row [nil, DateTime.now.to_formatted_s(:long)]
+
+      sheet.column_info.first.width = 15
+    end
+  end
+end

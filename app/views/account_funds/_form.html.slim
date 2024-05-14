@@ -1,0 +1,13 @@
+= simple_form_for(@account_fund, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @account_fund }
+
+  .row
+    .col.s3
+      = f.input :code
+    .col.s9
+      = f.input :name
+      = f.input :organization_id, as: :hidden
+  .row
+    .col.s12
+      .pull-right
+        = f.button :submit

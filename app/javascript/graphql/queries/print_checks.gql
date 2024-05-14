@@ -1,0 +1,34 @@
+query bankAccount($slug: String!) {
+  bank_account(slug: $slug) {
+    id
+    path
+    startedAt
+    endedAt
+    balance
+    number
+    name
+    slug
+    number
+    description
+    startedAt
+    endedAt
+    edpNumber
+    pseudo
+    lastStatementBalance
+    accountObject {
+      code
+      name
+    }
+    permissions {
+      view
+      edit
+    }
+  }
+  printerSettings {
+    id
+    name
+    printerType
+    updatedAt
+  }
+  fiscalYear
+}

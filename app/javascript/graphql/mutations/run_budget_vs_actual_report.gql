@@ -1,0 +1,52 @@
+mutation runBudgetVsActualReport(
+  $id: ID
+  $organization_id: ID
+  $startDate: String
+  $endDate: String
+  $account: AccountCodeInputObject
+) {
+  report: createBudgetVsActualReport(
+    id: $id
+    organization_id: $organization_id
+    start_date: $startDate
+    end_date: $endDate
+    account: $account
+  ) {
+    startDate
+    endDate
+    data
+    accountFundId
+    accountFundName
+    accountFundCode
+    organizationName
+    colspanWidth
+    url
+    pdfUrl
+    xlsxUrl
+    errors
+    valid
+    persisted
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+  }
+}

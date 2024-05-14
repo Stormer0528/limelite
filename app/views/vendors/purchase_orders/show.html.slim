@@ -1,0 +1,37 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "vendor", icon_options: "medium"
+    span.text
+      = link_to vendors_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Vendors
+      '
+      = link_to vendor_path(@vendor), class: "breadcrumb" do
+        span.link-text
+          = @vendor.name
+      '
+      span.breadcrumb
+        b PO #:&nbsp;
+
+        '
+        = @purchase_order.number
+
+
+h5.page-header
+  .pull-right.right-align
+    = link_to vendor_path(@vendor), class: "waves-effect waves-teal btn-flat" do
+      = class_icon "vendor"
+      '  Vendor
+    '  |
+    - if @purchase_order.invoice
+      = link_to vendor_invoice_path(@vendor, @purchase_order.invoice), class: "waves-effect waves-teal btn-flat" do
+        = class_icon "invoice"
+        '  Invoice
+      '  |
+
+    = link_to edit_vendor_purchase_order_path(@vendor, @purchase_order), class: "waves-effect waves-teal btn-flat" do
+      i.material-icons mode_edit
+      '  Edit
+
+= render partial: "info_card"
+= render partial: "fab"

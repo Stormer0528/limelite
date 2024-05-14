@@ -1,0 +1,21 @@
+li style="border: 1px solid #999; border-radius: 4px; padding: 8px; margin: 8px 0;  display: grid; grid-template-columns: max-content repeat(5, minmax(min-content, 1fr)); grid-column-gap: 4px; align-items: flex-end;"
+  span style="font-weight: normal;"
+    b #{item.invoiceable_type}
+    = item.invoiceable.display_name
+
+  span style="font-weight: normal;"
+    b Number:&nbsp;
+    = item.number
+
+  span style="font-weight: normal;"
+    b Amount:&nbsp;
+    = item.amount.format
+
+  span style="font-weight: normal;"
+    b Date:&nbsp;
+    = item&.date&.to_formatted_s(:std_alt)
+  span style="font-weight: normal;"
+    b Due:&nbsp;
+    = item&.due_date&.to_formatted_s(:std_alt)
+
+  a target="_blank" href="#{base_name}/#{item.invoiceable_type.tableize}/#{item.invoiceable.slug}/invoices/#{item.slug}" View Invoice

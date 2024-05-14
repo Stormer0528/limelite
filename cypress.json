@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://rja.limeliteds.local:3000",
+  "experimentalStudio": true,
+  "experimentalSourceRewriting": false,
+  "componentFolder": "cypress/components"
+}

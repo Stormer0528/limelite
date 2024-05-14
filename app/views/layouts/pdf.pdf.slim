@@ -1,0 +1,13 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="x-ua-compatible" content="ie=edge"
+
+    = wicked_pdf_stylesheet_link_tag 'pdf'
+
+    / Top level Js
+    = yield(:head)
+
+  body
+    = yield

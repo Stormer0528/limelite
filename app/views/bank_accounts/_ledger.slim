@@ -1,0 +1,52 @@
+section.ledger
+  h5.page-header
+    i.material-icons storage
+    | Ledger
+    .balances.pull-right
+      small.initial-balance
+        b Last Statement Balance:
+        '
+        = number_to_currency(@bank_account.last_statement_balance)
+      .balance
+        b Balance:
+        '
+        = number_to_currency(@bank_account.balance)
+  .divider
+
+  table.bordered.condensed
+    thead
+      tr
+        th Type
+        th State
+        th No.
+        th Date
+        th Payee
+        th Memo
+        th Reconciled
+        th Debits
+        th Credits
+
+    tbody
+      - @items.each do |item|
+        tr.item-row
+          td
+            .type-cell
+              == class_icon item.type.demodulize&.titleize, icon_options: "tiny"
+              '&nbsp;#{(item.name || item.type)&.demodulize&.titleize}
+          td = item.aasm_state&.titleize
+          td = item.number
+          td = item.date&.to_formatted_s(:std)
+          td = item.payee
+          td = item.memo
+          td
+            - if item.reconciled?
+              .green-text.center-align
+                i.material-icons check_circle
+          - if item['amount_in_cents'] < 0
+            td
+            td.green-text
+              = item.amount.format
+          - else
+            td.red-text.text-darken-1
+              = item.amount.format
+            td

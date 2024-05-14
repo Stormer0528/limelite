@@ -1,0 +1,39 @@
+/ Set Defaults for form path
+- form_path ||= @deposit.new_record? ? bank_account_deposits_path(@bank_account, @deposit) : bank_account_deposit_path(@bank_account, @deposit)
+
+= simple_form_for(@deposit, url: form_path, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @deposit }
+
+  .form-inputs
+    .card
+      .card-content
+        .row
+          .col.s3
+            = f.input :date, as: :string, wrapper: :materialize_date
+          .col.s3.offset-s6
+            = f.input :number
+        .row
+          .col.s12
+            / = render  partial: "shared/entry_input",
+            /   locals: { \
+            /   journalable: @deposit,
+            /   parent_class: "bank_account_deposit",
+            /   default_object_code: @bank_account.object_code,
+            /   default_entry_type: "Revenue",
+            /   invoice_remaining: 0 }
+
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @deposit.aasm_state.titleize
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @deposit,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "shared/state_btn"}
+
+  = render "shared/reason_modal", f: f

@@ -1,0 +1,160 @@
+.card
+  .card-content
+    h5.card-title style="display:flex; align-items: center;"
+      - unless !@vendor&.logo_url&.present?
+        img.circle.responsive-img src="#{fs_avatar_link @vendor.logo_url}"
+      - else
+        = class_icon "vendor"
+      '
+      span style="display: inline-block; margin-left: 1em;"
+        | Vendor Information
+    .divider
+    .row
+      .col.s2.right-align
+        b.text-label
+          i.material-icons perm_identity
+          | Name:
+      .col.s4
+        = @vendor.full_name
+      .col.s2.right-align
+        b.text-label
+          i.material-icons business
+          | Vendor ID:
+      .col.s4
+        = @vendor.visible_id
+    .row
+      .col.s2.right-align
+        b.text-label
+          i.material-icons business
+          | Company:
+      .col.s10
+        = @vendor.company
+
+    .row
+      .col.s2.right-align
+        b.text-label
+          i.material-icons email
+          | Email:
+      .col.s4
+        = @vendor.email
+      .col.s2.right-align
+        b.text-label
+          i.material-icons language
+          | Website:
+      .col.s4
+        = link_to @vendor.website
+
+    / Phones
+    .divider.spaced
+    .row
+      - if @vendor.home_phone_number && !@vendor.home_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+                b.text-label
+                  i.material-icons store
+                  | Home:
+            .col.s8
+              = number_to_phone @vendor.home_phone_number, area_code: true
+
+      - if @vendor.mobile_phone_number && !@vendor.mobile_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+              b.text-label
+                i.material-icons phonelink_ring
+                | Mobile:
+
+            .col.s8 = number_to_phone @vendor.mobile_phone_number, area_code: true
+
+      - if @vendor.work_phone_number && !@vendor.work_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+                b.text-label
+                  i.material-icons settings_phone
+                  | Work:
+            .col.s8 = number_to_phone @vendor.work_phone_number, area_code: true
+
+      - if @vendor.fax_phone_number && !@vendor.fax_phone_number.empty?
+        .col.s6
+          .row
+            .col.s4
+              b.text-label
+                i.material-icons print
+                | Fax:
+            .col.s8 = number_to_phone @vendor.fax_phone_number, area_code: true
+  / Approval Btns
+  = render partial: "shared/approval_footer",
+           locals: {form_path: vendor_path(@vendor), model: @vendor, hide_draft: true}
+
+.card
+  .card-content
+    span.card-title
+      i.material-icons turned_in_not
+      '
+      | Vendor Account
+    .row
+      .col.s3
+        b
+          | Account Number:
+      .col.s6
+        = @vendor.account_number
+      .col.s3
+        = disabled_checkbox "Active", @vendor.active
+
+ul class="collapsible" data-collapsible="expandable"
+  - @vendor.addresses.each do |address|
+    li.active
+      .collapsible-header
+        i.material-icons markunread_mailbox
+        = address.name
+      .collapsible-body
+        = render partial: 'shared/address/show', locals: { address_model: address }
+
+- if @vendor.payment_terms.try(:present?)
+  .card
+    .card-content
+      span.card-title
+        .material-icons payment
+        '
+        | Payment Terms
+      = @vendor.payment_terms
+
+- if @vendor.notes.try(:present?)
+  .card
+    .card-content
+      span.card-title
+        .material-icons subject
+        '  Notes
+      = @vendor.notes
+- if @vendor.ten_ninety_nine?
+  .card
+    .card-content
+      span.card-title
+        i.material-icons receipt
+        '  Tax Information
+      .row
+        .col.s4
+          b 1099 Required:
+          '  Yes
+        .col.s4
+          b EIN:
+          '
+          = @vendor.ein
+        .col.s4 style="display: flex; justify-content: space-between; align-items: center"
+          - if @vendor&.file_url.present?
+            b File Upload:
+            .btn-group
+              = link_to fs_link(@vendor.file_url), class: 'btn btn-flat', target: "_blank" do
+                  i.material-icons.medium description
+                  '  View
+
+      .row
+        .col.s12
+          b EIN Type:
+          '
+          = @vendor.ein_type
+
+/ Approval Log
+= render partial: "shared/state_change_log", locals: {model: @vendor}

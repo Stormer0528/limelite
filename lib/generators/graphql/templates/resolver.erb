@@ -1,0 +1,8 @@
+class Resolvers::<%= type_ruby_name.split('::')[-1] %>Resolver < Resolvers::BaseSearchResolver
+  type types[Types::EntryType]
+  description "Find and filter entries"
+
+  <% normalized_fields.each do |f| %>
+      <%= f.to_ruby %>
+  <% end %>
+end

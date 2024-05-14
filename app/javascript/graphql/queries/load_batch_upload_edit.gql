@@ -1,0 +1,52 @@
+query loadBatchUpload($id: ID!) {
+  batchUpload(id: $id) {
+    id
+    aasmState
+    files {
+      handle
+      url
+      uploadId
+      reason
+      date
+      dueDate
+      invoiceNumber
+      accounts {
+        accountId
+        accountNumber
+        amount
+      }
+      amount
+      invoiceNumber
+      vendorName
+      vendorId
+      notes
+      approved
+      path
+    }
+    authorizations {
+      id
+      groupId
+      groupName
+      userName
+      action
+      reason
+      date: updatedAt
+    }
+
+    authorizationPath {
+      name
+      id
+    }
+    authorizationPathIndex
+
+    stateChangeLogs {
+      loggableType
+      fromState
+      toState
+      createdAt
+      user {
+        fullName
+      }
+    }
+  }
+}

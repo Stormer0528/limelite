@@ -1,0 +1,192 @@
+wb = xlsx_package.workbook
+@wb = wb
+wb.styles do |s|
+  require_relative "../report_functions.rb"
+
+  def parse_num(num)
+    num.gsub(/[\$\,]/, "").to_f
+  end
+
+  def multi_style(style)
+    Array.new(@report.data["account_funds"].length, style)
+  end
+
+  def end_col
+    ("A"..."Z").to_a[@report.colspan_width - 2]
+  end
+
+  def current_row_num
+    current_sheet.rows.count + 1
+  end
+
+  def variance_calculation
+    "=IF(F#{current_row_num}=0,\" - \",(E#{current_row_num}-F#{current_row_num} )/F#{current_row_num})"
+  end
+
+  # Style Definitions
+  left_align         = s.add_style alignment: {horizontal: :left}
+  title_cell         = s.add_style fg_color: "00", b: true, alignment: {horizontal: :center}
+  total_title_cell   = s.add_style fg_color: "00", b: true, alignment: {indent: 8}
+  section_cell       = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  section_cell_right = s.add_style fg_color: "00", b: true, alignment: {horizontal: :right}
+  range_cell         = s.add_style fg_color: "00", b: true, alignment: {horizontal: :left}
+  grey_cell          = s.add_style bg_color: "D8D8D8", fg_color: "00", alignment: {horizontal: :center}
+  thin_border        = s.add_style num_fmt: 43, border: {style: :thin, color: "00", edges: [:top, :bottom]}
+  thin_border_percentage = s.add_style num_fmt: 10, alignment: {horizontal: :center}, border: {style: :thin, color: "00", edges: [:top, :bottom]}
+  double_border      = s.add_style num_fmt: 44, b: true, border: {style: :double, color: "00", edges: [:bottom]}
+  thin_double_border = s.add_style num_fmt: 44, border: {style: :double, color: "00", edges: [:bottom]}
+  border = s.borders[s.cellXfs[thin_double_border].borderId]
+  border.prs << Axlsx::BorderPr.new(name: :top, color: Axlsx::Color.new(rgb: '000000'), style: :thin)
+
+  currency = wb.styles.add_style num_fmt: 43
+  currency_with_sign = wb.styles.add_style num_fmt: 44
+  bold_currency_with_sign = wb.styles.add_style num_fmt: 44, b: true, border: {style: :thin, color: "00", edges: [:bottom]}
+  percentage_cell = s.add_style fg_color: "00", num_fmt: 10, alignment: {horizontal: :center}
+  bold_percentage = s.add_style fg_color: "00", b: true, num_fmt: 10, alignment: {horizontal: :center}, border: {style: :thin, color: "00", edges: [:top, :bottom]}
+
+  wb.add_worksheet(name: "Profit And Loss Statement") do |sheet|
+    sheet.add_row [@current_org.name.upcase], style: [title_cell]
+    sheet.merge_cells("A1:#{end_col}1")
+
+    sheet.add_row ["BUDGET VS ACTUAL REPORT"], style: [title_cell]
+    sheet.merge_cells("A2:#{end_col}2")
+
+    sheet.add_row ["#{@report.start_date.to_formatted_s(:long)} THROUGH #{@report.end_date.to_formatted_s(:long)}".upcase], style: [title_cell]
+    sheet.merge_cells("A3:#{end_col}3")
+
+    sheet.add_row ["FUND: #{@report.data["fund_code"]}"], style: [title_cell]
+    sheet.merge_cells("A4:#{end_col}4")
+
+    filter_string = @report.account_search_params.map {|k,v| next if !v&.present?; next if k == "fund_code"; "#{k.gsub(/_code/, '').upcase}: #{v.join(", ")}" }.compact.join(", ")
+    sheet.add_row([filter_string], style: title_cell) unless filter_string.empty?
+    sheet.merge_cells "A5:#{end_col}5" unless filter_string.empty?
+
+    sheet.add_row
+
+    sheet.add_row ["", "", "", *multi_style(""), "", "", ""], style: grey_cell
+
+    fund_codes = @report.data["account_funds"].map {|f| f["code"]}
+    sheet.add_row ["REVENUES", nil, *fund_codes, "Total", "Budget", "$ Variance", "% Variance"],
+                  style: [section_cell, nil,  *multi_style(section_cell_right), section_cell_right, section_cell_right, section_cell_right, section_cell]
+    first_row = true
+    @report.data["revenue"].each do |account_range, acc_obj|
+      acc_obj["accounts"].select{|a| a["balance"] != "$0.00" && a["budget"] != "$0.00" }.each do |account|
+        balance_style = first_row ? currency_with_sign : currency
+        first_row = false
+
+        # Account Object
+        sheet.add_row [
+          account["code"],
+          account["name"],
+          *account["account_funds"].values.map{|val| parse_num(val)},
+          parse_num(account["balance"]),
+          parse_num(account["budget"]),
+          parse_num(account["dollar_variance"]),
+          variance_calculation
+        ],
+        style: [left_align, nil, *multi_style(balance_style), balance_style, balance_style, balance_style, percentage_cell]
+
+        # Account Detail
+        account["accounts"].each do |acc|
+          next if acc["balance"] == "$0.00" && acc["budget"] == "$0.00"
+
+          sheet.add_row [
+            "",
+            acc["number"],
+            *account["account_funds"].values.map { "" },
+            parse_num(acc["balance"]),
+            parse_num(acc["budget"]),
+            parse_num(acc["variance"]),
+            variance_calculation,
+          ],
+          style: [left_align, nil, *multi_style(balance_style), balance_style, balance_style, balance_style, percentage_cell],
+          types: [:string, nil, nil, nil, nil, *account["account_funds"].values.map { nil }, :float]
+        end
+      end
+        funds_balances = acc_obj["funds_balances"].values.map{|val| parse_num(val)}
+
+        sheet.add_row [
+          account_range, acc_obj["title"],
+          *funds_balances, parse_num(acc_obj["total_balance"]),
+          parse_num(acc_obj["total_budget"]),
+          parse_num(acc_obj["total_account_balance"]),
+          variance_calculation
+        ],
+        style: [range_cell, nil, *multi_style(thin_border), thin_border, thin_border, thin_border, thin_border_percentage]
+    end
+    expenditures_range_totals = @report.data["revenue_range_totals"].values.map {|val| parse_num val}
+    sheet.add_row ["TOTAL REVENUES", "", *expenditures_range_totals, parse_num(@report.data["revenue_total"]), parse_num(@report.data["revenue_budget_total"]), parse_num(@report.data["revenue_account_balance_total"]), @report.data["revenue_account_balance_percentage"]],
+                  style: [total_title_cell, nil, *multi_style(bold_currency_with_sign), bold_currency_with_sign, bold_currency_with_sign, bold_currency_with_sign, bold_percentage]
+    sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+    sheet.add_row
+
+    first_row = true
+    sheet.add_row ["EXPENDITURES"], style: section_cell
+    @report.data["expenditures"].each do |account_range, acc_obj|
+      acc_obj["accounts"].select{|a| a["balance"] != "$0.00" && a["budget"] != "$0.00" }.each do |account|
+        balance_style = first_row ? currency_with_sign : currency
+        sheet.add_row [
+          account["code"],
+          account["name"],
+          *account["account_funds"].values.map{|val| parse_num(val)},
+          parse_num(account["balance"]),
+          parse_num(account["budget"]),
+          parse_num(account["dollar_variance"]),
+          variance_calculation
+        ],
+        style: [left_align, nil, *multi_style(balance_style), balance_style, balance_style, balance_style, percentage_cell]
+        first_row = false
+
+        # Account Detail
+        account["accounts"].each do |acc|
+          next if acc["balance"] == "$0.00" && acc["budget"] == "$0.00"
+
+          sheet.add_row [
+            "",
+            acc["number"],
+            *account["account_funds"].values.map { "" },
+            parse_num(acc["balance"]),
+            parse_num(acc["budget"]),
+            parse_num(acc["variance"]),
+            variance_calculation],
+          style: [left_align, nil, *multi_style(balance_style), balance_style, balance_style, balance_style, percentage_cell]
+        end
+      end
+
+      funds_balances = acc_obj["funds_balances"].values.map{|val| parse_num(val)}
+      sheet.add_row [
+        account_range,
+        acc_obj["title"],
+        *funds_balances,
+        parse_num(acc_obj["total_balance"]),
+        parse_num(acc_obj["total_budget"]),
+        parse_num(acc_obj["total_account_balance"]),
+        variance_calculation,
+      ],
+      style: [range_cell, nil, *multi_style(thin_border), thin_border, thin_border, thin_border, thin_border_percentage]
+    end
+    expenditures_range_totals = @report.data["expenditures_range_totals"].values.map {|val| parse_num val}
+    sheet.add_row ["TOTAL EXPENSES", "",
+      *expenditures_range_totals,
+      parse_num(@report.data["expenditures_total"]),
+      parse_num(@report.data["expenditures_budget_total"]),
+      parse_num(@report.data["expenditures_account_balance_total"]),
+      variance_calculation
+    ],
+    style: [total_title_cell, nil, *multi_style(bold_currency_with_sign), bold_currency_with_sign, bold_currency_with_sign, bold_currency_with_sign, bold_percentage]
+    sheet.merge_cells("A#{sheet.rows.length}:B#{sheet.rows.length}")
+
+    sheet.add_row
+
+    excess_revenues_totals = @report.data["excess_revenues_totals"].values.map {|val| parse_num val}
+    sheet.add_row ["EXCESS (DEFICIENCY) OF REVENUES OVER EXPENSES", nil, *excess_revenues_totals, parse_num(@report.data["excess_revenues"]), parse_num(@report.data["excess_revenues_budget"]), parse_num(@report.data["excess_revenues_account_balance"]), ""],
+                  style: [section_cell, nil, *multi_style(double_border), double_border, double_border, double_border, double_border]
+    sheet.merge_cells("A#{sheet.rows.count}:B#{sheet.rows.count}")
+
+    # Column Widths
+    sheet.column_info.first.width = 12
+    sheet.column_info[1].width    = 65
+    sheet.column_info.last.width  = 15
+  end
+end

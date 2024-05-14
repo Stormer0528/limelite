@@ -1,0 +1,12 @@
+.card-action.state-btns
+  .left
+    h5 class="current_state #{@customer.aasm_state.dasherize}"
+      b Status:
+      '
+      = @customer.aasm_state.titleize
+  .center
+  .right
+    = simple_form_for(@customer, url: form_path, wrapper: :materialize_form,
+      html: {class: "no-footer"}) do |f|
+      = f.input :name, as: :hidden
+      = render partial: "shared/state_btn", locals: { model: @customer, f:f, hide_draft: true}

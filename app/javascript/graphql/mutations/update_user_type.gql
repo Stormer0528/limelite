@@ -1,0 +1,7 @@
+mutation updateUserType($userId: ID, $organizationId: ID, $type: String) {
+  updateUserType(
+    userId: $userId
+    organizationId: $organizationId
+    type: $type
+  )
+}

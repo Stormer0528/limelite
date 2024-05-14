@@ -1,0 +1,29 @@
+query {
+  vendorReport {
+    valid
+    persisted
+    pdfUrl
+    xlsxUrl
+    organizationName
+    startDate
+    endDate
+    vendors {
+      code
+      vendorName
+      vendorNumber
+      amount
+      phone
+      address {
+        id
+        line1
+        line2
+        city
+        state
+        zip
+        name
+        attention
+        department
+      }
+    }
+  }
+}

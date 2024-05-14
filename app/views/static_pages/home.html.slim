@@ -1,0 +1,14 @@
+scss:
+  main > .container {
+    margin-top: 80px;
+  }
+
+= content_for :bottom_javascript
+  / Preload page info
+  javascript:
+    window.initial_data = Object.assign({}, (window.initial_data || {}));
+
+- if @current_org && policy(@current_org).show?
+  == render partial: 'org_home'
+- else
+  == render partial: 'admin_home', locals: {home: true}

@@ -1,0 +1,57 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "bank_account", icon_options: "medium"
+    span.text
+      '  Pay Invoices
+
+= form_tag batch_payments_path, method: :post do
+  .card
+    .card-content
+      .row
+        .col.s6
+          .input-field.col.s12.string.required.batch_date
+            i.material-icons.prefix event
+            = text_field_tag "batch[date]", Date.today,
+              { type: "date", class: "validate string" }
+        .col.s6
+          .input-field.col.s12.select.required.object_code
+            = select_tag "batch[account_object_id]",
+              options_from_collection_for_select(@account_objects,
+                                                 :id,
+                                                 :display_name)
+      .row
+        .col.s12
+          .pull-right
+            i.btn.waves-effect.waves-input-wrapper
+              = submit_tag "Pay Invoices", class: "waves-button-input"
+  table.responsive-table.bordered
+    thead
+      tr
+        th
+        th Due Date
+        th Vendor
+        th Invoice #
+        th File
+        th Amount
+
+    tbody
+      - @open_invoices.each_with_index do |invoice, i|
+        tr
+          td
+            = label_tag "batch_invoice_ids[]", "",
+              { class: "boolean", for: "invoice_ids_#{i}" }
+              = check_box_tag "batch[invoice_ids][]", invoice.id, false,
+                { class: "boolean", id: "invoice_ids_#{i}" }
+              span
+          td = invoice&.due_date&.to_formatted_s(:std)
+          td = invoice&.invoiceable&.name
+          td = invoice&.number
+          td
+            - if invoice&.file_url.present?
+              .btn-group
+                = link_to fs_link(invoice.file_url),
+                  class: 'btn btn-flat', target: "_blank" do
+                  i.material-icons.medium description
+                  '  View
+            - else
+          td = number_to_currency invoice.amount, precision: 2

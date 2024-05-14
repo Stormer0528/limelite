@@ -1,0 +1,19 @@
+- if model.state_change_logs.count > 0
+  ul.collapsible data-collapsible="accordion"
+      li
+        .collapsible-header
+          | <i class="material-icons">list</i> &nbsp;Approval Log
+
+        table.table.bordered.collapsible-body
+          thead
+            tr
+              th Date
+              th Action
+              th Reason
+          tbody
+            - model.state_change_logs.order(updated_at: :desc).each do |log|
+              tr
+                td = log.created_at&.to_formatted_s(:long)
+                td
+                  | #{log.user&.full_name || "Unknown user"} updated #{model.class.name.demodulize} from <b>#{log.from_state.titleize}</b> to <b>#{log.to_state.titleize}</b>
+                td = log.reason

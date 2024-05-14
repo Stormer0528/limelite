@@ -1,0 +1,23 @@
+css:
+  main.container {
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    box-shadow:0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+    padding: 8px;
+    margin-bottom: 1rem;
+    padding-bottom: 54px;
+    position: relative;
+  }
+
+= content_for :page_title
+  '&nbsp; :: Import Entries
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "entry", icon_options: "medium"
+    span.text
+      '  Entries
+    span.breadcrumb
+      b Import&nbsp;Entries
+
+= render partial: "form"

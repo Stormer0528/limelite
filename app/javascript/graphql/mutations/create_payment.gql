@@ -1,0 +1,49 @@
+mutation createPayment(
+  $payment: CreditCardPaymentAttributes
+  $stateAction: String
+  $reason: String
+) {
+  createPayment(payment: $payment, stateAction: $stateAction, reason: $reason) {
+    id
+    aasmState
+    amountInCents
+    amount
+    creditCardId
+    creatorId
+    date
+    number
+    fileUrl
+    memo
+    valid
+    errors
+    errorMessages
+
+    entry {
+      id
+      organizationId
+      entryType
+      date
+      aasmState
+      entryItems {
+        id
+        accountId
+        accountName
+        amount
+        type
+        memo
+        payableType
+        payableId
+        functionCode
+        fundCode
+        goalCode
+        locationCode
+        objectCode
+        resourceCode
+        yearCode
+        valid
+      }
+
+      errors
+    }
+  }
+}

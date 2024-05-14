@@ -1,0 +1,45 @@
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+  / Preload page info
+  / Skip upload check until all pages converted to redux
+  javascript:
+    window.initial_data = {
+      permissions: {
+        canCreateCheck: #{{policy(@bank_account_for_auth).create?}},
+        canCreateDeposit: #{{policy(@bank_account_for_auth).create?}},
+        canCreateAccountTransfer: #{{policy(@bank_account_for_auth).create?}},
+        canPrintChecks: #{{policy(@bank_account_for_auth).edit?}},
+      }
+    };
+
+  = javascript_pack_tag 'render_bank_account_page', defer: true, charset: 'utf-8'
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "bank_account", icon_options: "medium"
+    span.text
+      '  Bank Accounts
+
+#bank_account_index data-fiscal-year="#{@fiscal_year.year}" data-organization-id="#{@current_org.id}"

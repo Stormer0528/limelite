@@ -1,0 +1,20 @@
+.address
+  - if address_model&.attention
+    .attention
+      = address_model.attention
+  - if address_model&.department
+    .department
+      = address_model.department
+  .line-1
+    = address_model&.line1
+  - if address_model&.line2
+    .line-2
+      = address_model.line2
+  .line-3
+    span.city
+      = address_model&.city
+      |,
+    span.state
+      = address_model&.state
+    span.zip
+      = address_model&.zip

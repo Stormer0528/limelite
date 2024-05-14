@@ -1,0 +1,27 @@
+h1 Listing deposits
+
+table
+  thead
+    tr
+      th Account
+      th Amount
+      th Date
+      th Memo
+      th
+      th
+      th
+
+  tbody
+    - @deposits.each do |deposit|
+      tr
+        td = deposit.account
+        td = deposit.amount
+        td = deposit.date
+        td = deposit.memo
+        td = link_to 'Show', deposit
+        td = link_to 'Edit', edit_deposit_path(deposit)
+        td = link_to 'Destroy', deposit, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Deposit', new_deposit_path

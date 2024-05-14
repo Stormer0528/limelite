@@ -1,0 +1,60 @@
+/ Customer#show
+/ Note: Similar to Vendor#show
+
+- content_for :head do
+  = javascript_pack_tag 'render_customer_show', defer: true, charset: 'utf-8'
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "customer", icon_options: "medium"
+    span.text
+      = link_to customers_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Customers
+      '
+      span.breadcrumb = @customer.name
+
+#customer-show-view data-fiscal-year="#{@fiscal_year.year}"
+
+/ section#tabs
+/   .row
+/     .col.s7
+/       ul.tabs
+/         li.tab
+/           a href="#info"
+/             i.material-icons info
+/             | Info
+/         li.tab
+/           a href="#invoices"
+/             = class_icon 'invoice'
+/             | Invoices
+/     .col.s5
+/       .page-header.right-align style="justify-content: flex-end"
+/           = link_to customers_path, class: "waves-effect waves-teal btn-flat" do
+/             i.material-icons list
+/             '  Customers
+/           - if policy(@customer).edit?
+/             '  |
+/             = link_to edit_customer_path(@customer), class: "waves-effect waves-teal btn-flat" do
+/               i.material-icons edit
+/               '  Edit
+/
+/ section#info
+/   = render 'info'
+/
+/ section#invoices
+/   .card
+/     .card-content
+/       .card-title
+/         = class_icon "invoice"
+/         | Invoices
+/
+/         - if policy(@customer.invoices.new).create?
+/         .pull-right.right-align
+/           = link_to new_customer_invoice_path(@customer), class: "waves-effect waves-teal btn-flat teal-text" do
+/             i.material-icons add
+/       .divider
+/       = render partial: 'customers/invoices/list', locals: {invoices: @customer.invoices}
+/
+/ / Floating Action Btn
+/ = render partial: "fab"

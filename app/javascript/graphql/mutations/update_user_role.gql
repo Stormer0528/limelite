@@ -1,0 +1,12 @@
+mutation updateUserRole($userId: ID, $organizationId: ID, $role: String) {
+  updateUserRole(
+    userId: $userId
+    organizationId: $organizationId
+    role: $role
+  ) {
+    userId
+    organizationId
+    type
+    role
+  }
+}

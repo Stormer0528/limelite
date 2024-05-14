@@ -1,0 +1,12 @@
+- content_for :head do
+  / Preload page info
+  / Skip upload check until all pages converted to redux
+  // javascript:
+  //   window.initial_data = {
+  //     report: #{{ render "report/cash_flow_reports/cash_flow_report", cash_flow_report: @report }}
+  //   };
+
+  / = javascript_pack_tag 'render_cash_flow_report_routes', defer: true, charset: 'utf-8'
+
+
+#report_view

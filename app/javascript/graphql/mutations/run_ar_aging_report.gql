@@ -1,0 +1,32 @@
+mutation runArAgingReport(
+  $startDate: String
+  $endDate: String
+  $daysPerPeriod: Int
+  $showActiveColumns: Boolean
+  $showActiveRows: Boolean
+  $periods: Int
+) {
+  createArAgingReport(
+    start_date: $startDate
+    end_date: $endDate
+    days_per_period: $daysPerPeriod
+    show_active_columns: $showActiveColumns
+    show_active_rows: $showActiveRows
+    periods: $periods
+  ) {
+    persisted
+    valid
+    errors
+    periodNames
+    customersByPeriod
+    periodsByCustomer
+    startDate
+    endDate
+    daysPerPeriod
+    showActiveColumns
+    showActiveRows
+    periods
+    pdfUrl
+    xlsxUrl
+  }
+}

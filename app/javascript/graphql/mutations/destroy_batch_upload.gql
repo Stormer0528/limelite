@@ -1,0 +1,6 @@
+mutation destroyBatchUpload($id: ID!) {
+  destroyBatchUpload(id: $id) {
+    id
+    valid
+  }
+}

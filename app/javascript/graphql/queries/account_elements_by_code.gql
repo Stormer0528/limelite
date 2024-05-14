@@ -1,0 +1,45 @@
+query accountElementsByCode(
+  $functionCode: String
+  $fundCode: String
+  $goalCode: String
+  $locationCode: String
+  $objectCode: String
+  $resourceCode: String
+  $yearCode: String
+) {
+  functionObject: accountFunctionByCode(code: $functionCode) {
+    name
+    id
+    code
+  }
+  fundObject: accountFundByCode(code: $fundCode) {
+    name
+    id
+    code
+  }
+  goalObject: accountGoalByCode(code: $goalCode) {
+    name
+    id
+    code
+  }
+  locationObject: accountLocationByCode(code: $locationCode) {
+    name
+    id
+    code
+  }
+  objectObject: accountObjectByCode(code: $objectCode) {
+    name
+    id
+    code
+  }
+  resourceObject: accountResourceByCode(code: $resourceCode) {
+    name
+    id
+    code
+  }
+  yearObject: accountYearByCode(code: $yearCode) {
+    name
+    id
+    code
+  }
+}

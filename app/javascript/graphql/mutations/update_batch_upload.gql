@@ -1,0 +1,6 @@
+mutation updateBatchUpload($id: ID!, $files: [BatchInvoiceUploadFile]) {
+  updateBatchInvoiceUpload(id: $id, files: $files) {
+    errorMessages
+    success
+  }
+}

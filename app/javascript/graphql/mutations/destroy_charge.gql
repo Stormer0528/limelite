@@ -1,0 +1,5 @@
+mutation destroyCharge($id: ID!) {
+  destroyCharge(id: $id) {
+    id
+  }
+}

@@ -1,0 +1,9 @@
+query { filestack {
+		apikey
+		clientName
+		security {
+			signature
+			policy
+		}
+	}
+}

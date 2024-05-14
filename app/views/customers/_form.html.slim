@@ -1,0 +1,89 @@
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+= simple_form_for(@customer, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { resource: @customer, f:f }
+
+  .form-inputs
+    .card
+      .card-content
+        span.card-title Contact Information
+        .row
+          .col.s2
+            = f.input :title
+          .col.s3
+            = f.input :first_name
+          .col.s2
+            = f.input :middle_name
+          .col.s3
+            = f.input :last_name
+          .col.s2
+            = f.input :suffix
+        .row
+          .col.s8
+            = f.input :company
+          .col.s4
+            = f.input :number
+
+        .row
+          .col.s4
+            label Logo Image:
+            a.filestack-image-btn[data-inputId="customer::logo_url"
+                            data-name="customer[logo_url]"
+                            data-value="#{@customer.logo_url}"
+                            data-apikey="#{get_client_and_api_key[1]}"
+                            data-policy="#{get_fresh_policy_and_signature[1]}"
+                            data-signature="#{get_fresh_policy_and_signature[0]}"]
+          .col.s4
+            = f.input :email
+          .col.s4
+            = f.input :website
+
+    / Phones
+    .card
+      .card-content
+        span.card-title
+          '  Phone Numbers
+        .row
+          .col.s6
+            = f.simple_fields_for :home_phone do |home|
+              = home.input :number, as: :tel, label: 'Home', value: number_to_phone(:home_phone)
+          .col.s6
+            = f.simple_fields_for :mobile_phone do |mobile|
+              = mobile.input :number, as: :tel, label: 'Mobile', value: number_to_phone(:mobile_phone)
+          .col.s6
+            = f.simple_fields_for :work_phone do |work|
+              = work.input :number, as: :tel, label: 'Work', value: number_to_phone(:work_phone)
+          .col.s6
+            = f.simple_fields_for :fax_phone do |fax|
+              = fax.input :number, as: :tel, label: 'Fax', value: number_to_phone(:fax_phone)
+
+    / Addresses
+    .card
+      .card-content
+        = f.simple_fields_for :addresses do |address|
+          = render partial: 'shared/address/form', locals: { f: address }
+        .links
+          = link_to_add_association 'add address', f, :addresses,
+            partial:  'shared/address/form'
+
+    / Notes Section
+    .card
+      .card-content
+        = f.input :notes
+
+  .card.form-footer
+    .left
+      h5.current_state
+        b Status:
+        '
+        = @customer.aasm_state.titleize
+    = render partial: 'shared/form_footer', locals: { \
+      f:f,
+      model: @customer,
+      back_path: local_assigns[:back_path],
+      show_path: local_assigns[:show_path] ,
+      delete_path: local_assigns[:delete_path],
+      submit_partial: "shared/state_btn"}
+
+  = render "shared/reason_modal", f: f

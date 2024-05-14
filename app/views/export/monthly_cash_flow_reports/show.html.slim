@@ -1,0 +1,121 @@
+- content_for :header_content do
+  h2.page-header
+    = class_icon "report", icon_options: "medium"
+    span.text
+      = link_to reports_path, class: "breadcrumb primary" do
+        span.link-text
+          '  Reports
+      = link_to report_cash_flow_report_by_months_path, class: "breadcrumb primary" do
+        ' Cash Flow Report By Month
+
+#cash_flow_report_by_month
+  .header-top-links
+    = link_to report_cash_flow_report_by_months_path,
+    class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+      i.material-icons arrow_back
+    = link_to report_cash_flow_report_by_month_path(@report, format: :xlsx),
+      class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+      i.material-icons border_all
+    = link_to report_cash_flow_report_by_month_path(@report, format: :pdf),
+      class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+      i.material-icons picture_as_pdf
+    = link_to edit_report_cash_flow_report_by_month_path(@report_cash_flow_report_by_month),
+    class: "btn waves-effect waves-light btn-flat grey-text icon-btn" do
+      i.material-icons edit
+
+- @report = @report_cash_flow_report_by_month
+/ - @report.run_report
+h2 style="font-size: 1.5em; margin: 0" = @report.organization.name
+h3.subtitle style="font-size: 1.25em; margin: 0" Statement of Cash Flows
+h4.dates style="font-size: 1.125em; margin: 0" #{@report.start_date.to_formatted_s(:std)} &ndash; #{@report.end_date.to_formatted_s(:std)}
+
+
+table.report-table
+  thead
+    tr
+      th
+      th
+      - @report.months.each do |month|
+        th = month.strftime("%b")
+  tbody
+    tr
+      td colspan="#{2 + @report.months.length}"
+        b OPERATING ACTIVITIES
+    tr
+      td colspan="2"
+        b Net Income
+      - (@report.data["net_cash"] || []).each do |total|
+        td.right-align = total
+    tr
+      td colspan="#{2 + @report.months.length}"
+        b Adjustments to reconcile Net Income to Net Cash provided by operations:
+
+    - (@report.data["other_income"] || []).each do |account|
+      tr
+        td.right-align style="width: 5em"
+           = account["code"]
+        td  style="width: 35em"
+           = account["name"]
+
+        - account["balances"].each do |balance|
+          td.right-align = balance
+    tr
+      td colspan="2"
+        b Total Adjustments to reconcile Net Income to Net Cash provided by operations:
+      - (@report.data["other_income_total"] || []).each do |total|
+        td.right-align = total
+
+    tr
+      td colspan="2"
+        b Net cash provided by operating activities
+      - (@report.data["net_operations_cash"] || []).each do |total|
+        td.right-align = total
+    tr
+      td colspan="#{2 + @report.months.length}"
+        b INVESTING ACTIVITIES
+    - (@report.data["investing_activities"] || []).each do |account|
+      tr
+        td.right-align style="width: 5em"
+           = account["code"]
+        td style="width: 35em"
+           = account["name"]
+
+        - account["balances"].each do |balance|
+          td.right-align = balance
+    tr
+      td colspan="2"
+        b Net cash provided by investing activities
+      - (@report.data["investing_activities_total"] || []).each do |total|
+        td.right-align = total
+    tr
+      td colspan="#{2 + @report.months.length}"
+        b FINANCING ACTIVITIES
+    - (@report.data["financing_activities"] || []).each do |account|
+      tr
+        td.right-align style="width: 5em"
+           = account["code"]
+        td style="width: 35em"
+           = account["name"]
+
+        - account["balances"].each do |balance|
+          td.right-align = balance
+    tr
+      td colspan="2"
+        b Net cash provided by financing activities
+      - (@report.data["financing_activities_total"] || []).each do |total|
+        td.right-align = total
+    tr
+      td colspan="2"
+        b Net cash increase for period
+      - (@report.data["net_cash_increase"] || []).each do |total|
+        td.right-align = total
+    tr
+      td colspan="2"
+        | cash at beginning of period
+      - (@report.data["cash_at_beginning"] || []).each do |total|
+        td.right-align = total
+    tr
+      td colspan="2"
+        | cash at end of period
+      - (@report.data["cash_at_end"] || []).each do |total|
+        td.right-align = total

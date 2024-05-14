@@ -1,0 +1,27 @@
+h5.page-header
+  .pull-right.right-align
+    = link_to @vendor, class: "waves-effect waves-teal btn-flat" do
+      = class_icon "vendor"
+      '  Vendor
+    '  |
+    = link_to vendor_path(@vendor, anchor: :invoices), class: "waves-effect waves-teal btn-flat" do
+      i.material-icons list
+      '  Invoices
+
+    - if @invoice.purchase_order
+      '  |
+      = link_to "/vendors/#{@vendor.slug}/purchase_orders/#{@invoice.purchase_order.slug}",
+        class: "waves-effect waves-teal btn-flat" do
+        i.material-icons payment
+        '  Purchase Order
+    - elsif policy(@invoice).edit?
+      '  |
+      = link_to new_vendor_purchase_order_path(@vendor), class: "waves-effect waves-teal btn-flat" do
+        i.material-icons add
+        '  Purchase Order
+
+    - if policy(@invoice).edit?
+      '  |
+      = link_to edit_vendor_invoice_path(@vendor, @invoice), class: "waves-effect waves-teal btn-flat" do
+        i.material-icons mode_edit
+        '  Edit

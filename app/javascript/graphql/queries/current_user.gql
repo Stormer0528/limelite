@@ -1,0 +1,37 @@
+query {
+  currentUser {
+    id
+    slug
+    firstName
+    lastName
+    fullName
+    initials
+    email
+    avatarUrl
+    backOffice
+    admin
+    path
+    editPath
+    emailPreference
+    organizationAssignments {
+      id
+      organizationId
+      role
+      type
+    }
+    userGroups {
+      id
+      name
+    }
+    currentUserGroup {
+      id
+      name
+    }
+
+    permissions {
+      edit
+      view
+      delete
+    }
+  }
+}

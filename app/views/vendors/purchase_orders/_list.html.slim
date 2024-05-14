@@ -1,0 +1,39 @@
+table.responsive-table.bordered
+  thead
+    tr
+
+      th PO #
+      - unless local_assigns[:hide_vendor]
+        th Vendor
+      - unless local_assigns[:hide_invoice]
+        th Invoice #
+      th Date needed
+      th Requisition #
+      th
+
+  tbody
+    - purchase_orders.each do |purchase_order|
+      - next unless purchase_order&.id
+      tr
+        td = link_to purchase_order.number, vendor_purchase_order_path(@vendor, purchase_order)
+
+        - unless local_assigns[:hide_vendor]
+          td = purchase_order.vendor_name
+
+        - unless local_assigns[:hide_invoice]
+          td = purchase_order.invoice_number
+
+        td = purchase_order.date_needed
+        td = purchase_order.requisition_number
+        td
+          .btn-group
+            = link_to vendor_purchase_order_path(@vendor, purchase_order),
+                      class: 'btn waves-effect waves-light btn-flat cyan-text icon-btn' do
+              i.material-icons find_in_page
+            = link_to edit_vendor_purchase_order_path(@vendor, purchase_order),
+                      class: 'btn waves-effect waves-light btn-flat green-text icon-btn'  do
+              i.material-icons edit
+            = link_to vendor_purchase_order_path(@vendor, purchase_order),
+                      class: 'btn waves-effect waves-light btn-flat red-text icon-btn',
+                      data: { confirm: 'Are you sure?' }, method: :delete do
+              i.material-icons delete

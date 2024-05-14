@@ -1,0 +1,72 @@
+query {
+  monthly_cash_flow_report {
+    months
+    monthTitles
+    colspanWidth
+    valid
+    errors
+    startDate
+    endDate
+    organizationName
+    cashAtBeginning
+    cashAtEnd
+    financingActivities {
+      name
+      code
+      balance
+      # balances
+    }
+    financingActivitiesTotal
+    fiscalYear
+    investigatingActivities {
+      name
+      code
+      balance
+      # balances
+    }
+    investingActivities {
+      name
+      code
+      balance
+      # balances
+    }
+    investingActivitiesTotal
+    netCash
+    netCashIncrease
+    netIncome
+    netOperationsCash
+    otherIncome {
+      name
+      code
+      balance
+      # balances
+    }
+    otherIncomeTotal
+    reportDate
+
+    accountFund {
+      code
+    }
+    accountFunction {
+      code
+    }
+    accountGoal {
+      code
+    }
+    accountLocation {
+      code
+    }
+    accountObject {
+      code
+    }
+    accountResource {
+      code
+    }
+    accountYear {
+      code
+    }
+
+    pdfUrl
+    xlsxUrl
+  }
+}

@@ -1,0 +1,16 @@
+query loadBankAccount($slug: String!) {
+  bank_account(slug: $slug) {
+    id
+    pseudo
+    number
+    name
+    description
+    edpNumber
+    stateAccountNumber
+    lastStatementBalance
+    permissions {
+      show
+      edit
+    }
+  }
+}

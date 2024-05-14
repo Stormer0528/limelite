@@ -1,0 +1,5 @@
+mutation destroy<%= file_name.camelize %>($id: ID!) {
+  destroy<%= file_name.camelize %>(id: $id) {
+    id
+  }
+}

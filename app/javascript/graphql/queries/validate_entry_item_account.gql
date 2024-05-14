@@ -1,0 +1,31 @@
+query validateAccount(
+  $fundCode: String
+  $functionCode: String
+  $goalCode: String
+  $locationCode: String
+  $objectCode: String
+  $resourceCode: String
+  $yearCode: String
+) {
+  account: accountByNumber(
+    fundCode: $fundCode
+    functionCode: $functionCode
+    goalCode: $goalCode
+    locationCode: $locationCode
+    objectCode: $objectCode
+    resourceCode: $resourceCode
+    yearCode: $yearCode
+  ) {
+    accountId: id
+    accountName: name
+    number
+    fundCode
+    functionCode
+    goalCode
+    locationCode
+    objectCode
+    resourceCode
+    yearCode
+    valid
+  }
+}

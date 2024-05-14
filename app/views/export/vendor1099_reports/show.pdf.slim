@@ -1,0 +1,18 @@
+  #vendor-1099-report
+    h3 style="text-align:center" #{@report.organization.name} 1099 Vendor List
+    table.report-table.condensed
+      thead
+        tr
+          th Name
+          th Type
+          th SSN/EIN
+          th Vendor Address
+          th Year Amount
+      tbody
+        - @report.data["vendors"].each do |vendor|
+          tr
+            td = vendor["name"]
+            td = vendor["type"]
+            td style="width:10em" = vendor["ssn_ein"]
+            td = vendor["address"]
+            td = vendor["year_amount"]

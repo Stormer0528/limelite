@@ -1,0 +1,65 @@
+query entrySearch(
+  $aasm_state: String
+  $entry_type: String
+  $journalable_type: String
+  $start_date: String
+  $end_date: String
+  $account: AccountCodeInputObject
+  $min_amount: String
+  $max_amount: String
+  $cursor: String
+  $first: Int
+) {
+  entrySearchConnection(
+    aasm_state: $aasm_state
+    entry_type: $entry_type
+    journalable_type: $journalable_type
+    start_date: $start_date
+    end_date: $end_date
+    account: $account
+    min_amount: $min_amount
+    max_amount: $max_amount
+    after: $cursor
+    first: $first
+  ) {
+    nodes {
+      id
+      entryType
+      date
+      backupFileUrl
+      aasmState
+      totalDebits
+      totalCredits
+      journalableType
+      journalableId
+      amount
+      url
+      entryItems {
+        type
+        memo
+        date
+        accountName
+        accountNumber
+        accountDisplayName
+        positiveAmount
+        payable {
+          ... on Vendor {
+            name
+            path
+            __typename
+          }
+          ... on Customer {
+            name
+            path
+            __typename
+          }
+          __typename
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

@@ -1,0 +1,37 @@
+- content_for :head do
+  css:
+    body {
+      margin-top: 115px;
+      max-height: calc(100vh - 115px);
+    }
+
+    @media only screen and (max-width: 1024px) {
+      body > main.container {
+        width: calc(100% - 1em);
+      }
+    }
+
+    @media only screen and (min-width: 1025px) {
+      body  main.container {
+        width: 85%;
+      }
+    }
+
+    #top-navbar { position: static !important; }
+    main {
+      padding-top: 8px
+    }
+
+    @media only screen and (min-width: 1500px) {
+      body > main.container {
+        width: 90%;
+      }
+    }
+
+  = javascript_pack_tag 'render_approval_logs_page', defer: true, charset: 'utf-8'
+
+= content_for :page_title
+  '&nbsp; :: Approval Log Report
+
+#top-navbar data-fiscal-year="#{FiscalYear.current_fiscal_year.year}"
+#approval_logs_index

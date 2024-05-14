@@ -1,0 +1,67 @@
+= content_for :page_title
+  '&nbsp; :: General Ledger
+
+- content_for :head do
+  javascript:
+    window.initial_data = Object.assign({}, (window.initial_data || {}), {
+      organization: {id: #{@current_org.id}}
+    })
+
+  = javascript_pack_tag 'render_entries_index', defer: true
+
+  css:
+    main.container.with-breadcrumb {
+      height: 100vh;
+    }
+
+    @media only screen and (max-width: 768px){
+      body {
+        margin-top: 105px;
+        min-height: calc(100vh - 90px);
+      }
+
+      body > main.container{
+        width: 100%;
+      }
+    }
+
+    @media only screen and (min-width: 900px){
+    body {
+      margin-top: 115px;
+      min-height: calc(100vh - 105px);
+    }
+
+    body > main.container{
+        width: 95%;
+      }
+    }
+
+    #entries_index  {
+       display: flex;
+       flex-direction: column;
+       flex-grow: 1;
+       margin-bottom: 1em;
+    }
+
+    @media only screen and (max-height: 555px){
+      body > main.container{
+        margin: 0;
+        width: 100vw !important;
+      }
+
+
+      body > main.container #entries_index  {
+       display: contents;
+      }
+    }
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "Entry", icon_options: "medium"
+    span.text
+      a.breadcrumb.primary href="/reports"
+        ' Reports
+      a.breadcrumb href="/entries"
+        '  General Ledger
+
+#entries_index data-fiscal-year="#{@fiscal_year.year}"

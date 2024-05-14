@@ -1,0 +1,50 @@
+query approvalLogs(
+  $userId: ID
+  $organizationId: ID
+  $reason: String
+  $fromState: String
+  $toState: String
+  $startDate: String
+  $endDate: String
+  $cursor: String
+  $first: Int
+) {
+  stateChangeLogSearchConnection(
+    user_id: $userId
+    organization_id: $organizationId
+    reason: $reason
+    from_state: $fromState
+    to_state: $toState
+    start_date: $startDate
+    end_date: $endDate
+    after: $cursor
+    first: $first
+  ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+
+    nodes {
+      id
+      reason
+      fromState
+      toState
+      dateTime
+      user {
+        firstName
+        lastName
+      }
+      invoice {
+        number
+        slug
+        path
+        vendor {
+          id
+          name
+          path
+        }
+      }
+    }
+  }
+}

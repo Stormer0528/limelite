@@ -1,0 +1,54 @@
+query accounts(
+  $name: String
+  $fundCode: String
+  $functionCode: String
+  $goalCode: String
+  $locationCode: String
+  $objectCode: String
+  $resourceCode: String
+  $yearCode: String
+  $timestamp: String
+  $cursor: String
+  $first: Int
+) {
+  accountSearchConnection(
+    name: $name
+    fund_code: $fundCode
+    function_code: $functionCode
+    goal_code: $goalCode
+    location_code: $locationCode
+    object_code: $objectCode
+    resource_code: $resourceCode
+    year_code: $yearCode
+    timestamp: $timestamp
+    after: $cursor
+    first: $first
+    scoped: true
+  ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    nodes {
+      id
+      name
+      number
+      fundCode
+      functionCode
+      goalCode
+      locationCode
+      objectCode
+      resourceCode
+      yearCode
+      path
+      editPath
+      currentBudgetAmount
+      permissions {
+        view
+        view
+        edit
+        create
+      }
+    }
+  }
+}

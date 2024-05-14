@@ -1,0 +1,62 @@
+/ Set Defaults for form path
+- form_path ||= @payment.new_record? ? vendor_invoice_payments_path(@vendor, @invoice) : vendor_invoice_payment_path(@vendor, @invoice, @payment)
+
+- content_for :head do
+  = javascript_pack_tag "render_filestack_btn", defer: true, charset: 'utf-8', nonce: true
+
+= simple_form_for(@payment, url: form_path, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  = render partial: 'shared/validation_errors', locals: { f:f, resource: @payment }
+
+  .card#payment-form
+    .card-content
+      span.card-title
+        i.material-icons payment
+        '  Payment
+      - if @payment.payable
+        .row
+          .col.s1.right-align
+            b #{@payment.payable_type}:
+          .col.s5
+            = @payment.payable_name
+          .col.s2
+            b Vendor Number:
+          .col.s4
+            = @payment.payable_account_number
+      - else
+        .row
+          .col.s12
+            = f.association @invoice.invoiceable_type.downcase.to_sym
+      .row
+        - unless @invoice
+          .col.s6
+            = f.association :invoice, label: "Invoice #",
+                            collection: @purchase_order.invoices, label_method: :number
+
+      - if @invoice
+        .divider.spaced
+        .row
+          .col.s4
+            b Invoice Date:
+            '
+            = @invoice.date&.to_formatted_s(:std)
+          .col.s4.offset-s2.right-align
+            b Invoice Amount:
+          .col.s2
+            = number_to_currency @invoice.amount, precision: 2
+        - if @invoice.amount_remaining != @invoice.amount
+          .row
+            .col.s4.offset-s6.right-align
+              b Invoice Amount Remaining:
+            .col.s2
+              = number_to_currency @invoice.amount_remaining, precision: 2
+
+      .row
+        .col.s12
+          = render  partial: "shared/entry_input",
+            locals: { journalable: @payment,
+            parent_class: "vendor_payment",
+            invoice_remaining: @invoice&.amount_remaining }
+        .divider
+
+    .card-action.right-align
+      = f.button :submit

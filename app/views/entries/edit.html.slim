@@ -1,0 +1,21 @@
+= content_for :page_title
+  '&nbsp; :: Entries > #{@entry.id} > Edit
+
+- content_for :header_content do
+  h2.page-header
+    = class_icon "entry", icon_options: "medium"
+    span.text
+      a.breadcrumb.primary
+        span.link-text
+          '  Entries
+      '
+      = link_to entry_path(@entry), class: "breadcrumb" do
+        span.link-text
+          b Entry Id:&nbsp;
+          = @entry.id
+      '
+      span.breadcrumb Edit
+
+== render 'form',
+  delete_path: entry_url(@entry),
+  disabled: !["draft", "needs_revision"].include?(@entry.aasm_state)

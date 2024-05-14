@@ -1,0 +1,65 @@
+div class="voucher-#{voucher_number} check-receipt" style="top:#{offset * 5}pt;"
+  - if ["standard", "cyma"].include?(@printer_settings.printer_type.downcase)
+    .row
+      .col.s5
+        .org.section
+          b = @current_org.alias.present? ? @current_org.alias : @current_org.name
+      .col.s5
+        .vendor.section
+          b = check.payee
+      - if !defined?(hide_check_no)
+        .col.s2
+          .check-number.section
+            b = "Check No. #{check.number}"
+  - if check.payments.present?
+    .row
+      .col.s2
+        .invoice-no style="top:#{@printer_settings.invoice_no_x * 5}pt; left: #{@printer_settings.invoice_no_y * 5}pt"
+          b Invoice No.
+      .col.s2
+        .invoice-date style="top:#{@printer_settings.invoice_date_y * 5}pt; left: #{@printer_settings.invoice_date_x * 5}pt"
+          b Invoice Date
+      .col.s2
+        .invoice-amount.right-align style="top:#{@printer_settings.invoice_amount_y * 5}pt; left: #{@printer_settings.invoice_amount_x * 5}pt"
+          b Invoice Amount
+      .col.s2
+        .amount-paid.right-align style="top:#{@printer_settings.invoice_amount_paid_y * 5}pt; left: #{@printer_settings.invoice_amount_paid_x * 5}pt"
+          b Amount Paid
+      .col.s4
+        .description style="top:#{@printer_settings.invoice_description_y * 5}pt; left: #{@printer_settings.invoice_description_x * 5}pt"
+          b Description
+
+      - check.payments.group_by {|payment| payment.invoice }.each do |invoice, payment_array|
+        .col.s2
+          .invoice-no style="top:#{@printer_settings.invoice_no_x * 5}pt; left: #{@printer_settings.invoice_no_y * 5}pt"
+            = invoice&.number
+        .col.s2
+          .invoice-date style="top:#{@printer_settings.invoice_date_y * 5}pt; left: #{@printer_settings.invoice_date_x * 5}pt"
+            = invoice&.date&.to_formatted_s(:std)
+        .col.s2
+          .invoice-amount.right-align style="top:#{@printer_settings.invoice_amount_y * 5}pt; left: #{@printer_settings.invoice_amount_x * 5}pt"
+            = invoice&.amount.format
+        .col.s2
+          .amount-paid.right-align style="top:#{@printer_settings.invoice_amount_paid_y * 5}pt; left: #{@printer_settings.invoice_amount_paid_x * 5}pt"
+            = payment_array.inject(Money.new(0)) {|total, payment| total + payment.amount }.format
+        .col.s4
+          .description style="top:#{@printer_settings.invoice_description_y * 5}pt; left: #{@printer_settings.invoice_description_x * 5}pt"
+            = invoice&.description
+  - else
+    .row
+      .col.s4
+        b Payee
+        br
+        = check.payee
+      .col.s2
+        b Date
+        br
+        = check.date
+      .col.s4
+        b Memo
+        br
+        = check.memo
+      .col.s2
+        b Amount
+        br
+        = check.amount.format

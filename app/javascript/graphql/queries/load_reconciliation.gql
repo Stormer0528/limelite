@@ -1,0 +1,150 @@
+query loadStatement($statementId: ID!) {
+  statement(id: $statementId) {
+    id
+    adjustmentAmount
+    adjustmentDate
+    startedAt
+    endedAt
+    startingBalance
+    endingBalance
+    aasmState
+    fileUrl
+    versions {
+      id
+      auditableId
+      auditableType
+      associatedId
+      associatedType
+      userId
+      userType
+      action
+      version
+      comment
+      remoteAddress
+      requestUuid
+      createdAt
+    }
+    items {
+      ... on Check {
+        id
+        bankAccountId
+        amount
+        memo
+        type
+        date
+        payee
+        number
+        amountInCents
+      }
+      ... on Deposit {
+        id
+        bankAccountId
+        amount
+        memo
+        type
+        date
+        amountInCents
+      }
+      ... on AccountTransfer {
+        id
+        bankAccountId
+        amount
+        memo
+        type
+        date
+        amountInCents
+        isFromAccountItem
+        isToAccountItem
+      }
+      ... on CreditCardCharge {
+        id
+        amount
+        amountInCents
+        memo
+        type
+        date
+        amount
+      }
+      ... on CreditCardPayment {
+        id
+        amount
+        amountInCents
+        memo
+        type
+        date
+        amount
+      }
+    }
+    unreconciledItems {
+      ... on Check {
+        id
+        bankAccountId
+        amount
+        memo
+        type
+        date
+        payee
+        number
+        amountInCents
+      }
+      ... on Deposit {
+        id
+        bankAccountId
+        amount
+        memo
+        type
+        date
+        amountInCents
+      }
+      ... on AccountTransfer {
+        id
+        bankAccountId
+        amount
+        memo
+        type
+        date
+        amountInCents
+        isFromAccountItem
+        isToAccountItem
+      }
+      ... on CreditCardCharge {
+        id
+        amount
+        amountInCents
+        memo
+        type
+        date
+        amount
+      }
+      ... on CreditCardPayment {
+        id
+        amount
+        amountInCents
+        memo
+        type
+        date
+        amount
+      }
+    }
+    reconciliations {
+      id
+      reconcilableItemId
+      reconcilableItemType
+      statementId
+    }
+    permissions {
+      index
+      create
+      edit
+      view
+      show
+      update
+      delete
+      save_draft
+      send_for_approval
+      reverse_approval
+      approve
+      deny
+    }
+  }
+}

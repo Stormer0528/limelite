@@ -1,0 +1,31 @@
+mutation createUserGroup(
+  $parentId: ID
+  $name: String
+  $approvalAmount: Int
+  $modulePermissions: ModulePermissionsAttributes,
+  $organizationId: ID!
+) {
+  createUserGroup(
+    parentId: $parentId
+    name: $name
+    approvalAmount: $approvalAmount
+    modulePermissions: $modulePermissions,
+    organizationId: $organizationId
+  ) {
+    id
+    name
+
+    approvalAmount
+
+    modulePermissions {
+      Report
+      Vendor
+      Account
+      Customer
+      CreditCard
+      BankAccount
+      BatchUpload
+      approvalAmount
+    }
+  }
+}

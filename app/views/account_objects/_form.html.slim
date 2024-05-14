@@ -1,0 +1,24 @@
+= simple_form_for(@account_object, wrapper: :materialize_form, html: {class: "dirty-check"}) do |f|
+  - if f.error_notification
+    = render partial: 'shared/validation_errors', locals: { f:f, resource: @account_object }
+
+  .card
+    .card-content
+      .row
+        .col.s3
+          = f.input :code
+        .col.s3
+          = f.input :rollup
+
+        .col.s9
+          = f.input :name
+          = f.input :organization_id, as: :hidden
+      .row
+        .col.s6
+          = f.input :object_type,
+            collection: AccountObject::OBJECT_TYPES
+        .col.s6
+          = f.input :normal_balance,
+            collection: AccountObject::NORMAL_BALANCES
+
+    = render partial: "shared/form_footer", locals: {f:f, back_path: account_objects_path}

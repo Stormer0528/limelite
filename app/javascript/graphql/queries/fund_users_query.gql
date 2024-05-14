@@ -1,0 +1,15 @@
+query accountFundUsers($id: ID!, $organizationId: ID!) {
+  accountFundUsers(accountFundId: $id, organizationId: $organizationId) {
+    id
+    avatarUrl
+    fullName
+    email
+  }
+
+  users {
+    id
+    avatarUrl
+    fullName
+    email
+  }
+}

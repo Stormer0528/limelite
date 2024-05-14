@@ -1,0 +1,3 @@
+mutation ($emailPreference: String) {
+  updateUserPreferences(emailPreference: $emailPreference)
+}

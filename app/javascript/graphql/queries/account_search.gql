@@ -1,0 +1,42 @@
+query accounts(
+  $name: String
+  $fundCode: String
+  $functionCode: String
+  $goalCode: String
+  $locationCode: String
+  $objectCode: String
+  $resourceCode: String
+  $yearCode: String
+  $timestamp: String
+) {
+  accountSearch(
+    name: $name
+    fund_code: $fundCode
+    function_code: $functionCode
+    goal_code: $goalCode
+    location_code: $locationCode
+    object_code: $objectCode
+    resource_code: $resourceCode
+    year_code: $yearCode
+    timestamp: $timestamp
+  ) {
+    id
+    name
+    number
+    fundCode
+    functionCode
+    goalCode
+    locationCode
+    objectCode
+    resourceCode
+    yearCode
+    currentBudgetAmount
+    path
+    editPath
+    permissions {
+      view
+      edit
+      create
+    }
+  }
+}

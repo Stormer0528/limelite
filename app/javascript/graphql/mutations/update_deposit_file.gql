@@ -1,0 +1,6 @@
+mutation updateDepositFile(
+  $id: ID!
+  $fileUrl: String
+) {
+  updateDepositFile(id: $id, fileUrl: $fileUrl)
+}

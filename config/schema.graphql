@@ -1,0 +1,2974 @@
+type Account implements ValidatableInterface {
+  approvedBalance: Float!
+  budgets: [Budget!]!
+  currentBudget: Budget
+  currentBudgetAmount: String
+  editPath: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  functionCode: String
+  functionId: Int
+  fundCode: String
+  fundId: Int
+  goalCode: String
+  goalId: Int
+  id: Int
+  locationCode: String
+  locationId: Int
+  name: String
+  normalBalance: String!
+  number: String
+  objectCode: String
+  objectId: Int
+  organizationId: ID!
+  path: String!
+  permissions: Permissions
+  resourceCode: String
+  resourceId: Int
+  restriced: Boolean
+  slug: String
+  startDate: String
+  submittedBalance: Float!
+  valid: Boolean!
+  yearCode: String
+  yearId: Int
+}
+
+type AccountBalanceObjectType implements AccountElementInterface {
+  balance: String
+  balances: [String!]
+  code: String!
+  id: ID!
+  name: String!
+  normalBalance: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+input AccountCodeInputObject {
+  functionCode: String
+  fundCode: String
+  goalCode: String
+  locationCode: String
+  objectCode: String
+  resourceCode: String
+  yearCode: String
+}
+
+"""
+The connection type for Account.
+"""
+type AccountConnection {
+  """
+  A list of edges.
+  """
+  edges: [AccountEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Account]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type AccountEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Account
+}
+
+interface AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+}
+
+type AccountFunction implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+type AccountFund implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+type AccountGoal implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+type AccountLocation implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+type AccountObject implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  normalBalance: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+type AccountResource implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+"""
+Elements for types with the entry search bar
+"""
+interface AccountSearchableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+}
+
+type AccountTransfer implements BankItemInterface & ValidatableInterface {
+  aasmState: String
+  aasm_state: String
+  account: BankAccount
+  accountId: ID
+  account_id: ID
+  amount: String
+  amountInCents: String
+  amount_in_cents: String
+  approvedAt: String
+  approver: String
+  bankAccountId: ID
+  bankAccountName: String
+  bank_account_id: ID
+  createdAt: String
+  created_at: String
+  creatorId: ID
+  creator_id: ID
+  credit: String
+  date: String
+  debit: String!
+  editPath: String
+  edit_path: String
+  entry: Entry
+  entryId: ID
+  entry_id: ID
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fileUrl: String
+  file_url: String
+  fromBankAccountId: String
+  fromBankAccountName: String
+  id: ID
+  isFromAccountItem: Boolean
+  isToAccountItem: Boolean
+  memo: String
+  number: String
+  path: String
+  payee: String
+  permissions: Permissions
+  printed: Boolean
+  reconciled: Boolean!
+  stateChangeLogs: [StateChangeLog!]!
+  toBankAccountId: String
+  toBankAccountName: String
+  type: String!
+  updatedAt: String
+  updated_at: String
+  valid: Boolean!
+}
+
+"""
+Attributes for creating or updating a Bank Account Transfer
+"""
+input AccountTransferAttributes {
+  bankAccountId: ID!
+  date: String
+  entryAttributes: EntryAttributes
+  fileUrl: String
+  memo: String
+}
+
+"""
+Attributes for updating a Bank Account Deposit
+"""
+input AccountTransferUpdateAttributes {
+  bankAccountId: ID!
+  date: String
+  entryAttributes: EntryAttributes!
+  fileUrl: String
+  id: ID!
+  memo: String
+}
+
+type AccountYear implements AccountElementInterface {
+  code: String!
+  id: ID!
+  name: String!
+  organizationId: ID!
+  permissions: Permissions
+}
+
+type Address {
+  addressableId: Int
+  addressableType: String
+  attention: String
+  city: String
+  createdAt: String
+  department: String
+  empty: Boolean
+  id: ID
+  line1: String
+  line2: String
+  name: String
+  state: String
+  updatedAt: String
+  zip: String
+}
+
+type ApAgingReport implements ReportInterface & ValidatableInterface {
+  data: String!
+  daysPerPeriod: Int!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  pdfUrl: String
+  periodNames: [String!]
+  periods: Int
+  periodsByVendor: String
+  persisted: Boolean
+  showActiveColumns: Boolean
+  showActiveRows: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  vendorsByPeriod: String
+  xlsxUrl: String
+}
+
+type ArAgingReport implements ReportInterface & ValidatableInterface {
+  customersByPeriod: String
+  data: String!
+  daysPerPeriod: Int!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  pdfUrl: String
+  periodNames: [String!]
+  periods: Int
+  periodsByCustomer: String
+  persisted: Boolean
+  showActiveColumns: Boolean
+  showActiveRows: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type Audit {
+  action: String!
+  associatedId: ID
+  associatedType: String
+  auditableId: ID
+  auditableType: String
+  comment: String
+  createdAt: String!
+  id: ID
+  remoteAddress: String
+  requestUuid: String!
+  user: User
+  userId: ID
+  userType: String
+  username: String
+  version: Int
+}
+
+type BalanceSheet implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID
+  accountFundName: String
+  accountFunds: [AccountFund!]
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type BalanceSheetByMonthReport implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID
+  accountFundName: String
+  accountFunds: [AccountFund!]
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  monthTitles: [String!]
+  months: [String!]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type BalanceSheetByResourceReport implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID
+  accountFundName: String
+  accountFunds: [AccountFund!]
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  resourceTitles: [String!]
+  resources: [String!]
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+"""
+A Bank Account Belonging to a Organization
+"""
+type BankAccount {
+  account: Account
+  accountObject: AccountObject
+  balance: String
+  bankName: String
+
+  """
+  The DateTime the bank account record was created
+  """
+  createdAt: String!
+
+  """
+  User description of the account
+  """
+  description: String
+  edpNumber: String
+
+  """
+  The Date the bank account was ended
+  """
+  endedAt: String
+  id: ID
+  items: [BankItemInterface]
+
+  """
+  ended_at date for most recent reconciliation
+  """
+  lastReconciledDate: String
+
+  """
+  balance at the beginning of the account
+  """
+  lastStatementBalance: Float
+
+  """
+  User name for the account
+  """
+  name: String
+  number: String
+  path: String!
+  permissions: Permissions
+  pseudo: String
+  routingNumber: String
+  slug: String
+
+  """
+  The Date the bank account was started
+  """
+  startedAt: String!
+
+  """
+  balance at the beginning of the account
+  """
+  startingBalance: Float
+  stateAccountNumber: String
+  statements: [Statement]
+
+  """
+  The DateTime the bank account record was last updated
+  """
+  updatedAt: String!
+}
+
+"""
+Check, Deposit, Transfers for bank account
+"""
+union BankItem = AccountTransfer | Check | Deposit
+
+"""
+The connection type for BankItem.
+"""
+type BankItemConnection {
+  """
+  A list of edges.
+  """
+  edges: [BankItemEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [BankItem]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type BankItemEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: BankItem
+}
+
+"""
+Common fields for Check, Deposit, Transfers for bank account
+"""
+interface BankItemInterface {
+  aasm_state: String
+  account: BankAccount
+  account_id: ID
+  amount: String
+  amount_in_cents: String
+  bank_account_id: ID
+  created_at: String
+  creator_id: ID
+  credit: String
+  date: String
+  debit: String!
+  edit_path: String
+  entry_id: ID
+  file_url: String
+  id: ID
+  memo: String
+  number: String
+  path: String
+  payee: String
+  printed: Boolean
+  reconciled: Boolean!
+  type: String!
+  updated_at: String
+}
+
+"""
+A Basic repsonse to a mutation
+"""
+type BaseResponse {
+  errorMessages: [String!]
+  success: Boolean!
+}
+
+type Budget {
+  accountId: ID
+  amount: String
+  amountInCents: Int
+  fiscalYear: Int
+  id: ID
+}
+
+type BudgetVsActualReport implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID!
+  accountFundName: String
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type CashFlowReport implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fiscalYear: String
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  reportDate: String
+  reports: [CashFlowReportReport!]
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type CashFlowReportReport implements ReportInterface & ValidatableInterface {
+  cashAtBeginning: String
+  cashAtEnd: String
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  financingActivities: [AccountBalanceObjectType!]
+  financingActivitiesTotal: String
+  fund: AccountFund
+  investigatingActivities: [AccountBalanceObjectType!]
+  investingActivities: [AccountBalanceObjectType!]
+  investingActivitiesTotal: String
+  netCash: String
+  netCashIncrease: String
+  netIncome: String
+  netOperationsCash: String
+  organizationId: ID!
+  otherIncome: [AccountBalanceObjectType!]
+  otherIncomeTotal: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  valid: Boolean!
+}
+
+type Check implements BankItemInterface & ValidatableInterface {
+  aasmState: String
+  aasm_state: String
+  account: BankAccount
+  accountId: ID
+  account_id: ID
+  addressId: ID
+  amount: String
+  amountInCents: String
+  amount_in_cents: String
+  approvedAt: String
+  approver: String
+  bankAccountId: ID
+  bank_account_id: ID
+  checkType: String
+  createdAt: String
+  created_at: String
+  creatorId: ID
+  creator_id: ID
+  credit: String
+  date: String
+  debit: String!
+  editPath: String
+  edit_path: String
+  entry: Entry
+  entryId: ID
+  entryItemsFundCodeTotals: String
+  entry_id: ID
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fileUrl: String
+  file_url: String
+  id: ID
+  invoices: [Invoice!]!
+  memo: String
+  number: String
+  path: String
+  payee: String
+  permissions: Permissions
+  printed: Boolean!
+  reconciled: Boolean!
+  stateChangeLogs: [StateChangeLog!]!
+  type: String!
+  updatedAt: String
+  updated_at: String
+  valid: Boolean!
+  voided: Boolean!
+}
+
+"""
+Attributes for creating or updating a Bank Account Check
+"""
+input CheckAttributes {
+  addressId: ID
+  bankAccountId: ID!
+  checkType: String
+  date: String
+  entryAttributes: EntryAttributes
+  fileUrl: String
+  memo: String
+  number: String
+  printed: Boolean
+}
+
+"""
+Attributes for creating or updating a Bank Account Check
+"""
+input CheckPrintAttributes {
+  id: String!
+  number: String
+}
+
+"""
+Attributes for updating a Bank Account Check
+"""
+input CheckUpdateAttributes {
+  addressId: ID
+  bankAccountId: ID!
+  checkType: String
+  date: String
+  entryAttributes: EntryAttributes!
+  fileUrl: String
+  id: ID!
+  memo: String
+  number: String
+  printed: Boolean
+}
+
+type CreditCard {
+  balance: String
+  createdAt: String
+  description: String
+  edtPath: String!
+  endedAt: String
+  id: ID
+  items: [CreditCardItemInterface]
+  lastReconciledDate: String
+  lastStatementBalance: String
+  limit: String
+  limitCurrency: String
+  limitInCents: Int
+  name: String
+  number: String
+  path: String!
+  permissions: Permissions
+  pseudo: String
+  slug: String
+  startedAt: String
+  startingBalance: String
+  startingBalanceCurrency: String
+  startingBalanceInCents: Int
+  statements: [Statement]
+  updatedAt: String
+}
+
+"""
+Debit on a Credit Card
+"""
+type CreditCardCharge implements CreditCardItemInterface & ValidatableInterface {
+  aasmState: String
+  accountId: ID
+  amount: String
+  amountCurrency: String
+  amountInCents: Int
+  approvedAt: String
+  approver: String
+  createdAt: String
+  creatorId: ID
+  credit: String
+  creditCardId: ID
+  date: String
+  debit: String!
+  editPath: String
+  entry: Entry
+  entryId: ID
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fileUrl: String
+  id: ID
+  memo: String
+  number: String
+  path: String
+  payee: String
+  permissions: Permissions
+  reconciled: Boolean!
+  slug: String
+  stateChangeLogs: [StateChangeLog!]!
+  type: String!
+  updatedAt: String
+  valid: Boolean!
+  vendorId: ID
+}
+
+"""
+Attributes for creating or updating a Credit Card Charge
+"""
+input CreditCardChargeAttributes {
+  creditCardId: ID!
+  entryAttributes: EntryAttributes
+  fileUrl: String
+  memo: String
+  number: String
+}
+
+"""
+Attributes for creating or updating a Credit Card Payment
+"""
+input CreditCardChargeUpdateAttributes {
+  creditCardId: ID!
+  entryAttributes: EntryAttributes!
+  fileUrl: String
+  id: ID!
+  memo: String
+  number: String
+}
+
+"""
+Common fields for Payment and Charge for Credit Card
+"""
+interface CreditCardItemInterface {
+  aasmState: String
+  accountId: ID
+  amount: String
+  amountCurrency: String
+  amountInCents: Int
+  createdAt: String
+  creatorId: ID
+  credit: String
+  creditCardId: ID
+  date: String
+  debit: String!
+  editPath: String
+  entry: Entry
+  entryId: ID
+  fileUrl: String
+  id: ID
+  memo: String
+  number: String
+  path: String
+  payee: String
+  permissions: Permissions
+  reconciled: Boolean!
+  slug: String
+  type: String!
+  updatedAt: String
+  vendorId: ID
+}
+
+"""
+The connection type for CreditCardItemInterface.
+"""
+type CreditCardItemInterfaceConnection {
+  """
+  A list of edges.
+  """
+  edges: [CreditCardItemInterfaceEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [CreditCardItemInterface]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type CreditCardItemInterfaceEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: CreditCardItemInterface
+}
+
+"""
+Credit on a Credit Card
+"""
+type CreditCardPayment implements CreditCardItemInterface & ValidatableInterface {
+  aasmState: String
+  accountId: ID
+  amount: String
+  amountCurrency: String
+  amountInCents: Int
+  approvedAt: String
+  approver: String
+  createdAt: String
+  creatorId: ID
+  credit: String
+  creditCardId: ID
+  date: String
+  debit: String!
+  editPath: String
+  entry: Entry
+  entryId: ID
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fileUrl: String
+  id: ID
+  memo: String
+  number: String
+  path: String
+  payee: String
+  permissions: Permissions
+  reconciled: Boolean!
+  slug: String
+  stateChangeLogs: [StateChangeLog!]!
+  type: String!
+  updatedAt: String
+  valid: Boolean!
+  vendorId: ID
+}
+
+"""
+Attributes for creating or updating a Credit Card Payment
+"""
+input CreditCardPaymentAttributes {
+  creditCardId: ID!
+  entryAttributes: EntryAttributes
+  fileUrl: String
+  memo: String
+  number: String
+}
+
+"""
+Attributes for creating or updating a Credit Card Payment
+"""
+input CreditCardPaymentUpdateAttributes {
+  creditCardId: ID!
+  entryAttributes: EntryAttributes!
+  fileUrl: String
+  memo: String
+  number: String
+}
+
+type Customer implements PayableInterface {
+  aasmState: String
+  addresses: [Address!]!
+  approvedAt: String
+  approver: String
+  company: String
+  displayName: String
+  editPath: String
+  email: String
+  faxPhoneNumber: String
+  firstName: String
+  fullName: String
+  homePhoneNumber: String
+  id: ID
+  invoices: [Invoice!]!
+  lastName: String
+  logoUrl: String
+  middleName: String
+  mobilePhoneNumber: String
+  name: String
+  notes: String
+  number: String
+  organization: Organization!
+  organizationId: String!
+  path: String
+  permissions: Permissions
+  slug: String
+  stateChangeLogs: [StateChangeLog!]!
+  suffix: String
+  title: String
+  visibleId: String
+  website: String
+  workPhoneNumber: String
+}
+
+type Deposit implements BankItemInterface & ValidatableInterface {
+  aasmState: String
+  aasm_state: String
+  account: BankAccount
+  accountId: ID
+  account_id: ID
+  amount: String
+  amountInCents: String
+  amount_in_cents: String
+  approvedAt: String
+  approver: String
+  bankAccountId: ID
+  bank_account_id: ID
+  createdAt: String
+  created_at: String
+  creatorId: ID
+  creator_id: ID
+  credit: String
+  date: String
+  debit: String!
+  editPath: String
+  edit_path: String
+  entry: Entry
+  entryId: ID
+  entry_id: ID
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fileUrl: String
+  file_url: String
+  id: ID
+  memo: String
+  number: String
+  path: String
+  payee: String
+  permissions: Permissions
+  printed: Boolean
+  reconciled: Boolean!
+  stateChangeLogs: [StateChangeLog!]!
+  type: String!
+  updatedAt: String
+  updated_at: String
+  valid: Boolean!
+}
+
+"""
+Attributes for creating or updating a Bank Account Deposit
+"""
+input DepositAttributes {
+  bankAccountId: ID!
+  date: String
+  entryAttributes: EntryAttributes
+  fileUrl: String
+  memo: String
+  number: String
+}
+
+"""
+Attributes for updating a Bank Account Deposit
+"""
+input DepositUpdateAttributes {
+  bankAccountId: ID!
+  date: String
+  entryAttributes: EntryAttributes!
+  fileUrl: String
+  id: ID!
+  memo: String
+  number: String
+}
+
+type Entry implements ValidatableInterface {
+  aasmState: String
+  amount: String
+  approvedAt: String
+  approver: String
+  backupFileUrl: String
+  bankAccountItems: [BankItemInterface]
+  count: Int
+  createdAt: String
+  creditCardItems: [CreditCardItemInterface]
+  date: String
+  editPath: String
+  entryItems: [EntryItem]!
+  entryType: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  fileUrl: String
+  id: Int
+  invoice: Invoice
+  journalable: JournalableUnion
+  journalableId: ID
+  journalablePath: String
+  journalableType: String
+  organization: Organization!
+  organizationId: ID
+  path: String
+  payableName: String
+  payablePath: String
+  payableType: String
+  payments: [Payment!]
+  permissions: Permissions
+  stateChangeLogs: [StateChangeLog!]!
+  totalCredits: String
+  totalDebits: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+}
+
+"""
+Attributes for creating or updating an Entry
+"""
+input EntryAttributes {
+  date: String
+  entryItemsAttributes: [EntryItemAttributes!]
+  entryType: String!
+  id: ID
+}
+
+"""
+The connection type for Entry.
+"""
+type EntryConnection {
+  """
+  A list of edges.
+  """
+  edges: [EntryEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Entry]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type EntryEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Entry
+}
+
+type EntryItem implements ValidatableInterface {
+  aasmState: String
+  account: Account
+  accountDisplayName: String
+  accountFunctionCode: String
+  accountFunctionId: Int
+  accountFundCode: String
+  accountFundId: Int
+  accountGoalCode: String
+  accountGoalId: Int
+  accountId: ID
+  accountLocationCode: String
+  accountLocationId: Int
+  accountName: String
+  accountNumber: String
+  accountObjectCode: String
+  accountObjectId: Int
+  accountResourceCode: String
+  accountResourceId: Int
+  accountYearCode: String
+  accountYearId: Int
+  amount: String
+  amountInCents: Int
+  createdAt: String
+  credit: String
+  date: String
+  debit: String
+  entry: Entry
+  entryId: Int
+  entryType: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  functionCode: String
+  fundCode: String
+  goalCode: String
+  id: Int
+  locationCode: String
+  memo: String
+  objectCode: String
+  payable: PayableInterface
+  payableId: ID
+  payableName: String
+  payableType: String
+  positiveAmount: String
+  resourceCode: String
+  type: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  yearCode: String
+}
+
+"""
+Properties for creating a EntryItem
+"""
+input EntryItemAttributes {
+  accountId: ID
+  amount: Float!
+  id: ID
+  memo: String
+  payableId: ID
+  payableType: String
+  type: String!
+}
+
+"""
+The connection type for EntryItem.
+"""
+type EntryItemConnection {
+  """
+  A list of edges.
+  """
+  edges: [EntryItemEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [EntryItem]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type EntryItemEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: EntryItem
+}
+
+type FileUpload {
+  createdAt: String
+  creator: User
+  creatorId: ID!
+  description: String
+  fileType: String
+  id: ID
+  updatedAt: String
+  uploadableId: ID!
+  uploadableType: String!
+  url: String
+}
+
+"""
+Attributes for creating file uploads
+"""
+input FileUploadAttributes {
+  description: String
+  fileType: String
+  uploadableId: ID!
+  uploadableType: String!
+  url: String
+}
+
+"""
+The connection type for FileUpload.
+"""
+type FileUploadConnection {
+  """
+  A list of edges.
+  """
+  edges: [FileUploadEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [FileUpload]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type FileUploadEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: FileUpload
+}
+
+enum FileUploadOrder {
+  CREATED_AT
+  DESCRIPTION
+  FILE_TYPE
+  UPDATED_AT
+  UPLOADABLE_TYPE
+}
+
+"""
+Attributes for updating file uploads
+"""
+input FileUploadUpdateAttributes {
+  description: String
+  fileType: String
+  id: ID!
+  uploadableId: ID
+  uploadableType: String
+  url: String
+}
+
+type Filestack {
+  apikey: String!
+  clientName: String!
+  policy: String!
+  security: FilestackSecurity
+  signature: String!
+}
+
+type FilestackSecurity {
+  policy: String!
+  signature: String!
+}
+
+type Invoice {
+  aasmState: String
+  amount: String!
+  amountPaid: String!
+  amountRemaining: String!
+  checks: [Check!]
+  createdAt: String
+  customer: Customer
+  date: String
+  description: String
+  displayLabel: String
+  dueDate: String
+  editPath: String!
+  fileUrl: String
+  id: ID
+  invoiceable: InvoiceableUnion
+  invoiceableId: ID
+  invoiceableType: String
+  number: String
+  paid: Boolean!
+  path: String!
+  payments: [Payment!]
+  permissions: Permissions
+  purchaseOrder: PurchaseOrder
+  slug: String
+  updatedAt: String
+  vendor: Vendor
+  vendorName: String
+}
+
+enum InvoiceOrder {
+  CREATED_AT
+  DATE
+  DUE
+  NUMBER
+  STATE
+}
+
+"""
+Classes that can be invoiced
+"""
+union InvoiceableUnion = Customer | Vendor
+
+"""
+items attached to a (journal) entry
+"""
+union JournalableUnion = Invoice | Payment
+
+type MonthlyCashFlowReport implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  cashAtBeginning: [String!]
+  cashAtEnd: [String!]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  financingActivities: [AccountBalanceObjectType!]
+  financingActivitiesTotal: [String!]
+  fiscalYear: String
+  investigatingActivities: [AccountBalanceObjectType!]
+  investingActivities: [AccountBalanceObjectType!]
+  investingActivitiesTotal: [String!]
+  monthTitles: [String!]
+  months: [String!]
+  netCash: [String!]
+  netCashIncrease: [String!]
+  netIncome: [String!]
+  netOperationsCash: [String!]
+  organizationId: ID!
+  organizationName: String
+  otherIncome: [AccountBalanceObjectType!]
+  otherIncomeTotal: [String!]
+  pdfUrl: String
+  persisted: Boolean
+  reportDate: String
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type MonthlyProfitAndLossStatement implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID!
+  accountFundName: String
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  monthTitles: [String!]
+  months: [String!]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type Mutation {
+  """
+  Remove a user from all organizations and mark as archived
+  """
+  archiveUser(userId: ID!): BaseResponse
+
+  """
+  Create an Account
+  """
+  createAccount(budget: Float, functionCode: String, fundCode: String, goalCode: String, locationCode: String, objectCode: String, resourceCode: String, yearCode: String): Account
+
+  """
+  Create an Account Transfer
+  """
+  createAccountTransfer(accountTransfer: AccountTransferAttributes, reason: String, stateAction: String): AccountTransfer
+
+  """
+  Create a AP Aging Report
+  """
+  createApAgingReport(days_per_period: Int, end_date: String, periods: Int, show_active_columns: Boolean, show_active_rows: Boolean, start_date: String): ApAgingReport
+
+  """
+  Create a A/R Aging Report
+  """
+  createArAgingReport(days_per_period: Int, end_date: String, periods: Int, show_active_columns: Boolean, show_active_rows: Boolean, start_date: String): ArAgingReport
+
+  """
+  Create a Balance Sheet Report
+  """
+  createBalanceSheet(
+    account: AccountCodeInputObject
+    end_date: String
+    id: ID
+    organization_id: ID
+
+    """
+    Save report?
+    """
+    save: Boolean = false
+    start_date: String
+  ): BalanceSheet
+
+  """
+  Create a Balance Sheet By Month Report
+  """
+  createBalanceSheetByMonth(account: AccountCodeInputObject, end_date: String, start_date: String): BalanceSheetByMonthReport
+
+  """
+  Create a Balance Sheet By Resource Report
+  """
+  createBalanceSheetByResource(account: AccountCodeInputObject, end_date: String, start_date: String): BalanceSheetByResourceReport
+
+  """
+  Create a BalanceVsActual Report
+  """
+  createBudgetVsActualReport(
+    account: AccountCodeInputObject
+    end_date: String
+    id: ID
+    organization_id: ID
+
+    """
+    Save report?
+    """
+    save: Boolean = true
+    start_date: String
+  ): BudgetVsActualReport
+
+  """
+  Create a Cash Flow Report
+  """
+  createCashFlowReport(account: AccountCodeInputObject, display_columns_by: String, end_date: String, id: ID, show_active_columns: Boolean, show_active_rows: Boolean, start_date: String): CashFlowReport
+
+  """
+  Create a Payment
+  """
+  createCharge(charge: CreditCardChargeAttributes, reason: String, stateAction: String = "save_draft"): CreditCardCharge
+
+  """
+  Create a Check
+  """
+  createCheck(check: CheckAttributes, reason: String, stateAction: String): Check
+  createCheckForPayments(addressId: ID, cashAccountId: ID!, invoiceIds: [ID]!, vendorId: ID!): BaseResponse
+
+  """
+  Create a Deposit
+  """
+  createDeposit(deposit: DepositAttributes, reason: String, stateAction: String): Deposit
+
+  """
+  Create an Entry
+  """
+  createEntry(date: String, entryItems: [EntryItemAttributes], entryType: String, fileUrl: String): Entry
+
+  """
+  Create a FileUpload
+  """
+  createFileUpload(fileUpload: FileUploadAttributes): FileUpload
+
+  """
+  Create a Monthly Cash Flow Report
+  """
+  createMonthlyCashFlowReport(account: AccountCodeInputObject, display_columns_by: String, end_date: String, id: ID, show_active_columns: Boolean, show_active_rows: Boolean, start_date: String): MonthlyCashFlowReport
+
+  """
+  Create a Monthly Profit And Loss Statement
+  """
+  createMonthlyProfitAndLossStatement(account: AccountCodeInputObject, end_date: String, start_date: String): MonthlyProfitAndLossStatement
+
+  """
+  Create a Payment
+  """
+  createPayment(payment: CreditCardPaymentAttributes, reason: String, stateAction: String): CreditCardPayment
+
+  """
+  Create a Profit And Loss By Resource Report
+  """
+  createProfitAndLossByResourceReport(account: AccountCodeInputObject, endDate: String, startDate: String): ProfitAndLossByResourceReport
+
+  """
+  Create a Balance Sheet Report
+  """
+  createProfitAndLossStatement(
+    account: AccountCodeInputObject
+    end_date: String
+    id: ID
+    organization_id: ID
+
+    """
+    Save report?
+    """
+    save: Boolean = true
+    start_date: String
+  ): ProfitAndLossStatement
+
+  """
+  Create an Purchase Order
+  """
+  createPurchaseOrder(purchaseOrder: PurchaseOrderAttributes, reason: String, stateAction: String): PurchaseOrder
+
+  """
+  Create/Update a Bank Accout Reconciliation Statement
+  """
+  createStatement(adjustment_amount: String, adjustment_date: String, ended_at: String!, ending_balance: String!, file_url: String, item_ids: [ID], started_at: String!, starting_balance: String!, state_action: String, statement_id: ID, statementable_id: ID!, statementable_type: String!): Statement
+
+  """
+  Create a Vendor 1099 Report
+  """
+  createVendor1099Report(end_date: String, start_date: String): Vendor1099Report
+
+  """
+  Create a Vendor Report
+  """
+  createVendorReport(end_date: String, start_date: String): VendorReport
+  deletePurchaseOrder(id: ID!): PurchaseOrder
+  destroyAccountTransfer(id: ID!): AccountTransfer
+  destroyCharge(id: ID!): CreditCardCharge
+  destroyCheck(id: ID!): Check
+  destroyDeposit(id: ID!): Deposit
+  destroyPayment(id: ID!): CreditCardPayment
+  markChecksPrinted(bankAccountId: ID, checks: [CheckPrintAttributes]): BaseResponse
+
+  """
+  Update an Account Transfer
+  """
+  updateAccountTransfer(accountTransfer: AccountTransferUpdateAttributes, reason: String, stateAction: String): AccountTransfer
+
+  """
+  Update a Payment
+  """
+  updateCharge(charge: CreditCardChargeUpdateAttributes, reason: String, stateAction: String = "save_draft"): CreditCardCharge
+
+  """
+  Update a Check
+  """
+  updateCheck(check: CheckUpdateAttributes, reason: String, stateAction: String): Check
+
+  """
+  Update a Deposit
+  """
+  updateDeposit(deposit: DepositUpdateAttributes, reason: String, stateAction: String): Deposit
+
+  """
+  Update a FileUpload
+  """
+  updateFileUpload(fileUpload: FileUploadUpdateAttributes): FileUpload
+
+  """
+  Remove a user from all organizations and mark as archived
+  """
+  updateFinalPaymentUrl(finalPaymentUrl: String!, invoiceID: ID): BaseResponse
+
+  """
+  Set the fiscal year for the interface
+  """
+  updateFiscalYear(fiscalYear: Int): Int
+
+  """
+  Update a Payment
+  """
+  updatePayment(payment: CreditCardPaymentUpdateAttributes, reason: String, stateAction: String): CreditCardPayment
+
+  """
+  Create an Purchase Order
+  """
+  updatePurchaseOrder(purchaseOrder: PurchaseOrderUpdateAttributes, reason: String, stateAction: String): PurchaseOrder
+
+  """
+  Update State for Invoice
+  """
+  updateState(id: ID, modelType: String, nextState: String, reason: String, save: Boolean = true, slug: String): String
+
+  """
+  Update a users user role for an organization
+  """
+  updateUserRole(organizationId: ID, role: String, userId: ID): OrganizationAssignment
+
+  """
+  Update a users user type for an organization
+  """
+  updateUserType(organizationId: ID, type: String, userId: ID): OrganizationAssignment
+}
+
+type Organization {
+  description: String
+  email: String
+  id: ID!
+  name: String
+  phone: String
+  subdomain: String
+}
+
+type OrganizationAssignment {
+  id: ID!
+  organization: Organization!
+  organizationId: ID!
+  role: String
+  type: String!
+  user: User!
+  userId: ID!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+"""
+Common fields for Payables (Vendor, Customer)
+"""
+interface PayableInterface {
+  aasmState: String
+  displayName: String
+  editPath: String
+  id: ID
+  logoUrl: String
+  name: String
+  number: String
+  path: String
+  permissions: Permissions
+  slug: String
+  visibleId: String
+}
+
+type Payment {
+  addressId: ID
+  amount: String
+  amountInCents: Int
+  check: Check
+  createdAt: String
+  date: String
+  editPath: String
+  entry: Entry
+  fileUrl: String
+  finalPay: Boolean
+  formattedDate: String
+  id: ID
+  invoice: Invoice
+  invoiceId: ID
+  path: String
+  payableId: ID
+  payableType: String
+  shippingAmountInCents: Int
+  taxAmountInCents: Int
+  updatedAt: String
+}
+
+type Permissions {
+  approve: Boolean
+  create: Boolean
+  delete: Boolean
+  deny: Boolean
+  edit: Boolean
+  index: Boolean
+  print: Boolean
+  reverse_approval: Boolean
+  save_draft: Boolean
+  send_for_approval: Boolean
+  show: Boolean
+  update: Boolean
+  view: Boolean
+  void: Boolean
+}
+
+type PrinterSetting {
+  amountOffsetX: Int
+  amountOffsetY: Int
+  amountTextOffsetX: Int
+  amountTextOffsetY: Int
+  checkMargin: Int
+  createdAt: String!
+  dateOffsetX: Int
+  dateOffsetY: Int
+  id: ID
+  invoiceAmountPaidX: Int
+  invoiceAmountPaidY: Int
+  invoiceAmountX: Int
+  invoiceAmountY: Int
+  invoiceDateX: Int
+  invoiceDateY: Int
+  invoiceDescriptionX: Int
+  invoiceDescriptionY: Int
+  invoiceNoX: Int
+  invoiceNoY: Int
+  memoOffsetX: Int
+  memoOffsetY: Int
+  micrOffsetX: Int
+  micrOffsetY: Int
+  name: String
+  organizationId: ID!
+  payeeOffsetX: Int
+  payeeOffsetY: Int
+  printerType: String
+  signatureOffsetX: Int
+  signatureOffsetY: Int
+  slug: String
+  updatedAt: String!
+  voucher1OffsetY: Int
+  voucher2OffsetY: Int
+}
+
+type ProfitAndLossByResourceReport implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID!
+  accountFundName: String
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  resourceTitles: [String!]
+  resources: [String!]
+  startDate: String
+  titles: [String!]
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type ProfitAndLossStatement implements AccountSearchableInterface & ReportInterface & ValidatableInterface {
+  accountFunction: [AccountFunction]
+  accountFund: [AccountFund]
+  accountFundCode: String
+  accountFundId: ID!
+  accountFundName: String
+  accountGoal: [AccountGoal]
+  accountLocation: [AccountLocation]
+  accountObject: [AccountObject]
+  accountResource: [AccountResource]
+  accountYear: [AccountYear]
+  colspanWidth: Int
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  xlsxUrl: String
+}
+
+type PurchaseOrder implements ValidatableInterface {
+  addInvoicePath: String
+  address: Address
+  addressId: ID
+  approvedAt: String
+  approver: String
+  buyer: String
+  createdAt: String
+  date: String
+  dateNeeded: String
+  editPath: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  exportPath: String
+  fileUrl: String
+  id: ID
+  invoice: Invoice
+  invoiceAmount: String
+  invoiceAmountRemaining: String
+  invoiceDate: String
+  invoiceDescription: String
+  invoiceDueDate: String
+  invoiceId: ID
+  invoiceNumber: String
+  invoicePath: String
+  number: String
+  path: String
+  permissions: Permissions
+  proposalDate: String
+  proposalNumber: String
+  purchaseOrderItems: [PurchaseOrderItem]
+  quoteDate: String
+  quoteNumber: String
+  requestedBy: String
+  requestedFor: String
+  requisitionNumber: String
+  shippingAmount: String
+  shippingAmountInCents: Int
+  slug: String
+  stateChangeLogs: [StateChangeLog!]!
+  subtotal: String
+  subtotalInCents: Int
+  taxAmount: String
+  taxAmountInCents: Int
+  total: String
+  totalInCents: Int
+  updatedAt: String
+  valid: Boolean!
+  vendor: Vendor
+  vendorAddress: Address
+  vendorAddressId: ID
+  vendorId: ID!
+  vendorName: String
+  vendorPath: String
+}
+
+"""
+Attributes for creating a purchase order
+"""
+input PurchaseOrderAttributes {
+  addressId: ID
+  buyer: String
+  date: String
+  dateNeeded: String
+  fileUrl: String
+  invoiceId: ID
+  number: String
+  paymentTerms: String
+  proposalDate: String
+  proposalNumber: String
+  purchaseOrderItemsAttributes: [PurchaseOrderItemAttributes!]!
+  quoteDate: String
+  quoteNumber: String
+  referenceNumber: String
+  requestedBy: String
+  requestedFor: String
+  requisitionNumber: String
+  shippingAmountInCents: Int = 0
+  status: String
+  taxAmountInCents: Int = 0
+  vendorAddressId: ID
+  vendorId: ID!
+}
+
+"""
+The connection type for PurchaseOrder.
+"""
+type PurchaseOrderConnection {
+  """
+  A list of edges.
+  """
+  edges: [PurchaseOrderEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [PurchaseOrder]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type PurchaseOrderEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: PurchaseOrder
+}
+
+type PurchaseOrderItem {
+  createdAt: String
+  description: String
+  id: ID
+  order: Int
+  priceCurrency: String
+  priceInCents: Int
+  purchaseOrderId: ID
+  quantity: Int
+  total: String
+  totalInCents: Int
+  updatedAt: String
+}
+
+"""
+Properties for creating a PurchaseOrderItem
+"""
+input PurchaseOrderItemAttributes {
+  description: String
+  id: ID
+  order: Int
+  priceInCents: Int
+  purchaseOrderId: ID
+  quantity: Int
+}
+
+"""
+Attributes for Updating a purchase order
+"""
+input PurchaseOrderUpdateAttributes {
+  addressId: ID
+  buyer: String
+  date: String
+  dateNeeded: String
+  fileUrl: String
+  id: ID!
+  invoiceId: ID
+  number: String
+  paymentTerms: String
+  proposalDate: String
+  proposalNumber: String
+  purchaseOrderItemsAttributes: [PurchaseOrderItemAttributes!]!
+  quoteDate: String
+  quoteNumber: String
+  referenceNumber: String
+  requestedBy: String
+  requestedFor: String
+  requisitionNumber: String
+  shippingAmountInCents: Int = 0
+  status: String
+  taxAmountInCents: Int = 0
+  vendorAddressId: ID
+  vendorId: ID!
+}
+
+type Query {
+  account(id: ID!): Account
+
+  """
+  returns account with given element codes
+  """
+  accountByNumber(functionCode: String, fundCode: String, goalCode: String, locationCode: String, objectCode: String, resourceCode: String, yearCode: String): Account
+  accountFunctionByCode(code: String): AccountFunction
+  accountFundByCode(code: String): AccountFund
+  accountGoalByCode(code: String): AccountGoal
+  accountLocationByCode(code: String): AccountLocation
+  accountObjectByCode(code: String): AccountObject
+  accountResourceByCode(code: String): AccountResource
+
+  """
+  Find Accounts account properties
+  """
+  accountSearch(account_function_id: ID, account_fund_id: ID, account_goal_id: ID, account_location_id: ID, account_object_id: ID, account_resource_id: ID, account_year_id: ID, cash_accounts: Boolean, description: String, function_code: String, fund_code: String, goal_code: String, location_code: String, name: String, object_code: String, resource_code: String, timestamp: String, year_code: String): [Account]
+
+  """
+  Find Accounts account properties
+  """
+  accountSearchConnection(
+    account_function_id: ID
+    account_fund_id: ID
+    account_goal_id: ID
+    account_location_id: ID
+    account_object_id: ID
+    account_resource_id: ID
+    account_year_id: ID
+
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    cash_accounts: Boolean
+    description: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    function_code: String
+    fund_code: String
+    goal_code: String
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    location_code: String
+    name: String
+    object_code: String
+    resource_code: String
+    timestamp: String
+    year_code: String
+  ): AccountConnection
+  accountYearByCode(code: String): AccountYear
+  account_functions: [AccountFunction]
+  account_funds: [AccountFund]
+  account_goals: [AccountGoal]
+  account_locations: [AccountLocation]
+  account_objects: [AccountObject]
+  account_resources: [AccountResource]
+  account_transfer(id: ID!): AccountTransfer
+  account_years: [AccountYear]
+
+  """
+  Accounts for current Organization
+  """
+  accounts(function_code: ID, fund_code: ID, goal_code: ID, location_code: ID, object_code: ID, resource_code: ID, year_id: ID): [Account]
+  address(id: ID): Address
+
+  """
+  Find Addresses
+  """
+  addressSearch(addressable_id: ID, addressable_ids: [ID], addressable_type: String, name: String): [Address]
+  ap_aging_report: ApAgingReport
+  ar_aging_report: ArAgingReport
+  balanceSheet: BalanceSheet
+  balanceSheetByMonth: BalanceSheetByMonthReport
+  balanceSheetByResource: BalanceSheetByResourceReport
+  bankAccounts: [BankAccount]
+
+  """
+  Find Bank Account Items
+  """
+  bankItemConnection(
+    aasm_state: String
+
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+    approved: Boolean
+    bank_account_id: ID
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    beginning_balance: Boolean
+    end_date: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    ids: String
+    include_entry: Boolean
+    include_payment: Boolean
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    max_amount: String
+    memo: String
+    min_amount: String
+    month_ending_at: String
+    number: String
+    printed: Boolean
+    reconciled: Boolean
+    start_date: String
+    type: String
+    vendor_id: ID
+  ): BankItemConnection
+
+  """
+  Find Bank Account Items
+  """
+  bankItemSearch(aasm_state: String, approved: Boolean, bank_account_id: ID, beginning_balance: Boolean, end_date: String, ids: String, include_entry: Boolean, include_payment: Boolean, max_amount: String, memo: String, min_amount: String, month_ending_at: String, number: String, printed: Boolean, reconciled: Boolean, start_date: String, type: String, vendor_id: ID): [BankItem]
+  bank_account(slug: String!): BankAccount
+  bank_accounts: [BankAccount]
+  budgetVsActualReport: BudgetVsActualReport
+
+  """
+  Account Objects connected to Bank Accounts
+  """
+  cashAccounts: [AccountObject]
+  cashFlowReport: CashFlowReport
+  check(id: ID!): Check
+
+  """
+  Get Header fund codes for Check Register -- see also BankItemResolver
+  """
+  checkRegisterReport(aasm_state: String, approved: Boolean, bank_account_id: ID, end_date: String, include_entry: Boolean, max_amount: String, memo: String, min_amount: String, number: String, reconciled: Boolean, start_date: String, type: String, vendor_id: ID): [String]
+  creditCard(slug: String!): CreditCard
+  creditCardCharge(id: ID!): CreditCardCharge
+
+  """
+  Find Credit Card Items
+  """
+  creditCardItemConnection(
+    aasm_state: String
+
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    credit_card_id: ID
+    end_date: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    ids: String
+    include_entry: Boolean
+    include_payment: Boolean
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    max_amount: String
+    memo: String
+    min_amount: String
+    month_ending_at: String
+    number: String
+    printed: Boolean
+    reconciled: Boolean
+    start_date: String
+    type: String
+    vendor_id: ID
+  ): CreditCardItemInterfaceConnection
+
+  """
+  Find Credit Card Items
+  """
+  creditCardItemSearch(aasm_state: String, credit_card_id: ID, end_date: String, ids: String, include_entry: Boolean, include_payment: Boolean, max_amount: String, memo: String, min_amount: String, month_ending_at: String, number: String, printed: Boolean, reconciled: Boolean, start_date: String, type: String, vendor_id: ID): [CreditCardItemInterface]
+  creditCardPayment(creditCardSlug: String!, paymentId: ID!): CreditCardPayment
+  creditCards: [CreditCard]
+  current_user: User
+  customer(id: ID!): Customer
+  customerBySlug(slug: String!): Customer
+
+  """
+  Find Customers
+  """
+  customerSearch(aasm_state: String, name: String, number: String): [Customer]
+  customers: [Customer]
+  deposit(id: ID!): Deposit
+  entries: [Entry]
+  entry(id: ID!): Entry
+
+  """
+  Find and filter entries
+  """
+  entryItemsSearchConnection(
+    aasm_state: String
+    account: AccountCodeInputObject
+    account_id: ID
+
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+    approved: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    credits: String
+    customer_id: ID
+    debits: String
+    draft: String
+    end_date: String
+    entry_type: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    max_amount: String
+    memo: String
+    min_amount: String
+    organization_id: ID
+    payable_id: ID
+    payable_type: String
+    start_date: String
+    submitted: String
+    type: String
+    vendor_id: ID
+  ): EntryItemConnection
+
+  """
+  Find and filter entries
+  """
+  entrySearch(aasm_state: String, account: AccountCodeInputObject, end_date: String, entry_type: String, journalable_id: ID, journalable_type: String, limit: Int, max_amount: String, min_amount: String, offset: Int, start_date: String, vendor_id: ID): [Entry]
+
+  """
+  Find and filter entries
+  """
+  entrySearchConnection(
+    aasm_state: String
+    account: AccountCodeInputObject
+
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    end_date: String
+    entry_type: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    journalable_id: ID
+    journalable_type: String
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    limit: Int
+    max_amount: String
+    min_amount: String
+    offset: Int
+    start_date: String
+    vendor_id: ID
+  ): EntryConnection
+
+  """
+  Find/Filter File Uploads
+  """
+  fileUploadSearch(creator_id: ID, description: String, file_type: String, id: ID, order: FileUploadOrder = CREATED_AT, uploadable_id: ID, uploadable_type: String): [FileUpload]
+
+  """
+  Find/Filter File Uploads
+  """
+  fileUploadSearchConnection(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    creator_id: ID
+    description: String
+    file_type: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    id: ID
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    order: FileUploadOrder = CREATED_AT
+    uploadable_id: ID
+    uploadable_type: String
+  ): FileUploadConnection
+  filestack: Filestack
+  fiscalYear: Int
+  invoice(id: ID!): Invoice
+
+  """
+  Find Invoices
+  """
+  invoiceSearch(aasm_state: String, dated_after: String, dated_before: String, due_after: String, due_before: String, invoiceable_id: ID, invoiceable_type: String, number: String, order: InvoiceOrder = CREATED_AT, paid: Boolean, preload: Boolean, with_purchase_order: Boolean, without_purchase_order: Boolean): [Invoice]
+  lastStatement(before_date: String, slug: String!, statementable_type: String!): Statement
+  lastStatementBalance(before_date: String, id: ID!, statementable_type: String!): String
+  monthly_cash_flow_report: MonthlyCashFlowReport
+  monthly_profit_and_loss_statement: MonthlyProfitAndLossStatement
+
+  """
+  Find Organization
+  """
+  organizationSearch: [Organization]
+  permissions(model_class: String): Permissions
+  printerSettings: [PrinterSetting]
+  profit_and_loss_by_resource_report: ProfitAndLossByResourceReport
+  profit_and_loss_statement: ProfitAndLossStatement
+  purchaseOrder(id: ID!): PurchaseOrder
+  purchaseOrderBySlug(slug: String!, vendorSlug: String!): PurchaseOrder
+
+  """
+  Find Purchase Orders
+  """
+  purchaseOrderSearch(aasm_state: String, blanket: String, buyer: String, date_needed: String, id: ID, invoice_number: String, number: String, preload_invoice: Boolean, requested_by: String, requested_for: String, requisition_number: String, slug: String, status: String, stock_po: String, vendor_ein: String, vendor_id: ID, with_invoice: Boolean, without_invoice: Boolean): [PurchaseOrder]
+
+  """
+  Find Purchase Orders
+  """
+  purchaseOrderSearchConnection(
+    aasm_state: String
+
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    blanket: String
+    buyer: String
+    date_needed: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    id: ID
+    invoice_number: String
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    number: String
+    preload_invoice: Boolean
+    requested_by: String
+    requested_for: String
+    requisition_number: String
+    slug: String
+    status: String
+    stock_po: String
+    vendor_ein: String
+    vendor_id: ID
+    with_invoice: Boolean
+    without_invoice: Boolean
+  ): PurchaseOrderConnection
+  statement(id: ID!): Statement
+
+  """
+  Find Bank Account Statements
+  """
+  statementSearch(ending_after: String, ending_before: String, statementable_id: ID, statementable_slug: String, statementable_type: String): [Statement]
+  statementVersion(id: ID!, versionId: ID!): StatementVersion
+  user(id: ID!): User
+
+  """
+  Find Users
+  """
+  users(admin: Boolean, archived: Boolean, email: String, name: String, organization_id: ID, role: String, type: String): [User]
+  validateCheckNumbers(bankAccountId: ID!, numbers: [String]!): BaseResponse
+  vendor(id: ID!): Vendor
+  vendor1099Report: Vendor1099Report
+  vendorBySlug(slug: String!): Vendor
+  vendorReport: VendorReport
+
+  """
+  Find Vendors
+  """
+  vendorSearch(aasm_state: String, name: String, number: String): [Vendor]
+  vendors: [Vendor]
+}
+
+"""
+Bank Account or Credit Card Being Reconciled
+"""
+union Reconcilable = BankAccount | CreditCard
+
+"""
+Bank Account Item or Credit Card Item that was Reconciled
+"""
+union ReconcilableItem = AccountTransfer | Check | CreditCardCharge | CreditCardPayment | Deposit
+
+"""
+Reconciliation record for Bank Account item or Credit Card
+"""
+type Reconciliation {
+  entry: Entry
+  entryId: ID
+  id: ID!
+  organization: Organization
+  organizationId: ID!
+  reconcilable: Reconcilable
+  reconcilableId: ID!
+  reconcilableItem: ReconcilableItem
+  reconcilableItemId: ID!
+  reconcilableItemType: String!
+  reconcilableType: String!
+  statement: Statement
+  statementId: ID!
+}
+
+interface ReportInterface {
+  data: String!
+  endDate: String
+  organizationId: ID!
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+}
+
+type StateChangeLog {
+  createdAt: String
+  event: String
+  fromState: String
+  id: ID!
+  loggableId: ID!
+  loggableType: String
+  reason: String
+  toState: String
+  updatedAt: String
+  user: User
+  userId: ID!
+}
+
+type Statement {
+  aasmState: String
+  adjustmentAmount: String
+  adjustmentDate: String
+  approved: Boolean
+  approver: User
+  approverName: String
+  audits: [Audit]!
+  createdAt: String
+  creator: User
+  creatorName: String
+  editPath: String
+  endedAt: String
+  endedAtFormatted: String
+  endingBalance: String
+  exportPath: String
+  fileUrl: String
+  id: ID!
+  items: [StatementItem]
+  organization: Organization
+  organizationId: ID
+  path: String
+  permissions: Permissions
+  reconciliations: [Reconciliation]
+  startedAt: String
+  startedAtFormatted: String
+  startingBalance: String
+  statementable: Statementable
+  statementableId: ID
+  statementableType: String
+  unreconciledItems: [StatementItem]
+  updatedAt: String
+}
+
+"""
+Check, Deposit, Transfers for bank account or Credit Card Payment or Charge
+"""
+union StatementItem = AccountTransfer | Check | CreditCardCharge | CreditCardPayment | Deposit
+
+type StatementVersion {
+  aasmState: String
+  adjustmentAmount: String
+  adjustmentDate: String
+  approved: Boolean
+  approver: User
+  approverName: String
+  auditVersion: Int!
+  audits: [Audit]!
+  createdAt: String
+  creator: User
+  creatorName: String
+  data: String!
+  editPath: String
+  endedAt: String
+  endedAtFormatted: String
+  endingBalance: String
+  exportPath: String
+  fileUrl: String
+  id: ID
+  items: [StatementItem]
+  organization: Organization
+  organizationId: ID
+  path: String
+  permissions: Permissions
+  reconciliations: [Reconciliation]
+  startedAt: String
+  startedAtFormatted: String
+  startingBalance: String
+  statement: Statement!
+  statementable: Statementable
+  statementableId: ID
+  statementableType: String
+  unreconciledItems: [StatementItem]
+  updatedAt: String
+  version: Int!
+}
+
+"""
+BankAccount or Credit Card for Statement
+"""
+union Statementable = BankAccount | CreditCard
+
+type TenNinetyNine {
+  address: Address
+  addressId: ID
+  createdAt: String
+  ein: String
+  einType: String
+  fileUrl: String
+  id: ID!
+  required: Boolean
+  updatedAt: String
+  vendor: Vendor!
+  year: Int!
+}
+
+type User {
+  admin: Boolean
+  avatarUrl: String
+  backOffice: Boolean
+  editUrl: String!
+  editorAssignments: [OrganizationAssignment!]!
+  email: String
+  firstName: String
+  fullName: String
+  id: Int
+  initials: String
+  lastName: String
+  organizationAssignments: [OrganizationAssignment!]!
+  organizations: [Organization!]!
+  ownerAssignments: [OrganizationAssignment!]!
+  permissions: Permissions
+  slug: String
+  url: String!
+  viewerAssignments: [OrganizationAssignment!]!
+}
+
+"""
+Error and validation fields for elements that can be created
+"""
+interface ValidatableInterface {
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  valid: Boolean!
+}
+
+type Vendor implements PayableInterface {
+  aasmState: String
+  accountNumber: String
+  active: Boolean
+  addresses: [Address!]!
+  approvedAt: String
+  approver: String
+  company: String
+  createdAt: String
+  currentTenNinetyNine: TenNinetyNine
+  defaultPoNumber: String!
+  displayName: String
+  editPath: String
+  email: String
+  endDate: String
+  faxPhoneNumber: String
+  fileUploads: [FileUpload!]!
+  firstName: String
+  fullName: String
+  global: Boolean
+  homePhoneNumber: String
+  id: ID
+  invoices: [Invoice!]!
+  lastName: String
+  logoUrl: String
+  middleName: String
+  mobilePhoneNumber: String
+  name: String
+  notes: String
+  number: String
+  organization: Organization!
+  organizationId: String!
+  other: String
+  path: String
+  paymentTerms: String
+  permissions: Permissions
+  rating: Int
+  slug: String
+  startDate: String
+  startingBalance: String
+  stateChangeLogs: [StateChangeLog!]!
+  suffix: String
+  tenNinetyNines: [TenNinetyNine!]!
+  title: String
+  updatedAt: String
+  visibleId: String
+  website: String
+  workPhoneNumber: String
+}
+
+type Vendor1099Report implements ReportInterface & ValidatableInterface {
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String!
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  vendors: [Vendor1099ReportItem!]
+  xlsxUrl: String
+}
+
+type Vendor1099ReportItem implements ReportInterface & ValidatableInterface {
+  address: String
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  name: String
+  organizationId: ID!
+  persisted: Boolean
+  ssnEin: String
+  startDate: String
+  type: String
+  updatedAt: String
+  valid: Boolean!
+  yearAmount: String
+}
+
+type VendorReport implements ReportInterface & ValidatableInterface {
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  organizationName: String
+  pdfUrl: String
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  url: String
+  valid: Boolean!
+  vendors: [VendorReportItem!]
+  xlsxUrl: String
+}
+
+type VendorReportItem implements ReportInterface & ValidatableInterface {
+  address: Address
+  amount: String
+  code: String
+  data: String!
+  endDate: String
+
+  """
+  rails error object
+  """
+  errorMessages: String
+
+  """
+  Reasons the object couldn't be created or updated
+  """
+  errors: [String]
+  organizationId: ID!
+  persisted: Boolean
+  startDate: String
+  updatedAt: String
+  valid: Boolean!
+  vendorName: String
+  vendorNumber: String
+}

@@ -1,0 +1,18 @@
+query {
+  ap_aging_report {
+    periodNames
+    vendorsByPeriod
+    periodsByVendor
+    persisted
+    valid
+    errors
+    startDate
+    endDate
+    daysPerPeriod
+    showActiveColumns
+    showActiveRows
+    periods
+    pdfUrl
+    xlsxUrl
+  }
+}

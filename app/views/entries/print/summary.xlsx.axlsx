@@ -1,0 +1,122 @@
+def format_date(date)
+  case
+  when date.is_a?(Date)
+    date.to_formatted_s(:std_alt)
+  when date.is_a?(String)
+    Date.parse(date).to_formatted_s(:std_alt)
+  else
+    ""
+  end
+end
+
+wb = xlsx_package.workbook
+wb.styles do |s|
+  header_title_cell = s.add_style fg_color: "00", b: true, sz: 12, alignment: {horizontal: :center}
+  bold_cell = s.add_style b: true
+  grey_cell = s.add_style fg_color: "00", b: true, bg_color: "D4D4D4", sz: 12
+  currency = wb.styles.add_style num_fmt: 7
+  tota_currency = wb.styles.add_style num_fmt: 7, b: true, border: {style: :thin, color: "00", edges: [:top, :bottom]}
+
+  wb.add_worksheet(name: "General Ledger") do |sheet|
+    p_n_l = ("1000".."8929").to_a
+
+    # Header
+    sheet.add_row [@current_org.name.upcase], style: header_title_cell
+    sheet.merge_cells "A1:G1"
+    sheet.add_row ["GENERAL LEDGER"], style: header_title_cell
+    sheet.merge_cells "A2:G2"
+
+    # Date Range
+    start_date = @start_date || @entries.sort_by(&:date).first.date.to_s
+    end_date = @end_date || @entries.sort_by(&:date).last.date.to_s
+
+    sheet.add_row ["#{format_date(start_date)} - #{format_date(end_date)}"], style: header_title_cell
+    sheet.merge_cells "A3:G3"
+
+    filter_string = @account_filter.map {|k,v| next if v&.empty?; "#{k.gsub(/Code/, "").upcase}: #{v}" }.compact.join(", ")
+    sheet.add_row [filter_string], style: header_title_cell
+    sheet.merge_cells "A4:G4"
+
+    sheet.add_row ["ID", "Date", "Account", "Vendor", "Memo", "Debit", "Credit"], style: grey_cell
+
+    # Account Object Sections
+    AccountObject::OBJECT_TYPES.each do |object_type|
+      account_objs = @account_objects.select {|account_object| account_object.object_type == object_type}
+      next if account_objs.count.zero?
+
+      # Account object title
+      sheet.add_row [object_type], style: bold_cell
+      sheet.merge_cells "A#{sheet.rows.length}:C#{sheet.rows.length}"
+
+      # Account Object Entries
+      account_objs.each do |account_object|
+        sheet.add_row [account_object.display_name], style: bold_cell
+        sheet.merge_cells "A#{sheet.rows.length}:C#{sheet.rows.length}"
+        filtered_items = @filtered_items.select {|item| item.account.account_object == account_object}
+
+        # Exclude Forward Balance on P&L Categories, otherwise, add row
+        if p_n_l.include?(account_object.code.strip) || @start_date.nil?
+          forward_balance = Money.new(0)
+        else
+          forward_end_date = @start_date&.yesterday
+
+          forward_balance = account_object.balance("", forward_end_date, @account_filter)
+
+          # Account Object Normal Balance
+          if account_object.normal_balance == "Debit"
+            neg_f_bal = forward_balance >= Money.new(0) ? forward_balance.to_f : nil
+            pos_f_bal = forward_balance >= Money.new(0) ? nil : Money.new(-1 * forward_balance).to_f
+          else
+            neg_f_bal = forward_balance >= Money.new(0) ? nil : Money.new(-1 * forward_balance).to_f
+            pos_f_bal = forward_balance >= Money.new(0) ? forward_balance.to_f : nil
+          end
+          sheet.add_row [nil, nil, "Balance Forward", nil, nil, neg_f_bal, pos_f_bal],
+                 style: [nil, nil, bold_cell, nil, nil, tota_currency, tota_currency]
+        end
+
+        filtered_items.each do |item|
+          deb = item.type == "Debit" ? item.positive_amount.to_f : nil
+          cred = item.type == "Credit" ? item.amount.to_f : nil
+          if item.vendor
+            vendor = item.vendor.name
+          elsif item.entry.journalable.is_a?(Invoice)
+            vendor = item.entry.journalable.invoiceable.name
+          elsif item.entry.journalable.is_a?(Payment)
+            vendor = item.entry.journalable.payable.name
+          end
+
+          sheet.add_row [item.id, item&.date&.to_formatted_s(:std), item.account.number, vendor, item.memo, deb, cred],
+                 style: [nil, nil, nil, nil, nil, currency, currency]
+        end
+
+        # Balances
+        total_deb = filtered_items.select {|item| item.type == "Debit"}.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount}
+        total_cred = filtered_items.select {|item| item.type == "Credit"}.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount}
+
+        deb_activity = total_deb >= Money.new(0) ? nil : Money.new(-1 * total_deb).to_f
+        cred_activity = total_cred >= Money.new(0) ? total_cred.to_f : nil
+
+        # Account Object Normal Balance
+        if account_object.normal_balance == "Debit"
+          balance = (-1 * forward_balance) + filtered_items.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount }
+        else
+          balance = forward_balance + filtered_items.map(&:amount).inject(Money.new(0)) {|total, amount| total + amount }
+        end
+
+        neg_bal = balance >= Money.new(0) ? nil : Money.new(-1 * balance).to_f
+        pos_bal = balance >= Money.new(0) ? balance.to_f : nil
+
+        sheet.add_row [nil, nil, "Total Activity",nil, nil, deb_activity,  cred_activity],
+               style: [nil, nil,  bold_cell,      nil, nil, tota_currency, tota_currency]
+
+        sheet.add_row [nil, nil, "Ending Balance", nil, nil, neg_bal,       pos_bal],
+               style: [nil, nil,  bold_cell,       nil, nil, tota_currency, tota_currency]
+      end
+    end
+
+    # Resize Columns
+    sheet.column_info.first.width = 12
+    sheet.column_info[4].width = 20
+    sheet.column_info[5].width = 20
+  end
+end
