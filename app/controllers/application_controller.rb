@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
   def set_current_org
     # make sure to get subdomain if localhost
     subdomain_str = request.subdomain(/localhost/ =~ request.domain ? 0 : 1)
+    subdomain_str.gsub!(".staging", "")
     @current_org = if subdomain_str.present? && !subdomain_str.casecmp("www").zero?
                      Organization.find_by(subdomain: subdomain_str.downcase)
                    end
