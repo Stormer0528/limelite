@@ -5,7 +5,7 @@ class FilesController < ApplicationController
   end
 
   def new
-    authorize :file, :create?
+    authorize :file, :view?
     render layout: "application"
   end
 
