@@ -165,4 +165,22 @@ class Vendor < ApplicationRecord
   def display_name
     [name, visible_id].join(" - ")
   end
+
+
+  # Override authable concern
+  def auth_finished?(args)
+    return true unless current_auth
+
+    group = UserGroup.find(args[:user_group_id])
+    permission = group.module_permissions.dig(record_class)
+
+    return false unless args[:admin] || ["Owner", "Editor"].include?(permission)      
+
+    auth = current_auth || authorizations.new
+    auth_approve  user_id: args[:user_id],
+                  user_group_id: args[:user_group_id],
+                  reason: args[:reason]
+
+    true
+  end
 end
