@@ -191,4 +191,22 @@ class BankAccount::Item < ApplicationRecord
 
     entry.accounts.where.not(account_object_id: bank_account.account_object.id)
   end
+
+  # Override auth_finished? method for bank account items
+  #-----------------------------------------------------------------------------
+  def auth_finished?(args)
+    return true unless current_auth
+
+    group = UserGroup.find(args[:user_group_id])
+    permission = group.module_permissions.dig(record_class)
+
+    return false unless args[:admin] || ["Owner", "Editor"].include?(permission)      
+
+    auth = current_auth || authorizations.new
+    auth_approve  user_id: args[:user_id],
+                  user_group_id: args[:user_group_id],
+                  reason: args[:reason]
+
+    true
+  end
 end
