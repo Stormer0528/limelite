@@ -40,7 +40,7 @@ export function AuthGuard({ children }: Props) {
     }
 
     if (!authenticated) {
-      const signInPath = paths.auth.jwt.signIn;
+      const signInPath = paths.signIn;
 
       const href = `${signInPath}?${createQueryString('returnTo', pathname)}`;
 
