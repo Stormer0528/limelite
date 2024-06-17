@@ -19,7 +19,17 @@
     "re:build-npm": "npm run rm:all && npm install && npm run build",
     "dev:host": "vite --host"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "bash -c tsc --noEmit"
+    ],
+    "*.{md,json}": [
+      "prettier --write"
+    ]
+  },
   "dependencies": {
+    "@apollo/client": "^3.10.5",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -39,8 +49,13 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "framer-motion": "^11.2.10",
+    "graphql": "^16.8.2",
     "history": "^5.3.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
+    "qs": "^6.12.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
@@ -53,9 +68,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.3.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@types/autosuggest-highlight": "^3.2.3",
+    "@types/lodash": "^4.17.5",
     "@types/node": "^20.14.2",
     "@types/nprogress": "^0.2.3",
+    "@types/qs": "^6.9.15",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/stylis": "^4.2.6",
