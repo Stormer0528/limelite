@@ -12,7 +12,7 @@ export function Router() {
   return useRoutes([
     {
       path: '/',
-      element: <Navigate to={CONFIG.auth.redirectPath} replace />,
+      element: <Navigate to={CONFIG.redirectPath} replace />,
     },
 
     // Auth

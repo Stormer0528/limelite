@@ -23,7 +23,7 @@ export function GuestGuard({ children }: Props) {
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
-  const returnTo = searchParams.get('returnTo') || CONFIG.auth.redirectPath;
+  const returnTo = searchParams.get('returnTo') || CONFIG.redirectPath;
 
   const checkPermissions = async (): Promise<void> => {
     if (loading) {
