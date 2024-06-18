@@ -17,7 +17,8 @@
     "re:start": "yarn rm:all && yarn install && yarn dev",
     "re:build": "yarn rm:all && yarn install && yarn build",
     "re:build-npm": "npm run rm:all && npm install && npm run build",
-    "dev:host": "vite --host"
+    "compile": "graphql-codegen",
+    "watch": "graphql-codegen -w"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
