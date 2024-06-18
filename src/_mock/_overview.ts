@@ -1,6 +1,6 @@
 import { today } from 'src/utils/format-time';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG } from 'src/config';
 
 import { _mock } from './_mock';
 

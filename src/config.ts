@@ -11,6 +11,7 @@ export type ConfigValue = {
     basePath: string;
     version: string;
   };
+  API_URL: string;
   redirectPath: string;
 };
 
@@ -24,5 +25,6 @@ export const CONFIG: ConfigValue = {
     basePath: import.meta.env.VITE_BASE_PATH ?? '',
     version: packageJson.version,
   },
+  API_URL: import.meta.env.VITE_API_URL ?? '',
   redirectPath: paths.dashboard.root,
 };

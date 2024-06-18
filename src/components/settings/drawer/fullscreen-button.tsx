@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG } from 'src/config';
 
 import { SvgColor, svgColorClasses } from '../../svg-color';
 

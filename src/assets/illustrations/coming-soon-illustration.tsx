@@ -5,7 +5,7 @@ import { memo } from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG } from 'src/config';
 
 import { BackgroundShape } from './background-shape';
 

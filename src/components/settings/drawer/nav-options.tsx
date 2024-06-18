@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG } from 'src/config';
 import { varAlpha, stylesMode } from 'src/theme/styles';
 
 import { Block } from './styles';

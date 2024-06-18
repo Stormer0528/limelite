@@ -11,7 +11,7 @@ import { alpha as hexAlpha } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG } from 'src/config';
 import { varAlpha, bgGradient } from 'src/theme/styles';
 
 import { Label } from 'src/components/label';

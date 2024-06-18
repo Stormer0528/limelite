@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import { CONFIG } from 'src/config-global';
+import { CONFIG } from 'src/config';
 import { varAlpha, bgGradient } from 'src/theme/styles';
 
 // ----------------------------------------------------------------------
