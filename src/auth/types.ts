@@ -1,14 +1,9 @@
-export type UserType = Record<string, any> | null;
-
-export type AuthState = {
-  user: UserType;
-  loading: boolean;
-};
+import type { User } from 'src/__generated__/graphql';
 
 export type AuthContextValue = {
-  user: UserType;
+  user?: User | null;
   loading: boolean;
-  authenticated: boolean;
-  unauthenticated: boolean;
-  checkUserSession?: () => Promise<void>;
+  isAuthenticated: boolean;
+  signIn: (token: string) => void;
+  signOut: () => void;
 };

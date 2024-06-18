@@ -19,7 +19,7 @@ export function GuestGuard({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const { loading, authenticated } = useAuthContext();
+  const { loading, isAuthenticated } = useAuthContext();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
@@ -30,7 +30,7 @@ export function GuestGuard({ children }: Props) {
       return;
     }
 
-    if (authenticated) {
+    if (isAuthenticated) {
       router.replace(returnTo);
       return;
     }
@@ -41,7 +41,7 @@ export function GuestGuard({ children }: Props) {
   useEffect(() => {
     checkPermissions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated, loading]);
+  }, [isAuthenticated, loading]);
 
   if (isChecking) {
     return <SplashScreen />;

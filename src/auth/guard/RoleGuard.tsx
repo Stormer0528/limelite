@@ -11,7 +11,7 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
-export type RoleBasedGuardProp = {
+export type RoleGuardProp = {
   sx?: SxProps<Theme>;
   currentRole: string;
   hasContent?: boolean;
@@ -19,13 +19,7 @@ export type RoleBasedGuardProp = {
   children: React.ReactNode;
 };
 
-export function RoleBasedGuard({
-  sx,
-  children,
-  hasContent,
-  currentRole,
-  acceptRoles,
-}: RoleBasedGuardProp) {
+export function RoleGuard({ sx, children, hasContent, currentRole, acceptRoles }: RoleGuardProp) {
   if (typeof acceptRoles !== 'undefined' && !acceptRoles.includes(currentRole)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>

@@ -1,5 +1,5 @@
-export * from './auth-guard';
+export * from './AuthGuard';
 
-export * from './guest-guard';
+export * from './RoleGuard';
 
-export * from './role-based-guard';
+export * from './GuestGuard';

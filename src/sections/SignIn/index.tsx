@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -20,7 +19,8 @@ import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { signInWithPassword } from 'src/auth/context/jwt';
+
+import { useApollo } from './useApollo';
 
 // ----------------------------------------------------------------------
 
@@ -39,23 +39,16 @@ export const SignInSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function JwtSignInView() {
-  const router = useRouter();
-
-  const { checkUserSession } = useAuthContext();
+export function SignInView() {
+  const { signIn } = useAuthContext();
+  const { submitLogin } = useApollo();
 
   const [errorMsg, setErrorMsg] = useState('');
 
   const password = useBoolean();
 
-  const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: '@demo1',
-  };
-
   const methods = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
-    defaultValues,
   });
 
   const {
@@ -65,10 +58,9 @@ export function JwtSignInView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await signInWithPassword({ email: data.email, password: data.password });
-      await checkUserSession?.();
-
-      router.refresh();
+      const response = await submitLogin({ variables: { data } });
+      const token = response.data?.login.accessToken ?? '';
+      signIn(token);
     } catch (error) {
       console.error(error);
       setErrorMsg(error instanceof Error ? error.message : error);
@@ -131,12 +123,6 @@ export function JwtSignInView() {
   return (
     <>
       {renderHead}
-
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use <strong>{defaultValues.email}</strong>
-        {' with password '}
-        <strong>{defaultValues.password}</strong>
-      </Alert>
 
       {!!errorMsg && (
         <Alert severity="error" sx={{ mb: 3 }}>
