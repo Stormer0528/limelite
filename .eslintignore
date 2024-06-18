@@ -34,3 +34,6 @@ public/*
 
 # misc
 **/jsconfig.json
+
+# graphql
+src/__generated__/*
