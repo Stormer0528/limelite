@@ -11,8 +11,9 @@ export type ConfigValue = {
     basePath: string;
     version: string;
   };
-  API_URL: string;
+  SERVER_URL: string;
   redirectPath: string;
+  storageTokenKey: string;
 };
 
 // ----------------------------------------------------------------------
@@ -25,6 +26,7 @@ export const CONFIG: ConfigValue = {
     basePath: import.meta.env.VITE_BASE_PATH ?? '',
     version: packageJson.version,
   },
-  API_URL: import.meta.env.VITE_API_URL ?? '',
+  SERVER_URL: import.meta.env.VITE_SERVER_URL ?? '',
   redirectPath: paths.dashboard.root,
+  storageTokenKey: 'token',
 };

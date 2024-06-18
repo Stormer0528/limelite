@@ -5,12 +5,12 @@ import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from '@ap
 import { CONFIG } from 'src/config';
 
 const httpLink = createHttpLink({
-  uri: CONFIG.API_URL,
+  uri: CONFIG.SERVER_URL,
 });
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem(CONFIG.storageTokenKey);
   // return the headers to the context so httpLink can read them
   return {
     headers: {
