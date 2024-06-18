@@ -73,6 +73,7 @@
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.3.0",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@parcel/watcher": "^2.4.1",
     "@types/autosuggest-highlight": "^3.2.3",
     "@types/lodash": "^4.17.5",
     "@types/node": "^20.14.2",
