@@ -51,7 +51,17 @@ export default function UserTableRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+      <TableCell
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+          '&:hover': { bgcolor: (theme) => theme.vars.palette.action.hover },
+        }}
+        onClick={() => {
+          router.push(paths.dashboard.user.edit(id));
+        }}
+      >
         <Avatar alt={name} src={avatarUrl || undefined} sx={{ mr: 2 }} />
 
         <ListItemText
