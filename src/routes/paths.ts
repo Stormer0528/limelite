@@ -1,17 +1,15 @@
 // ----------------------------------------------------------------------
 
 const ROOTS = {
-  AUTH: '/auth',
+  SIGN_IN: '/sign-in',
   DASHBOARD: '/dashboard',
 };
 
 // ----------------------------------------------------------------------
 
 export const paths = {
-  faqs: '/faqs',
-  minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
   // AUTH
-  signIn: `/sign-in`,
+  signIn: ROOTS.SIGN_IN,
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
@@ -22,5 +20,18 @@ export const paths = {
       five: `${ROOTS.DASHBOARD}/group/five`,
       six: `${ROOTS.DASHBOARD}/group/six`,
     },
+
+    user: {
+      root: `${ROOTS.DASHBOARD}/users`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/users/${id}`,
+      new: `${ROOTS.DASHBOARD}/users/new`,
+    },
+    org: {
+      root: `${ROOTS.DASHBOARD}/organizations`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/organizations/${id}`,
+      editUserGroup: (id: string) => `${ROOTS.DASHBOARD}/organizations/${id}/user-group`,
+      new: `${ROOTS.DASHBOARD}/organizations/new`,
+    },
   },
+  notFound: '/404',
 };

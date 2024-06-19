@@ -8,8 +8,8 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ButtonBase from '@mui/material/ButtonBase';
 
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
+import { Label } from 'src/components/Label';
+import { Iconify } from 'src/components/Iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------

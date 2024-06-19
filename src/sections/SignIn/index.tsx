@@ -13,10 +13,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { RouterLink } from 'src/routes/components';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useBoolean } from 'src/hooks/useBoolean';
 
-import { Iconify } from 'src/components/iconify';
-import { Form, Field } from 'src/components/hook-form';
+import { Iconify } from 'src/components/Iconify';
+import { Form, Field } from 'src/components/Form';
 
 import { useAuthContext } from 'src/auth/hooks';
 

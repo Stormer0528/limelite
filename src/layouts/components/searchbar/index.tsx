@@ -16,14 +16,14 @@ import Dialog, { dialogClasses } from '@mui/material/Dialog';
 import { useRouter } from 'src/routes/hooks';
 import { isExternalLink } from 'src/routes/utils';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useBoolean } from 'src/hooks/useBoolean';
 import { useEventListener } from 'src/hooks/use-event-listener';
 
 import { varAlpha } from 'src/theme/styles';
 
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
-import { Scrollbar } from 'src/components/scrollbar';
+import { Label } from 'src/components/Label';
+import { Iconify } from 'src/components/Iconify';
+import { ScrollBar } from 'src/components/ScrollBar';
 import { SearchNotFound } from 'src/components/search-not-found';
 
 import { ResultItem } from './result-item';
@@ -182,7 +182,7 @@ export function Searchbar({ data: navItems = [], sx, ...other }: SearchbarProps)
         {notFound ? (
           <SearchNotFound query={searchQuery} sx={{ py: 15 }} />
         ) : (
-          <Scrollbar sx={{ px: 3, pb: 3, pt: 2, height: 400 }}>{renderItems()}</Scrollbar>
+          <ScrollBar sx={{ px: 3, pb: 3, pt: 2, height: 400 }}>{renderItems()}</ScrollBar>
         )}
       </Dialog>
     </>

@@ -8,7 +8,7 @@ import Drawer, { drawerClasses } from '@mui/material/Drawer';
 import { usePathname } from 'src/routes/hooks';
 
 import { Logo } from 'src/components/logo';
-import { Scrollbar } from 'src/components/scrollbar';
+import { ScrollBar } from 'src/components/ScrollBar';
 import { NavSectionVertical } from 'src/components/nav-section';
 
 // ----------------------------------------------------------------------
@@ -51,9 +51,9 @@ export function NavMobile({ data, open, onClose, slots, sx, ...other }: NavMobil
         </Box>
       )}
 
-      <Scrollbar fillContent>
+      <ScrollBar fillContent>
         <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
-      </Scrollbar>
+      </ScrollBar>
 
       {slots?.bottomArea}
     </Drawer>

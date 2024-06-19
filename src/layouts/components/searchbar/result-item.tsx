@@ -4,7 +4,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { varAlpha } from 'src/theme/styles';
 
-import { Label } from 'src/components/label';
+import { Label } from 'src/components/Label';
 
 // ----------------------------------------------------------------------
 

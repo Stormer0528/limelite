@@ -15,9 +15,9 @@ import { useRouter, usePathname } from 'src/routes/hooks';
 
 import { varAlpha } from 'src/theme/styles';
 
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
-import { Scrollbar } from 'src/components/scrollbar';
+import { Label } from 'src/components/Label';
+import { Iconify } from 'src/components/Iconify';
+import { ScrollBar } from 'src/components/ScrollBar';
 import { AnimateAvatar } from 'src/components/animate';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -104,7 +104,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
           <Iconify icon="mingcute:close-line" />
         </IconButton>
 
-        <Scrollbar>
+        <ScrollBar>
           <Stack alignItems="center" sx={{ pt: 8 }}>
             {renderAvatar}
 
@@ -156,7 +156,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
               );
             })}
           </Stack>
-        </Scrollbar>
+        </ScrollBar>
 
         <Box sx={{ p: 2.5 }}>
           <SignOutButton onClose={handleCloseDrawer} />

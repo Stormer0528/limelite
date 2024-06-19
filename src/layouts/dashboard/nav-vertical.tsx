@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import { varAlpha, hideScrollY } from 'src/theme/styles';
 
 import { Logo } from 'src/components/logo';
-import { Scrollbar } from 'src/components/scrollbar';
+import { ScrollBar } from 'src/components/ScrollBar';
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 
 import { NavToggleButton } from '../components/nav-toggle-button';
@@ -43,9 +43,9 @@ export function NavVertical({
         </Box>
       )}
 
-      <Scrollbar fillContent>
+      <ScrollBar fillContent>
         <NavSectionVertical data={data} sx={{ px: 2, flex: '1 1 auto' }} {...other} />
-      </Scrollbar>
+      </ScrollBar>
     </>
   );
 
