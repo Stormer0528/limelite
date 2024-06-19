@@ -15,6 +15,7 @@ import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/components/settings';
 
 import ApolloProvider from './ApolloProvider';
+import { DayjsProvider } from './DayjsProvider';
 
 // ----------------------------------------------------------------------
 
@@ -23,18 +24,20 @@ export default function App() {
 
   return (
     <ApolloProvider>
-      <AuthProvider>
-        <SettingsProvider settings={defaultSettings}>
-          <ThemeProvider>
-            <MotionLazy>
-              <SnackBar />
-              <ProgressBar />
-              <SettingsDrawer />
-              <Router />
-            </MotionLazy>
-          </ThemeProvider>
-        </SettingsProvider>
-      </AuthProvider>
+      <DayjsProvider>
+        <AuthProvider>
+          <SettingsProvider settings={defaultSettings}>
+            <ThemeProvider>
+              <MotionLazy>
+                <SnackBar />
+                <ProgressBar />
+                <SettingsDrawer />
+                <Router />
+              </MotionLazy>
+            </ThemeProvider>
+          </SettingsProvider>
+        </AuthProvider>
+      </DayjsProvider>
     </ApolloProvider>
   );
 }
