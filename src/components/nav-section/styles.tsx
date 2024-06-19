@@ -10,7 +10,7 @@ import { stylesMode } from 'src/theme/styles';
 
 import { navSectionClasses } from './classes';
 import { svgColorClasses } from '../svg-color';
-import { Iconify, iconifyClasses } from '../iconify';
+import { Iconify, iconifyClasses } from '../Iconify';
 
 // ----------------------------------------------------------------------
 

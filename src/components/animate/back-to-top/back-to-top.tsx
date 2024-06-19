@@ -5,7 +5,7 @@ import { useScroll, useMotionValueEvent } from 'framer-motion';
 
 import Fab from '@mui/material/Fab';
 
-import { Iconify } from 'src/components/iconify';
+import { Iconify } from 'src/components/Iconify';
 
 // ----------------------------------------------------------------------
 

@@ -12,10 +12,11 @@ import { paper, varAlpha } from 'src/theme/styles';
 import { defaultFont } from 'src/theme/core/typography';
 import PRIMARY_COLOR from 'src/theme/with-settings/primary-color.json';
 
-import { Iconify } from '../../iconify';
+import { Iconify } from 'src/components/Iconify';
+import { ScrollBar } from 'src/components/ScrollBar';
+
 import { BaseOption } from './base-option';
 import { NavOptions } from './nav-options';
-import { Scrollbar } from '../../scrollbar';
 import { FontOptions } from './font-options';
 import { useSettingsContext } from '../context';
 import { PresetsOptions } from './presets-options';
@@ -177,7 +178,7 @@ export function SettingsDrawer({
     >
       {renderHead}
 
-      <Scrollbar>
+      <ScrollBar>
         <Stack spacing={6} sx={{ px: 2.5, pb: 5 }}>
           <Box gap={2} display="grid" gridTemplateColumns="repeat(2, 1fr)">
             {!hideColorScheme && renderMode}
@@ -189,7 +190,7 @@ export function SettingsDrawer({
           {!hidePresets && renderPresets}
           {!hideFont && renderFont}
         </Stack>
-      </Scrollbar>
+      </ScrollBar>
     </Drawer>
   );
 }

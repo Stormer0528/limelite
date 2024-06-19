@@ -5,11 +5,11 @@ import Box from '@mui/material/Box';
 
 import { scrollbarClasses } from './classes';
 
-import type { ScrollbarProps } from './types';
+import type { ScrollBarProps } from './types';
 
 // ----------------------------------------------------------------------
 
-export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
+export const ScrollBar = forwardRef<HTMLDivElement, ScrollBarProps>(
   ({ slotProps, children, fillContent, naturalScroll, sx, ...other }, ref) => (
     <Box
       component={SimpleBar}

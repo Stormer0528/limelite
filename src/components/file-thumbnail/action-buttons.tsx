@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { bgBlur, varAlpha } from 'src/theme/styles';
 
-import { Iconify } from '../iconify';
+import { Iconify } from '../Iconify';
 
 // ----------------------------------------------------------------------
 

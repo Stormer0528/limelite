@@ -1,9 +1,9 @@
 import type { Theme, SxProps } from '@mui/material/styles';
-import type { Props as SimplebarProps } from 'simplebar-react';
+import type { Props as SimpleBarProps } from 'simplebar-react';
 
 // ----------------------------------------------------------------------
 
-export type ScrollbarProps = SimplebarProps & {
+export type ScrollBarProps = SimpleBarProps & {
   sx?: SxProps<Theme>;
   children?: React.ReactNode;
   fillContent?: boolean;

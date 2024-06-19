@@ -8,7 +8,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import { stylesMode } from 'src/theme/styles';
 
 import { useNavItem } from '../hooks';
-import { Iconify } from '../../iconify';
+import { Iconify } from '../../Iconify';
 import { navSectionClasses } from '../classes';
 import { stateClasses, sharedStyles } from '../styles';
 

@@ -1,9 +1,10 @@
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 
+import { ScrollBar } from 'src/components/ScrollBar';
+
 import { NavList } from './nav-list';
 import { NavUl, NavLi } from '../styles';
-import { Scrollbar } from '../../scrollbar';
 import { navSectionClasses } from '../classes';
 import { navSectionCssVars } from '../css-vars';
 
@@ -27,7 +28,7 @@ export function NavSectionHorizontal({
   };
 
   return (
-    <Scrollbar
+    <ScrollBar
       sx={{ height: 1 }}
       slotProps={{
         content: { height: 1, display: 'flex', alignItems: 'center' },
@@ -59,7 +60,7 @@ export function NavSectionHorizontal({
           ))}
         </NavUl>
       </Stack>
-    </Scrollbar>
+    </ScrollBar>
   );
 }
 

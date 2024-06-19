@@ -8,7 +8,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import { CONFIG } from 'src/config';
 import { varAlpha } from 'src/theme/styles';
 
-import { Iconify } from 'src/components/iconify';
+import { Iconify } from 'src/components/Iconify';
 
 import { SvgColor } from '../../svg-color';
 
