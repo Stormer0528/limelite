@@ -104,6 +104,26 @@ const FETCH_USERS_QUERY = gql(/* GraphQL */ `
         createdAt
         updatedAt
         deletedAt
+        userGroups {
+          id
+          name
+          permissions {
+            Account
+            ApprovalAmount
+            BankAccount
+            BatchUpload
+            CreditCard
+            Customer
+            Report
+            Vendor
+          }
+          organization {
+            id
+            name
+            slug
+            avatarUrl
+          }
+        }
       }
       total
     }

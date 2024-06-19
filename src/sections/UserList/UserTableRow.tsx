@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import AvatarGroup, { avatarGroupClasses } from '@mui/material/AvatarGroup';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -32,8 +33,18 @@ export default function UserTableRow({
 }: Props) {
   const router = useRouter();
 
-  const { id, name, avatarUrl, email, isSuperAdmin, isApUser, createdAt, updatedAt, deletedAt } =
-    row;
+  const {
+    id,
+    name,
+    avatarUrl,
+    email,
+    isSuperAdmin,
+    isApUser,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    userGroups,
+  } = row;
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -54,7 +65,31 @@ export default function UserTableRow({
         />
       </TableCell>
 
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>ABC Charter School</TableCell>
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+        <AvatarGroup
+          sx={{
+            [`& .${avatarGroupClasses.avatar}`]: {
+              width: 24,
+              height: 24,
+            },
+          }}
+          total={userGroups?.length}
+          max={6}
+        >
+          {userGroups?.slice(0, 6).map(
+            ({ organization }) =>
+              organization && (
+                <Tooltip title={organization.name}>
+                  <Avatar
+                    key={organization.id}
+                    alt={organization.name}
+                    src={organization.avatarUrl ?? undefined}
+                  />
+                </Tooltip>
+              )
+          )}
+        </AvatarGroup>
+      </TableCell>
 
       <TableCell sx={{ whiteSpace: 'nowrap' }}>
         {isSuperAdmin && (
