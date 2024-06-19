@@ -10,7 +10,7 @@ import { varAlpha } from 'src/theme/styles';
 
 import { Iconify } from 'src/components/Iconify';
 
-import { SvgColor } from '../../svg-color';
+import { SvgColor } from '../../SvgColor';
 
 // ----------------------------------------------------------------------
 

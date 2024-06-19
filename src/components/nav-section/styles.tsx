@@ -9,7 +9,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import { stylesMode } from 'src/theme/styles';
 
 import { navSectionClasses } from './classes';
-import { svgColorClasses } from '../svg-color';
+import { svgColorClasses } from '../SvgColor';
 import { Iconify, iconifyClasses } from '../Iconify';
 
 // ----------------------------------------------------------------------

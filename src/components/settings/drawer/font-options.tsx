@@ -5,7 +5,7 @@ import { CONFIG } from 'src/config';
 import { setFont, varAlpha, stylesMode } from 'src/theme/styles';
 
 import { Block } from './styles';
-import { SvgColor } from '../../svg-color';
+import { SvgColor } from '../../SvgColor';
 
 // ----------------------------------------------------------------------
 

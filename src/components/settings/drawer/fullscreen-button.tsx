@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { CONFIG } from 'src/config';
 
-import { SvgColor, svgColorClasses } from '../../svg-color';
+import { SvgColor, svgColorClasses } from '../../SvgColor';
 
 // ----------------------------------------------------------------------
 

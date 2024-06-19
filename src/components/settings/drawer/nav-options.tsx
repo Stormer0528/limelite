@@ -9,7 +9,7 @@ import { CONFIG } from 'src/config';
 import { varAlpha, stylesMode } from 'src/theme/styles';
 
 import { Block } from './styles';
-import { SvgColor, svgColorClasses } from '../../svg-color';
+import { SvgColor, svgColorClasses } from '../../SvgColor';
 
 import type { SettingsState } from '../types';
 
