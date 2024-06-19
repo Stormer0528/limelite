@@ -1,6 +1,6 @@
 export * from './useQuery';
 
-export * from './use-active-link';
+export * from './useActiveLink';
 
 export { useParams } from './use-params';
 
