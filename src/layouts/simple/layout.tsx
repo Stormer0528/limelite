@@ -1,7 +1,5 @@
 import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
-import Alert from '@mui/material/Alert';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { Main, CompactContent } from './main';
@@ -37,13 +35,6 @@ export function SimpleLayout({ sx, children, content }: SimpleLayoutProps) {
             searchbar: false,
             workspaces: false,
             menuButton: false,
-          }}
-          slots={{
-            topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                This is an info Alert.
-              </Alert>
-            ),
           }}
           slotProps={{ container: { maxWidth: false } }}
         />
