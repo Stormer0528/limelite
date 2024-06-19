@@ -1,5 +1,6 @@
 import type { Organization } from 'src/__generated__/graphql';
 
+import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
@@ -35,18 +36,27 @@ export default function CustomTableRow({ row, selected, onSelectRow }: Props) {
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar alt={name} src={avatarUrl || undefined} sx={{ mr: 2 }} />
-
-        <ListItemText
-          primary={name}
-          secondary={email}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          '&:hover': { bgcolor: (theme) => theme.vars.palette.action.hover },
+        }}
+        onClick={() => {
+          router.push(paths.dashboard.org.edit(id));
+        }}
+      >
+        <Box display="flex" alignItems="center">
+          <Avatar alt={name} src={avatarUrl || undefined} sx={{ mr: 2 }} />
+          <ListItemText
+            primary={name}
+            secondary={email}
+            primaryTypographyProps={{ typography: 'body2' }}
+            secondaryTypographyProps={{
+              component: 'span',
+              color: 'text.disabled',
+            }}
+          />
+        </Box>
       </TableCell>
 
       <TableCell sx={{ whiteSpace: 'nowrap' }}>{slug}</TableCell>
