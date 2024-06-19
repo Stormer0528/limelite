@@ -71,7 +71,7 @@ const MuiAvatar: Components<Theme>['MuiAvatar'] = {
               }
             : {
                 color: theme.vars.palette.text.secondary,
-                backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.24),
+                // backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.24),
               }),
         }),
       };
