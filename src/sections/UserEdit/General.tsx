@@ -274,10 +274,10 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
                   label={
                     <>
                       <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                        AP user
+                        AP User
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        AP user permission
+                        AP user can access to all organizations upload platform
                       </Typography>
                     </>
                   }
@@ -293,7 +293,7 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
                         Back Office User
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        AP user permission
+                        Back office user is a user from ICON school management
                       </Typography>
                     </>
                   }
@@ -309,7 +309,7 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
                         Email Verified
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Disabling this will automatically send the user a verification email
+                        Enabling this will NOT automatically send a verification email
                       </Typography>
                     </>
                   }
