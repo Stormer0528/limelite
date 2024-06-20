@@ -5,9 +5,12 @@ import { useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Button from '@mui/material/Button';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import { useBoolean } from 'src/hooks/useBoolean';
 
 import { gql } from 'src/__generated__/gql';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -19,6 +22,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 import UserGeneral from './General';
 import Organization from './Organization';
+import { UserGroupAssign } from './UserGroupAssign';
 
 // ----------------------------------------------------------------------
 
@@ -84,6 +88,8 @@ export default function OrganizationEditView() {
   const params = useParams();
   const router = useRouter();
 
+  const drawerState = useBoolean();
+
   const [fetchUserQuery, { loading, data, called }] = useLazyQuery(FETCH_USER);
 
   const { id: userId, tab: tabParam } = params;
@@ -122,6 +128,11 @@ export default function OrganizationEditView() {
           sx={{
             mb: { xs: 3, md: 5 },
           }}
+          action={
+            <Button variant="contained" onClick={drawerState.onTrue}>
+              Manage organizations
+            </Button>
+          }
         />
 
         <Tabs
@@ -157,8 +168,20 @@ export default function OrganizationEditView() {
         </Tabs>
 
         {tabParam === 'general' && <UserGeneral currentUser={user} refetchUser={fetchUser} />}
-        {tabParam === 'organizations' && <Organization userGroups={user.userGroups ?? []} />}
+        {tabParam === 'organizations' && (
+          <Organization currentUser={user} refetchUser={fetchUser} />
+        )}
       </DashboardContent>
+      <UserGroupAssign
+        open={drawerState.value}
+        userId={userId!}
+        assignedUserGroups={user.userGroups ?? []}
+        onSuccess={() => {
+          drawerState.onFalse();
+          fetchUser();
+        }}
+        onClose={drawerState.onFalse}
+      />
     </>
   );
 }

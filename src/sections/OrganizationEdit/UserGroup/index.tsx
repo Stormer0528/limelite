@@ -60,7 +60,7 @@ type Props = {
 };
 
 // ----------------------------------------------------------------------
-const createChartData = (userGroups: UserGroup[]): UserGroupWithChildren => {
+export const createUserGroupTree = (userGroups: UserGroup[]): UserGroupWithChildren => {
   const map: Record<string, UserGroupWithChildren> = {};
   const userGroupsToProcess: UserGroup[] = [];
   let result: UserGroupWithChildren = {} as UserGroupWithChildren;
@@ -109,7 +109,7 @@ export default function OrganizationUserGroup({ orgId }: Props) {
 
   const chartData = useMemo(() => {
     if (data?.userGroups) {
-      return createChartData(data.userGroups);
+      return createUserGroupTree(data.userGroups);
     }
     return {
       name: 'Admin',

@@ -1,4 +1,4 @@
-import type { UserGroup } from 'src/__generated__/graphql';
+import type { User, UserGroup } from 'src/__generated__/graphql';
 
 import { useState, useCallback } from 'react';
 
@@ -40,17 +40,18 @@ const TABLE_HEAD = [
 ];
 
 type Props = {
-  userGroups: UserGroup[];
+  currentUser: User;
+  refetchUser: () => void;
 };
 // ----------------------------------------------------------------------
 
-export default function UserListView({ userGroups }: Props) {
+export default function UserListView({ currentUser, refetchUser }: Props) {
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const [keyword, setKeyword] = useState('');
 
   const filteredUserGroups = applyFilter({
-    userGroups,
+    userGroups: currentUser.userGroups!,
     comparator: getComparator(table.order, table.orderBy),
     keyword,
   });
@@ -95,10 +96,8 @@ export default function UserListView({ userGroups }: Props) {
                 <TableRow
                   key={row.id}
                   row={row}
-                  selected={table.selected.includes(row.id)}
-                  onSelectRow={() => table.onSelectRow(row.id)}
-                  // onDeleteRow={() => handleDeleteRow(row.id)}
-                  // onEditRow={() => handleEditRow(row.id)}
+                  currentUserId={currentUser.id}
+                  refetchUser={refetchUser}
                 />
               ))}
 

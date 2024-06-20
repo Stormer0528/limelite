@@ -1,5 +1,6 @@
 import type { UserGroup } from 'src/__generated__/graphql';
 
+import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
@@ -12,38 +13,52 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fDate, fTime } from 'src/utils/format-time';
 
+import { toast } from 'src/components/SnackBar';
 import { Iconify } from 'src/components/Iconify';
+
+import { useUnassignUser } from './useApollo';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  selected: boolean;
   row: UserGroup;
-  onSelectRow: VoidFunction;
+  currentUserId: string;
+  refetchUser: () => void;
 };
 
-export default function CustomTableRow({ row, selected, onSelectRow }: Props) {
+export default function CustomTableRow({ row, currentUserId, refetchUser }: Props) {
   const router = useRouter();
+  const { unassignUser, loading } = useUnassignUser();
 
   const { name, permissions, organization, createdAt } = row;
   return (
-    <TableRow hover selected={selected}>
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar
-          alt={organization?.name}
-          src={organization?.avatarUrl || undefined}
-          sx={{ mr: 2 }}
-        />
+    <TableRow hover>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          '&:hover': { bgcolor: (theme) => theme.vars.palette.action.hover },
+        }}
+        onClick={() => {
+          router.push(paths.dashboard.org.edit(organization?.id!));
+        }}
+      >
+        <Box display="flex" alignItems="center">
+          <Avatar
+            alt={organization?.name}
+            src={organization?.avatarUrl || undefined}
+            sx={{ mr: 2 }}
+          />
 
-        <ListItemText
-          primary={organization?.name}
-          secondary={organization?.email}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
+          <ListItemText
+            primary={organization?.name}
+            secondary={organization?.email}
+            primaryTypographyProps={{ typography: 'body2' }}
+            secondaryTypographyProps={{
+              component: 'span',
+              color: 'text.disabled',
+            }}
+          />
+        </Box>
       </TableCell>
 
       <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
@@ -71,14 +86,17 @@ export default function CustomTableRow({ row, selected, onSelectRow }: Props) {
       </TableCell>
 
       <TableCell align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <Tooltip title="View" placement="top" arrow>
+        <Tooltip title="Remove" placement="top" arrow>
           <IconButton
-            color="default"
-            onClick={() => {
-              router.push(paths.dashboard.org.editUserGroup(organization!.id));
+            color="error"
+            disabled={loading}
+            onClick={async () => {
+              await unassignUser({ userId: currentUserId, userGroupId: row.id });
+              toast.success('Successfully removed');
+              refetchUser();
             }}
           >
-            <Iconify icon="solar:eye-bold" />
+            <Iconify icon={loading ? 'svg-spinners:ring-resize' : 'solar:trash-bin-trash-bold'} />
           </IconButton>
         </Tooltip>
       </TableCell>

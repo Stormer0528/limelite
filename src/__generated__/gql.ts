@@ -35,6 +35,8 @@ const documents = {
     "\n  mutation ResetPassword($data: EntityID!) {\n    resetPassword(data: $data) {\n      success\n    }\n  }\n": types.ResetPasswordDocument,
     "\n  mutation DeactivateUser($data: EntityID!) {\n    deactivateUser(data: $data) {\n      success\n    }\n  }\n": types.DeactivateUserDocument,
     "\n  mutation ActivateUser($data: EntityID!) {\n    activateUser(data: $data) {\n      success\n    }\n  }\n": types.ActivateUserDocument,
+    "\n  query SearchOrganizations($filter: JSONObject, $page: String, $sort: String) {\n    organizations(filter: $filter, page: $page, sort: $sort) {\n      organizations {\n        id\n        name\n        slug\n      }\n      total\n    }\n  }\n": types.SearchOrganizationsDocument,
+    "\n  mutation ManageUserGroups($data: ManageUserGroupsInput!) {\n    manageUserGroups(data: $data) {\n      success\n    }\n  }\n": types.ManageUserGroupsDocument,
     "\n  query FetchUser($filter: JSONObject) {\n    users(filter: $filter) {\n      users {\n        id\n        name\n        email\n        avatarUrl\n        isSuperAdmin\n        isApUser\n        isBackOfficeUser\n        isEmailVerified\n        deletedAt\n        userGroups {\n          id\n          name\n          createdAt\n          permissions {\n            Account\n            ApprovalAmount\n            BankAccount\n            BatchUpload\n            CreditCard\n            Customer\n            Report\n            Vendor\n          }\n          organization {\n            id\n            name\n            slug\n            email\n            avatarUrl\n          }\n        }\n      }\n    }\n  }\n": types.FetchUserDocument,
     "\n  query FetchUserStats(\n    $adminFilter: JSONObject\n    $apFilter: JSONObject\n    $inactiveFilter: JSONObject\n  ) {\n    all: users {\n      total\n    }\n    admin: users(filter: $adminFilter) {\n      total\n    }\n    ap: users(filter: $apFilter) {\n      total\n    }\n    inactive: users(filter: $inactiveFilter) {\n      total\n    }\n  }\n": types.FetchUserStatsDocument,
     "\n  query FetchUsers($page: String, $filter: JSONObject, $sort: String) {\n    users(page: $page, filter: $filter, sort: $sort) {\n      users {\n        id\n        name\n        email\n        avatarUrl\n        isSuperAdmin\n        isApUser\n        createdAt\n        updatedAt\n        deletedAt\n        userGroups {\n          id\n          name\n          permissions {\n            Account\n            ApprovalAmount\n            BankAccount\n            BatchUpload\n            CreditCard\n            Customer\n            Report\n            Vendor\n          }\n          organization {\n            id\n            name\n            slug\n            avatarUrl\n          }\n        }\n      }\n      total\n    }\n  }\n": types.FetchUsersDocument,
@@ -142,6 +144,14 @@ export function gql(source: "\n  mutation DeactivateUser($data: EntityID!) {\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation ActivateUser($data: EntityID!) {\n    activateUser(data: $data) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation ActivateUser($data: EntityID!) {\n    activateUser(data: $data) {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query SearchOrganizations($filter: JSONObject, $page: String, $sort: String) {\n    organizations(filter: $filter, page: $page, sort: $sort) {\n      organizations {\n        id\n        name\n        slug\n      }\n      total\n    }\n  }\n"): (typeof documents)["\n  query SearchOrganizations($filter: JSONObject, $page: String, $sort: String) {\n    organizations(filter: $filter, page: $page, sort: $sort) {\n      organizations {\n        id\n        name\n        slug\n      }\n      total\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ManageUserGroups($data: ManageUserGroupsInput!) {\n    manageUserGroups(data: $data) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation ManageUserGroups($data: ManageUserGroupsInput!) {\n    manageUserGroups(data: $data) {\n      success\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
