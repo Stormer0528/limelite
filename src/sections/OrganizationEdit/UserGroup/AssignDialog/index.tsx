@@ -32,7 +32,8 @@ const FETCH_USERGROUP_USERS = gql(/* GraphQL */ `
         name
         email
         avatarUrl
-        status
+        userGroupId
+        userGroupName
       }
       total
     }

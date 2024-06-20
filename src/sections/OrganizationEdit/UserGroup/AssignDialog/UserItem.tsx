@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client';
 
 import Avatar from '@mui/material/Avatar';
 import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -31,7 +32,10 @@ type Props = {
 
 export default function UserItem({ userGroupId, user }: Props) {
   const [assignUser, { data, loading }] = useMutation(ASSIGN_USER);
-  const isAssigned = useMemo(() => data?.assignUser.success ?? user.status === 1, [user, data]);
+  const isAssigned = useMemo(
+    () => data?.assignUser.success ?? user.userGroupId === userGroupId,
+    [user, userGroupId, data]
+  );
   return (
     <ListItem
       disableGutters
@@ -42,7 +46,6 @@ export default function UserItem({ userGroupId, user }: Props) {
           }}
           loading={loading}
           size="small"
-          disabled={user.status === -1}
           color={isAssigned ? 'primary' : 'inherit'}
           startIcon={
             <Iconify
@@ -67,7 +70,14 @@ export default function UserItem({ userGroupId, user }: Props) {
           sx: { mb: 0.25 },
         }}
         secondaryTypographyProps={{ typography: 'caption' }}
-        primary={user.name}
+        primary={
+          <>
+            {user.name}
+            {user.userGroupId && user.userGroupId !== userGroupId && (
+              <Typography variant="caption"> ({user.userGroupName})</Typography>
+            )}
+          </>
+        }
         secondary={user.email}
       />
     </ListItem>
