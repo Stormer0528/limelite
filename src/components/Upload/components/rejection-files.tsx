@@ -8,7 +8,7 @@ import { fData } from 'src/utils/formatNumber';
 
 import { varAlpha } from 'src/theme/styles';
 
-import { fileData } from '../../file-thumbnail';
+import { fileData } from '../../FileThumbnail';
 
 // ----------------------------------------------------------------------
 

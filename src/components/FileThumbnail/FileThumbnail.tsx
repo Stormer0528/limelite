@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { fileThumbnailClasses } from './classes';
 import { fileData, fileThumb, fileFormat } from './utils';
-import { RemoveButton, DownloadButton } from './action-buttons';
+import { RemoveButton, DownloadButton } from './ActionButtons';
 
 import type { FileThumbnailProps } from './types';
 

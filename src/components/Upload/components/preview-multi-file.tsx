@@ -8,7 +8,7 @@ import { varAlpha } from 'src/theme/styles';
 
 import { Iconify } from 'src/components/Iconify';
 
-import { fileData, FileThumbnail } from '../../file-thumbnail';
+import { fileData, FileThumbnail } from '../../FileThumbnail';
 
 import type { MultiFilePreviewProps } from '../types';
 

@@ -74,43 +74,43 @@ export function fileThumb(fileUrl: string) {
 
   switch (fileFormat(fileUrl)) {
     case 'folder':
-      thumb = iconUrl('ic-folder');
+      thumb = iconUrl('ic_folder');
       break;
     case 'txt':
-      thumb = iconUrl('ic-txt');
+      thumb = iconUrl('ic_txt');
       break;
     case 'zip':
-      thumb = iconUrl('ic-zip');
+      thumb = iconUrl('ic_zip');
       break;
     case 'audio':
-      thumb = iconUrl('ic-audio');
+      thumb = iconUrl('ic_audio');
       break;
     case 'video':
-      thumb = iconUrl('ic-video');
+      thumb = iconUrl('ic_video');
       break;
     case 'word':
-      thumb = iconUrl('ic-word');
+      thumb = iconUrl('ic_word');
       break;
     case 'excel':
-      thumb = iconUrl('ic-excel');
+      thumb = iconUrl('ic_excel');
       break;
     case 'powerpoint':
-      thumb = iconUrl('ic-power_point');
+      thumb = iconUrl('ic_power_point');
       break;
     case 'pdf':
-      thumb = iconUrl('ic-pdf');
+      thumb = iconUrl('ic_pdf');
       break;
     case 'photoshop':
-      thumb = iconUrl('ic-pts');
+      thumb = iconUrl('ic_pts');
       break;
     case 'illustrator':
-      thumb = iconUrl('ic-ai');
+      thumb = iconUrl('ic_ai');
       break;
     case 'image':
-      thumb = iconUrl('ic-img');
+      thumb = iconUrl('ic_img');
       break;
     default:
-      thumb = iconUrl('ic-file');
+      thumb = iconUrl('ic_file');
   }
   return thumb;
 }
