@@ -52,6 +52,7 @@ class Report::VendorReport < ApplicationRecord
           AND entries.organization_id = ?
           AND entries.date BETWEEN ? AND ?
           AND account_funds.code in (?)
+          AND vendors.aasm_state = 'approved'
           GROUP BY account_funds.code, vendors.id
           ORDER BY account_funds.code, vendor_name, vendor_number ASC".freeze
 
@@ -82,6 +83,9 @@ class Report::VendorReport < ApplicationRecord
 
     data[:fund_code] = funds.join(', ')
     data[:funds] = funds
+
+    puts 'HERE'
+    puts funds.inspect
 
     should_continue = false
     data[:vendors] = get_vendors.map do |vendor|
