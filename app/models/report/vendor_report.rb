@@ -105,7 +105,7 @@ class Report::VendorReport < ApplicationRecord
         phone = record&.work_phone&.number
       end
 
-      vendor.merge(amount: Money.new(vendor["amount_in_cents"]).format, address: address.attributes, phone: phone)
+      vendor.merge(amount: Money.new(vendor["amount_in_cents"]).format, address: address.try(:attributes) || {}, phone: phone)
     end
 
     save
