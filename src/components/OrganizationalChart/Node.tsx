@@ -112,7 +112,7 @@ export default function StandardNode({ node, onEdit, onRemove, onAdd, onAssign }
             (user) =>
               user && (
                 <Tooltip title={user.name} key={user.id}>
-                  <Avatar alt={user.name} src={user.avatarUrl || undefined} />
+                  <Avatar alt={user.name} src={user.avatar?.url ?? undefined} />
                 </Tooltip>
               )
           )}

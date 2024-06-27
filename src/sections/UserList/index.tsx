@@ -98,7 +98,9 @@ const FETCH_USERS_QUERY = gql(/* GraphQL */ `
         id
         name
         email
-        avatarUrl
+        avatar {
+          url
+        }
         isSuperAdmin
         isApUser
         createdAt
@@ -121,7 +123,9 @@ const FETCH_USERS_QUERY = gql(/* GraphQL */ `
             id
             name
             slug
-            avatarUrl
+            avatar {
+              url
+            }
           }
         }
       }

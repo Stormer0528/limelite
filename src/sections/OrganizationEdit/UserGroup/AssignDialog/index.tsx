@@ -31,7 +31,9 @@ const FETCH_USERGROUP_USERS = gql(/* GraphQL */ `
         id
         name
         email
-        avatarUrl
+        avatar {
+          url
+        }
         userGroupId
         userGroupName
       }

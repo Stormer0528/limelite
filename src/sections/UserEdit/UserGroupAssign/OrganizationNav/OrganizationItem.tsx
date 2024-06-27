@@ -30,7 +30,7 @@ export function OrganizationItem({ organization, selected, assigned, sx, ...othe
         }}
         {...other}
       >
-        <Avatar alt={organization.name} src={organization.avatarUrl ?? ''}>
+        <Avatar alt={organization.name} src={organization.avatar?.url ?? undefined}>
           {organization.name.charAt(0).toUpperCase()}
         </Avatar>
 

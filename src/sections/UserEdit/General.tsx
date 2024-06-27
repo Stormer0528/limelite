@@ -1,9 +1,9 @@
 import type { User } from 'src/__generated__/graphql';
 
 import { z as zod } from 'zod';
-import { useCallback } from 'react';
 import isEqual from 'lodash/isEqual';
 import { useForm } from 'react-hook-form';
+import { useMemo, useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ApolloError, useMutation } from '@apollo/client';
 
@@ -19,6 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useBoolean } from 'src/hooks/useBoolean';
 
 import { fDateTime } from 'src/utils/format-time';
+import { uploadFile } from 'src/utils/uploadFile';
 
 import { gql } from 'src/__generated__/gql';
 
@@ -42,7 +43,9 @@ const UPDATE_USER = gql(/* GraphQL */ `
       id
       name
       email
-      avatarUrl
+      avatar {
+        url
+      }
       isApUser
       isBackOfficeUser
       isEmailVerified
@@ -83,7 +86,7 @@ const UserGeneralSchema = zod.object({
   email: zod
     .string({ required_error: 'Email is required' })
     .email({ message: 'Invalid email address is provided' }),
-  avatarUrl: zod.string().nullable(),
+  avatarUrl: zod.custom<File | string>().nullable().optional(),
   isSuperAdmin: zod.boolean().nullable(),
   isApUser: zod.boolean().nullable(),
   isBackOfficeUser: zod.boolean().nullable(),
@@ -99,23 +102,43 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
   const [deactivateUserMutation, { loading: isDeactivating }] = useMutation(DEACTIVATE_USER);
   const [activateUserMutation, { loading: isActivating }] = useMutation(ACTIVATE_USER);
 
-  const methods = useForm({
+  const defaultValues = useMemo(() => {
+    const { data } = UserGeneralSchema.safeParse(currentUser);
+    return data
+      ? { ...data, avatarUrl: currentUser.avatar?.url || null }
+      : ({} as UserGeneralSchemaType);
+  }, [currentUser]);
+
+  const methods = useForm<UserGeneralSchemaType>({
     resolver: zodResolver(UserGeneralSchema),
-    defaultValues: currentUser,
+    defaultValues,
   });
 
   const { setError, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (newUser) => {
     try {
-      if (isEqual(newUser, currentUser)) {
+      if (isEqual(newUser, defaultValues)) {
         toast.warning('No changes to save');
         return;
       }
 
-      // Need to strip fields
-      // const data = await userSchema.validate(newUser, { stripUnknown: true });
-      await submit({ variables: { data: { ...newUser, id: currentUser.id } } });
+      let newAvatarFileId;
+      if ((newUser.avatarUrl as unknown) instanceof File) {
+        const uploadRes = await uploadFile(newUser.avatarUrl as unknown as File);
+        newAvatarFileId = uploadRes.file.id;
+        delete newUser.avatarUrl;
+      }
+
+      await submit({
+        variables: {
+          data: {
+            ...newUser,
+            id: currentUser.id,
+            avatarFileId: newAvatarFileId,
+          },
+        },
+      });
       toast.success('Update success!');
     } catch (err) {
       if (err instanceof ApolloError) {
@@ -173,7 +196,7 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
                 </Tooltip>
               )}
               <Box sx={{ mb: 5 }}>
-                <Field.SelectAvatar
+                <Field.UploadAvatar
                   name="avatarUrl"
                   helperText={
                     <Typography

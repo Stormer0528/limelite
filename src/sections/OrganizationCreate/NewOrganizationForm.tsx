@@ -1,5 +1,3 @@
-import type { CreateOrganizationInput } from 'src/__generated__/graphql';
-
 import { z as zod } from 'zod';
 import { useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,17 +17,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { uploadFile } from 'src/utils/uploadFile';
+
 import { gql } from 'src/__generated__/gql';
 
 import { toast } from 'src/components/SnackBar';
 import { Iconify } from 'src/components/Iconify';
 import { Form, Field } from 'src/components/Form';
-
-// ----------------------------------------------------------------------
-
-type Props = {
-  currentOrg?: CreateOrganizationInput;
-};
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +50,7 @@ const NewOrganizationSchema = zod.object({
   phone: zod.string().nullable(),
   description: zod.string().nullable(),
   // TODO: Avatar url is nullable
-  avatarUrl: zod.string().nullable(),
+  avatarUrl: zod.custom<File | string>().nullable(),
   addresses: zod
     .object({
       line1: zod.string({ required_error: 'Line1 is required' }),
@@ -67,20 +61,19 @@ const NewOrganizationSchema = zod.object({
     .array(),
 });
 
-export default function NewOrganizationForm({ currentOrg }: Props) {
+export default function NewOrganizationForm() {
   const router = useRouter();
 
   const defaultValues = useMemo(
     () => ({
-      name: currentOrg?.name || '',
-      slug: currentOrg?.slug || '',
-      email: currentOrg?.email || '',
-      phone: currentOrg?.phone || '',
-      description: currentOrg?.description || '',
-      avatarUrl: currentOrg?.avatarUrl || '',
-      addresses: currentOrg?.addresses || [{ line1: '', city: '', state: '', zip: '' }],
+      name: '',
+      slug: '',
+      email: '',
+      phone: '',
+      description: '',
+      addresses: [{ line1: '', city: '', state: '', zip: '' }],
     }),
-    [currentOrg]
+    []
   );
 
   const [submit, { loading }] = useMutation(CREATE_ORGANIZATION);
@@ -102,11 +95,16 @@ export default function NewOrganizationForm({ currentOrg }: Props) {
   const { reset, setError, handleSubmit } = methods;
 
   // TODO: Move to wrong validated field when validation field and tries to submit the form
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async ({ avatarUrl, ...data }) => {
     try {
-      await submit({ variables: { data } });
+      let newAvatarFileId;
+      if ((avatarUrl as unknown) instanceof File) {
+        const uploadRes = await uploadFile(avatarUrl as unknown as File);
+        newAvatarFileId = uploadRes.file.id;
+      }
+      await submit({ variables: { data: { ...data, avatarFileId: newAvatarFileId } } });
       reset();
-      toast.success(currentOrg ? 'Update success!' : 'Create success!');
+      toast.success('Create success!');
       router.push(paths.dashboard.org.root);
     } catch (err) {
       if (err instanceof ApolloError) {
@@ -254,7 +252,7 @@ export default function NewOrganizationForm({ currentOrg }: Props) {
           </Card>
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
             <LoadingButton type="submit" variant="contained" loading={loading}>
-              {!currentOrg ? 'Create Organization' : 'Save Changes'}
+              Create Organization
             </LoadingButton>
           </Stack>
         </Grid>

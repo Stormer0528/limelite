@@ -1,6 +1,7 @@
-import type { UpdateOrganizationInput } from 'src/__generated__/graphql';
+import type { Organization } from 'src/__generated__/graphql';
 
 import { z as zod } from 'zod';
+import { useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,6 +15,9 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { allowEmptyString } from 'src/utils/zod';
+import { uploadFile } from 'src/utils/uploadFile';
+
 import { gql } from 'src/__generated__/gql';
 
 import { toast } from 'src/components/SnackBar';
@@ -23,7 +27,7 @@ import { Form, Field } from 'src/components/Form';
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentOrg: UpdateOrganizationInput;
+  currentOrg: Organization;
 };
 
 // ----------------------------------------------------------------------
@@ -48,32 +52,48 @@ const OrganizationGeneralSchema = zod.object({
   name: zod.string({ required_error: 'Name is required' }),
   slug: zod.string({ required_error: 'Slug is required' }),
   // TODO: Backend throws error when receive empty string for email
-  email: zod.string().email({ message: 'Invalid email address is provided' }).nullable(),
-  phone: zod.string().nullable(),
-  description: zod.string().nullable(),
-  avatarUrl: zod.string().nullable(),
+  email: allowEmptyString(
+    zod.string().email({ message: 'Invalid email address is provided' }).nullish()
+  ),
+  phone: allowEmptyString(),
+  description: allowEmptyString(),
+  avatarUrl: zod.custom<File | string>().nullish(),
 });
 
-export default function OrganizationGeneral({ currentOrg }: Props) {
+export default function OrganizationGeneral({ currentOrg: { avatar, ...currentOrg } }: Props) {
   const [submit, { loading }] = useMutation(UPDATE_ORGANIZATION);
+
+  const defaultValues = useMemo(() => {
+    const { data } = OrganizationGeneralSchema.safeParse(currentOrg);
+    return data
+      ? { ...data, avatarUrl: avatar?.url || null }
+      : ({} as OrganizationGeneralSchemaType);
+  }, [currentOrg, avatar]);
 
   const methods = useForm<OrganizationGeneralSchemaType>({
     resolver: zodResolver(OrganizationGeneralSchema),
-    defaultValues: currentOrg,
+    defaultValues,
   });
 
-  const { reset, setError, handleSubmit } = methods;
+  const { setError, handleSubmit } = methods;
 
   // TODO: Move to wrong validated field when validation field and tries to submit the form
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async ({ avatarUrl, ...data }) => {
     try {
-      if (isEqual(data, currentOrg)) {
-        toast.info('No changes to save');
+      if (isEqual({ ...data, avatarUrl }, defaultValues)) {
+        toast.warning('No changes to save');
         return;
       }
 
-      await submit({ variables: { data: { ...data, id: currentOrg.id } } });
-      reset();
+      let newAvatarFileId;
+      if ((avatarUrl as unknown) instanceof File) {
+        const uploadRes = await uploadFile(avatarUrl as unknown as File);
+        newAvatarFileId = uploadRes.file.id;
+      }
+
+      await submit({
+        variables: { data: { ...data, id: currentOrg.id, avatarFileId: newAvatarFileId } },
+      });
       toast.success('Update success!');
     } catch (err) {
       if (err instanceof ApolloError) {
@@ -96,7 +116,7 @@ export default function OrganizationGeneral({ currentOrg }: Props) {
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             <Box sx={{ mb: 5 }}>
-              <Field.SelectAvatar
+              <Field.UploadAvatar
                 name="avatarUrl"
                 helperText={
                   <Typography

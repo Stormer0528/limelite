@@ -36,7 +36,7 @@ export default function UserTableRow({
   const {
     id,
     name,
-    avatarUrl,
+    avatar,
     email,
     isSuperAdmin,
     isApUser,
@@ -62,7 +62,7 @@ export default function UserTableRow({
           router.push(paths.dashboard.user.edit(id));
         }}
       >
-        <Avatar alt={name} src={avatarUrl || undefined} sx={{ mr: 2 }} />
+        <Avatar alt={name} src={avatar?.url ?? undefined} sx={{ mr: 2 }} />
 
         <ListItemText
           primary={name}
@@ -93,7 +93,7 @@ export default function UserTableRow({
                   <Avatar
                     key={organization.id}
                     alt={organization.name}
-                    src={organization.avatarUrl ?? undefined}
+                    src={organization.avatar?.url ?? undefined}
                   />
                 </Tooltip>
               )

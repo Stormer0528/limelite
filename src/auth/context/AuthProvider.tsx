@@ -25,7 +25,9 @@ const FETCH_ME_QUERY = gql(/* GraphQL */ `
       id
       name
       email
-      avatarUrl
+      avatar {
+        url
+      }
     }
   }
 `);

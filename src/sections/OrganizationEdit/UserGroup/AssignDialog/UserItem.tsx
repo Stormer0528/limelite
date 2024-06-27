@@ -61,7 +61,7 @@ export default function UserItem({ userGroupId, user }: Props) {
       sx={{ height: 64 }}
     >
       <ListItemAvatar>
-        <Avatar src={user.avatarUrl || undefined} />
+        <Avatar src={user.avatar?.url ?? undefined} />
       </ListItemAvatar>
 
       <ListItemText

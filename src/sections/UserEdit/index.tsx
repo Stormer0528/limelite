@@ -47,7 +47,9 @@ const FETCH_USER = gql(/* GraphQL */ `
         id
         name
         email
-        avatarUrl
+        avatar {
+          url
+        }
         isSuperAdmin
         isApUser
         isBackOfficeUser
@@ -72,7 +74,9 @@ const FETCH_USER = gql(/* GraphQL */ `
             name
             slug
             email
-            avatarUrl
+            avatar {
+              url
+            }
           }
         }
       }

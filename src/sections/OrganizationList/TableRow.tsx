@@ -29,7 +29,7 @@ type Props = {
 export default function CustomTableRow({ row, selected, onSelectRow }: Props) {
   const router = useRouter();
 
-  const { id, name, slug, avatarUrl, email, phone, users, createdAt, updatedAt, deletedAt } = row;
+  const { id, name, slug, avatar, email, phone, users, createdAt, updatedAt, deletedAt } = row;
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -46,7 +46,7 @@ export default function CustomTableRow({ row, selected, onSelectRow }: Props) {
         }}
       >
         <Box display="flex" alignItems="center">
-          <Avatar alt={name} src={avatarUrl || undefined} sx={{ mr: 2 }} />
+          <Avatar alt={name} src={avatar?.url ?? undefined} sx={{ mr: 2 }} />
           <ListItemText
             primary={name}
             secondary={email}
@@ -78,7 +78,7 @@ export default function CustomTableRow({ row, selected, onSelectRow }: Props) {
             (user) =>
               user && (
                 <Tooltip title={user.name}>
-                  <Avatar key={user.id} alt={user.name} src={user.avatarUrl || undefined} />
+                  <Avatar key={user.id} alt={user.name} src={user.avatar?.url ?? undefined} />
                 </Tooltip>
               )
           )}

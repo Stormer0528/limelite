@@ -62,7 +62,9 @@ const FETCH_ORGANIZATION = gql(/* GraphQL */ `
         description
         email
         phone
-        avatarUrl
+        avatar {
+          url
+        }
         createdAt
         updatedAt
         deletedAt

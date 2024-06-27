@@ -45,7 +45,7 @@ export default function CustomTableRow({ row, currentUserId, refetchUser }: Prop
         <Box display="flex" alignItems="center">
           <Avatar
             alt={organization?.name}
-            src={organization?.avatarUrl || undefined}
+            src={organization?.avatar?.url ?? undefined}
             sx={{ mr: 2 }}
           />
 

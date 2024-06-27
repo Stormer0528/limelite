@@ -97,7 +97,9 @@ const FETCH_ORGANIZATIONS = gql(/* GraphQL */ `
         description
         email
         phone
-        avatarUrl
+        avatar {
+          url
+        }
         createdAt
         updatedAt
         deletedAt
@@ -105,7 +107,9 @@ const FETCH_ORGANIZATIONS = gql(/* GraphQL */ `
           id
           name
           email
-          avatarUrl
+          avatar {
+            url
+          }
         }
       }
       total

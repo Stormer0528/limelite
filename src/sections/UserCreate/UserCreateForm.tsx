@@ -14,6 +14,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { uploadFile } from 'src/utils/uploadFile';
+
 import { gql } from 'src/__generated__/gql';
 
 import { toast } from 'src/components/SnackBar';
@@ -27,7 +29,9 @@ const CREATE_USER = gql(/* GraphQL */ `
       id
       name
       email
-      avatarUrl
+      avatar {
+        url
+      }
       isSuperAdmin
       isApUser
       isBackOfficeUser
@@ -45,7 +49,7 @@ const NewUserSchema = zod.object({
   email: zod
     .string({ required_error: 'Email is required' })
     .email({ message: 'Invalid email address is provided' }),
-  avatarUrl: zod.string().nullable(),
+  avatarUrl: zod.custom<File | string>().nullable(),
   isSuperAdmin: zod.boolean().nullable(),
   isApUser: zod.boolean().nullable(),
   isBackOfficeUser: zod.boolean().nullable(),
@@ -59,7 +63,7 @@ export default function UserCreateForm() {
     () => ({
       name: '',
       email: '',
-      avatarUrl: '',
+      avatarUrl: null,
       isSuperAdmin: false,
       isApUser: false,
       isBackOfficeUser: false,
@@ -70,16 +74,22 @@ export default function UserCreateForm() {
 
   const [submit, { loading }] = useMutation(CREATE_USER);
 
-  const methods = useForm({
+  const methods = useForm<NewUserSchemaType>({
     resolver: zodResolver(NewUserSchema),
     defaultValues,
   });
 
   const { reset, setError, handleSubmit } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async ({ avatarUrl, ...data }) => {
     try {
-      await submit({ variables: { data } });
+      let newAvatarFileId;
+      if ((avatarUrl as unknown) instanceof File) {
+        const uploadRes = await uploadFile(avatarUrl as unknown as File);
+        newAvatarFileId = uploadRes.file.id;
+      }
+
+      await submit({ variables: { data: { ...data, avatarFileId: newAvatarFileId } } });
       reset();
       toast.success('Create success!');
       router.push(paths.dashboard.user.root);
@@ -101,8 +111,8 @@ export default function UserCreateForm() {
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             <Box sx={{ mb: 5 }}>
-              <Field.SelectAvatar
-                name="avatarUrl"
+              <Field.UploadAvatar
+                name="avatar"
                 helperText={
                   <Typography
                     variant="caption"
@@ -199,7 +209,7 @@ export default function UserCreateForm() {
                       Email Verified
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Disabling this will automatically send the user a verification email
+                      Enabling this will NOT automatically send a verification email
                     </Typography>
                   </>
                 }
