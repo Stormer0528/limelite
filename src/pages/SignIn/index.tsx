@@ -6,7 +6,7 @@ import { SignInView } from 'src/sections/SignIn';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Sign in | Jwt - ${CONFIG.site.name}` };
+const metadata = { title: `${CONFIG.site.name} - Sign in` };
 
 export default function Page() {
   return (

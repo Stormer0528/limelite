@@ -12,6 +12,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/useBoolean';
 
+import { CONFIG } from 'src/config';
 import { gql } from 'src/__generated__/gql';
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -123,7 +124,7 @@ export default function OrganizationEditView() {
   return (
     <>
       <Helmet>
-        <title>{`Limelite: ${user.name}`}</title>
+        <title>{`${CONFIG.site.name}: ${user.name}`}</title>
       </Helmet>
       <DashboardContent>
         <Breadcrumbs

@@ -9,6 +9,7 @@ import Tabs from '@mui/material/Tabs';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { CONFIG } from 'src/config';
 import { gql } from 'src/__generated__/gql';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { AddressableType } from 'src/__generated__/graphql';
@@ -106,7 +107,7 @@ export default function OrganizationEditView() {
   return (
     <>
       <Helmet>
-        <title>{`Limelite: ${organization.name}`}</title>
+        <title>{`${CONFIG.site.name} - ${organization.name}`}</title>
       </Helmet>
       <DashboardContent>
         <Breadcrumbs
