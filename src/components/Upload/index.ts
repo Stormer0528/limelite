@@ -4,7 +4,7 @@ export type * from './types';
 
 export * from './upload-box';
 
-export * from './upload-avatar';
+export * from './UploadAvatar';
 
 export * from './components/rejection-files';
 
