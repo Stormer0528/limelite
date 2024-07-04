@@ -1,5 +1,7 @@
 import type { Theme, SxProps } from '@mui/material/styles';
 
+import { useState, useEffect } from 'react';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { alpha } from '@mui/material/styles';
@@ -18,19 +20,29 @@ export interface SelectAvatarProps {
   error?: boolean;
   sx?: SxProps<Theme>;
   helperText?: React.ReactNode;
-  file?: string | null;
-  onChange: (value: string) => void;
+  file?: string | File | null;
+  onChange: (value: string | File) => void;
 }
 
 export function SelectAvatar({ error, file, helperText, sx, onChange }: SelectAvatarProps) {
   const avatarSelection = useBoolean();
+  const [preview, setPreview] = useState('');
+
+  useEffect(() => {
+    if (typeof file === 'string') {
+      setPreview(file);
+    } else if (file instanceof File) {
+      setPreview(URL.createObjectURL(file));
+    }
+  }, [file]);
+
   const hasFile = !!file;
   const hasError = !!error;
 
   const renderPreview = hasFile && (
     <Image
       alt="avatar"
-      src={file}
+      src={preview}
       sx={{
         width: 1,
         height: 1,
@@ -76,7 +88,7 @@ export function SelectAvatar({ error, file, helperText, sx, onChange }: SelectAv
     >
       <Iconify icon="radix-icons:avatar" width={32} />
 
-      <Typography variant="caption">{file ? 'Update avatar' : 'Select avatar'}</Typography>
+      <Typography variant="caption">Select avatar</Typography>
     </Stack>
   );
 
@@ -129,10 +141,12 @@ export function SelectAvatar({ error, file, helperText, sx, onChange }: SelectAv
       {helperText && helperText}
 
       <AvatarDialog
+        selection={typeof file === 'string' ? file : undefined}
         open={avatarSelection.value}
         onClose={avatarSelection.onFalse}
-        onChoose={(id) => {
-          onChange(`/assets/avatars/avatar_${id + 1}.jpg`);
+        onChoose={(avatar) => {
+          onChange(avatar);
+          avatarSelection.onFalse();
         }}
       />
     </>
