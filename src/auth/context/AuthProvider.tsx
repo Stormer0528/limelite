@@ -48,7 +48,9 @@ export function AuthProvider({ children }: Props) {
     setSession(null);
     toast.error('Your session has expired. Please login again.');
     router.push(paths.signIn);
-  }, [router]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const signIn = useCallback((newToken: string) => {
     setSession(newToken);
