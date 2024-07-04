@@ -116,18 +116,20 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
 
   const { setError, handleSubmit } = methods;
 
-  const onSubmit = handleSubmit(async (newUser) => {
+  const onSubmit = handleSubmit(async ({ avatarUrl, ...newUser }) => {
     try {
-      if (isEqual(newUser, defaultValues)) {
+      if (isEqual({ ...newUser, avatarUrl }, defaultValues)) {
         toast.warning('No changes to save');
         return;
       }
 
       let newAvatarFileId;
-      if ((newUser.avatarUrl as unknown) instanceof File) {
-        const uploadRes = await uploadFile(newUser.avatarUrl as unknown as File);
+      let newAvatarFileUrl; // This is required to update only when avatar url is changed...
+      if ((avatarUrl as unknown) instanceof File) {
+        const uploadRes = await uploadFile(avatarUrl as unknown as File);
         newAvatarFileId = uploadRes.file.id;
-        delete newUser.avatarUrl;
+      } else if (avatarUrl !== defaultValues.avatarUrl) {
+        newAvatarFileUrl = avatarUrl as string;
       }
 
       await submit({
@@ -136,6 +138,7 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
             ...newUser,
             id: currentUser.id,
             avatarFileId: newAvatarFileId,
+            avatarFileUrl: newAvatarFileId ? undefined : newAvatarFileUrl,
           },
         },
       });
@@ -196,7 +199,7 @@ export default function UserGeneral({ currentUser, refetchUser }: Props) {
                 </Tooltip>
               )}
               <Box sx={{ mb: 5 }}>
-                <Field.UploadAvatar
+                <Field.SelectAvatar
                   name="avatarUrl"
                   helperText={
                     <Typography

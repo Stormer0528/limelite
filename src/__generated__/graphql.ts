@@ -76,6 +76,7 @@ export type AssignUserInput = {
 export type CreateOrganizationInput = {
   addresses?: InputMaybe<Array<AddressInput>>;
   avatarFileId?: InputMaybe<Scalars['ID']['input']>;
+  avatarFileUrl?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -92,6 +93,7 @@ export type CreateUserGroupInput = {
 
 export type CreateUserInput = {
   avatarFileId?: InputMaybe<Scalars['ID']['input']>;
+  avatarFileUrl?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   isApUser?: InputMaybe<Scalars['Boolean']['input']>;
   isBackOfficeUser?: InputMaybe<Scalars['Boolean']['input']>;
@@ -323,6 +325,7 @@ export type UpdateAddressInput = {
 
 export type UpdateOrganizationInput = {
   avatarFileId?: InputMaybe<Scalars['ID']['input']>;
+  avatarFileUrl?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
@@ -345,6 +348,7 @@ export type UpdateUserGroupInput = {
 
 export type UpdateUserInput = {
   avatarFileId?: InputMaybe<Scalars['ID']['input']>;
+  avatarFileUrl?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   id: Scalars['ID']['input'];
   isApUser?: InputMaybe<Scalars['Boolean']['input']>;

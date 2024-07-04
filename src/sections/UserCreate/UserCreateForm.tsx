@@ -83,13 +83,24 @@ export default function UserCreateForm() {
 
   const onSubmit = handleSubmit(async ({ avatarUrl, ...data }) => {
     try {
-      let newAvatarFileId;
+      let newAvatarFileId; // File ID when user manually uploads avatar
+      let newAvatarFileUrl; // File Url when user selects from default avatars
       if ((avatarUrl as unknown) instanceof File) {
         const uploadRes = await uploadFile(avatarUrl as unknown as File);
         newAvatarFileId = uploadRes.file.id;
+      } else if (avatarUrl !== defaultValues.avatarUrl) {
+        newAvatarFileUrl = avatarUrl as string;
       }
 
-      await submit({ variables: { data: { ...data, avatarFileId: newAvatarFileId } } });
+      await submit({
+        variables: {
+          data: {
+            ...data,
+            avatarFileId: newAvatarFileId,
+            avatarFileUrl: newAvatarFileId ? undefined : newAvatarFileUrl,
+          },
+        },
+      });
       reset();
       toast.success('Create success!');
       router.push(paths.dashboard.user.root);

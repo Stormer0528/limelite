@@ -86,13 +86,23 @@ export default function OrganizationGeneral({ currentOrg: { avatar, ...currentOr
       }
 
       let newAvatarFileId;
+      let newAvatarFileUrl; // This is required to update only when avatar url is changed...
       if ((avatarUrl as unknown) instanceof File) {
         const uploadRes = await uploadFile(avatarUrl as unknown as File);
         newAvatarFileId = uploadRes.file.id;
+      } else if (avatarUrl !== defaultValues.avatarUrl) {
+        newAvatarFileUrl = avatarUrl as string;
       }
 
       await submit({
-        variables: { data: { ...data, id: currentOrg.id, avatarFileId: newAvatarFileId } },
+        variables: {
+          data: {
+            ...data,
+            id: currentOrg.id,
+            avatarFileId: newAvatarFileId,
+            avatarFileUrl: newAvatarFileId ? undefined : newAvatarFileUrl,
+          },
+        },
       });
       toast.success('Update success!');
     } catch (err) {
@@ -116,7 +126,7 @@ export default function OrganizationGeneral({ currentOrg: { avatar, ...currentOr
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             <Box sx={{ mb: 5 }}>
-              <Field.UploadAvatar
+              <Field.SelectAvatar
                 name="avatarUrl"
                 helperText={
                   <Typography
