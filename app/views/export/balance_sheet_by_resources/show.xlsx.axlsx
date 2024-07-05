@@ -202,8 +202,15 @@ wb.styles do |s|
       end
       equities_end_row = current_row_num
 
-      net_income_ary = (3..@report.data["titles"].length + 3).to_a.map {|col| col_name = column_name(col); "=#{col_name}#{total_assets_row}-#{col_name}#{total_liabilities_row}-#{col_name}#{nine_thousands_row}"}
-      sheet.add_row ["", "Net Income (Loss)", *net_income_ary], style: [nil, nil, *multi_style(currency), currency]
+      unres, res = format_row(report["net_income_loss"])
+      sheet.add_row [
+        "", "Net Income (Loss)",
+        *unres,
+        parse_num(report["net_income_loss"]["unrestricted"]),
+        *res,
+        parse_num(report["net_income_loss"]["restricted"]),
+        parse_num(report["net_income_loss"]["balance"])
+      ], style: [nil, nil, *multi_style(currency), currency]
       net_income_row = current_row_num
 
       total_equity_ary = (3..@report.data["titles"].length + 3).to_a.map {|col| col_name = column_name(col); "=(SUM(#{col_name}#{equities_start_row}:#{col_name}#{equities_end_row}))+#{col_name}#{net_income_row}"}
