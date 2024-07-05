@@ -28,6 +28,25 @@ const FETCH_ME_QUERY = gql(/* GraphQL */ `
       avatar {
         url
       }
+      userGroups {
+        id
+        name
+        organization {
+          id
+          name
+          slug
+        }
+        permissions {
+          Account
+          ApprovalAmount
+          BankAccount
+          BatchUpload
+          CreditCard
+          Customer
+          Report
+          Vendor
+        }
+      }
     }
   }
 `);
