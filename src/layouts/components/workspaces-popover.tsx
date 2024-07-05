@@ -7,10 +7,14 @@ import Avatar from '@mui/material/Avatar';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ButtonBase from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
 
 import { Label } from 'src/components/Label';
 import { Iconify } from 'src/components/Iconify';
+import { ScrollBar } from 'src/components/ScrollBar';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
+
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +28,7 @@ export type WorkspacesPopoverProps = ButtonBaseProps & {
 };
 
 export function WorkspacesPopover({ data = [], sx, ...other }: WorkspacesPopoverProps) {
+  const { user } = useAuthContext();
   const popover = usePopover();
 
   const mediaQuery = 'sm';
@@ -86,24 +91,39 @@ export function WorkspacesPopover({ data = [], sx, ...other }: WorkspacesPopover
         onClose={popover.onClose}
         slotProps={{ arrow: { placement: 'top-left' } }}
       >
-        <MenuList sx={{ width: 240 }}>
-          {data.map((option) => (
-            <MenuItem
-              key={option.id}
-              selected={option.id === workspace?.id}
-              onClick={() => handleChangeWorkspace(option)}
-              sx={{ height: 48 }}
-            >
-              <Avatar alt={option.name} src={option.logo} sx={{ width: 24, height: 24 }} />
+        <ScrollBar
+          scrollableNodeProps={{
+            id: 'address-dialog-scroll-container',
+          }}
+          sx={{
+            width: 320,
+            px: 2.5,
+            height: 308, // 48 * 6 + 4 * 5,
+          }}
+        >
+          <MenuList>
+            {user?.userGroups!.map((userGroup) => (
+              <MenuItem
+                key={userGroup.id}
+                selected={userGroup.id === workspace?.id}
+                onClick={() => handleChangeWorkspace(workspace)}
+                sx={{ height: 48 }}
+              >
+                <Avatar
+                  alt={userGroup.organization!.name}
+                  src={userGroup.organization?.avatar?.url ?? undefined}
+                  sx={{ width: 24, height: 24 }}
+                />
 
-              <Box component="span" sx={{ flexGrow: 1 }}>
-                {option.name}
-              </Box>
+                <Typography variant="inherit" noWrap sx={{ flex: 1 }}>
+                  {userGroup.organization!.name}
+                </Typography>
 
-              <Label color={option.plan === 'Free' ? 'default' : 'info'}>{option.plan}</Label>
-            </MenuItem>
-          ))}
-        </MenuList>
+                <Label color="info">{userGroup.name}</Label>
+              </MenuItem>
+            ))}
+          </MenuList>
+        </ScrollBar>
       </CustomPopover>
     </>
   );

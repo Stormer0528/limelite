@@ -35,6 +35,9 @@ const FETCH_ME_QUERY = gql(/* GraphQL */ `
           id
           name
           slug
+          avatar {
+            url
+          }
         }
         permissions {
           Account

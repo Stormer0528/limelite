@@ -112,7 +112,7 @@ export function HeaderBase({
             <StyledDivider data-slot="divider" />
 
             {/* -- Workspace popover -- */}
-            {workspaces && <WorkspacesPopover data-slot="workspaces" data={data?.workspaces} />}
+            {workspaces && <WorkspacesPopover data-slot="workspaces" />}
 
             {slots?.leftAreaEnd}
           </>
