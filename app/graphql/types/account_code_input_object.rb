@@ -24,14 +24,15 @@ class Types::AccountCodeInputObject < GraphQL::Schema::InputObject
     elsif a.nil? or a.length == 0
       return b
     else
-      a1 = a.map { |item| (item.is_a? String) ? item.to_i : item }
-      b1 = b.map { |item| (item.is_a? String) ? item.to_i : item }
+      # Don't parse it to int to compare
+      # a1 = a.map { |item| (item.is_a? String) ? item.to_i : item }
+      # b1 = b.map { |item| (item.is_a? String) ? item.to_i : item }
       intersection = []
 
-      a1.each do |item1|
-        existing = b1.select { |item2| item1 === item2 }
+      a.each do |item1|
+        existing = b.select { |item2| item1 === item2 }
         unless existing.length == 0
-          intersection.push(item1.to_s)
+          intersection.push(item1)
         end
       end
 

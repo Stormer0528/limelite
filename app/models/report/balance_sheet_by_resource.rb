@@ -70,6 +70,31 @@ class Report::BalanceSheetByResource < ApplicationRecord
                                                     }, ["restricted", "$0.00"], ["balance", "$0.00"]].to_h.freeze
     end
 
+    # Calculate Net Income and Loss
+    # ----------------------------------------------------------------------------------------------------
+    p_and_l = Report::ProfitAndLossByResourceReport.where(
+      organization: organization
+    ).where("data->>'fund_code' = ?", account_search_params[:fund_code].join(', ')).order(:id).first
+
+    if p_and_l.nil?
+      p_and_l = Report::ProfitAndLossByResourceReport.new
+    end
+    # only save if save is set to true
+    p_and_l.assign_attributes(
+      organization: organization,
+      start_date: "#{FiscalYear.get_year(end_date)}-07-01",
+      end_date: end_date,
+      account_search_params: account_search_params
+    )
+
+    unless p_and_l.new_record?
+      p_and_l.run_report(true)
+    end
+    p_and_l.save  
+    
+    @net_income_and_loss = p_and_l.data.dig("reports", "all", "net_position_totals")
+    # ----------------------------------------------------------------------------------------------------
+
     data[:titles] = [*@unrestricted_codes, :unrestricted, *@restricted_codes, :restricted]
     data[:unrestricted_codes] = @unrestricted_codes
     data[:restricted_codes] = @restricted_codes
@@ -170,7 +195,7 @@ class Report::BalanceSheetByResource < ApplicationRecord
     # CODES
     @asset_codes     ||= organization.account_objects.where(object_type: "BS - Asset").order(code: :asc).pluck(:code)
     @liability_codes ||= organization.account_objects.where(object_type: "BS - Liability").order(code: :asc).pluck(:code)
-    @equity_codes    ||= organization.account_objects.where(object_type: "Equity").order(code: :asc).pluck(:code)
+    @equity_codes    ||= organization.account_objects.where(object_type: "Equity").where.not(code: "9791").order(code: :asc).pluck(:code)
 
     # SECTIONS
     report[:assets]      = fields_for_account_objects(object_codes: @asset_codes,     fund_code: fund_codes)
@@ -181,25 +206,38 @@ class Report::BalanceSheetByResource < ApplicationRecord
     report[:total_assets]      = aggregate_total report[:assets]
     report[:total_liabilities] = aggregate_total report[:liabilities]
     report[:total_equities]    = aggregate_total report[:equities]
+    report[:net_income_loss]   = @net_income_and_loss
 
-    # 97** TOTALS
-    report[:total_9700s] =
-      fields_for_account_objects(object_codes: 9700..9799, fund_code: fund_codes).first || @default_row
+    beginning_balance = report[:total_assets].keys.each_with_object({}) do |code, ret| 
+      # next(ret) if ["code", "description"].include? code.to_s
+      
+      total = parse_amount(report[:total_assets][code]) - parse_amount(report[:total_liabilities][code]) - parse_amount(report[:total_equities][code]) - parse_amount(report[:net_income_loss][code])
 
-    # NET INCOME LOSS
-    # net_income_loss = (total_assets - total_liabilities - total_nine_thousands)
-    report[:net_income_loss] = report[:total_9700s].keys.each_with_object({}) do |code, ret|
-      next(ret) if ["code", "description"].include? code.to_s
-
-      total = parse_amount(report[:total_assets][code]) - parse_amount(report[:total_liabilities][code]) - parse_amount(report[:total_9700s][code])
       ret[code] = total.format
     end
+    beginning_balance['code'] = '9791'
+    beginning_balance['description'] = 'Beginning Balance'
 
-    # EQUITY BALANCE = (equities_pre_total + net_income_loss)
+    report[:equities].insert(0, beginning_balance)
+
+    # # 97** TOTALS
+    # report[:total_9700s] =
+    #   fields_for_account_objects(object_codes: 9792..9799, fund_code: fund_codes).first || @default_row
+
+    # # NET INCOME LOSS
+    # # net_income_loss = (total_assets - total_liabilities - total_nine_thousands)
+    # report[:net_income_loss] = report[:total_9700s].keys.each_with_object({}) do |code, ret|
+    #   next(ret) if ["code", "description"].include? code.to_s
+
+    #   total = parse_amount(report[:total_assets][code]) - parse_amount(report[:total_liabilities][code]) - parse_amount(report[:total_9700s][code])
+    #   ret[code] = total.format
+    # end
+
+    # EQUITY BALANCE = (beginning_balance + equities_pre_total + net_income_loss)
     report[:equity_balance] = report[:total_equities].keys.each_with_object({}) do |code, ret|
       next(ret) if ["code", "description"].include? code.to_s
 
-      total = parse_amount(report[:total_equities][code]) + parse_amount(report[:net_income_loss][code])
+      total = parse_amount(beginning_balance[code]) + parse_amount(report[:total_equities][code]) + parse_amount(report[:net_income_loss][code])
       ret[code] = total.format
     end
 
