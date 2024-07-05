@@ -244,7 +244,7 @@ const ReportRow = ({
         const key = title.toLowerCase();
         return (
           <TableCell className={classes.balanceCell} key={key + i}>
-            {rest[key]}
+            <BalanceCell balance={rest[key]} />
           </TableCell>
         );
       })}
