@@ -192,7 +192,7 @@ wb.styles do |s|
         restricted_sum_col = urestricted_sum_col + restricted.length + 1
 
         sheet.add_row [asset["code"],
-                       asset["name"],
+                       asset["description"],
                        *unrestricted,
                        horizontal_sum(unrestricted, 3),
                        *restricted,
