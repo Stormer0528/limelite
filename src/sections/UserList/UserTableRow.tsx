@@ -89,7 +89,7 @@ export default function UserTableRow({
           {userGroups?.slice(0, 6).map(
             ({ organization }) =>
               organization && (
-                <Tooltip title={organization.name}>
+                <Tooltip title={organization.name} key={organization.id}>
                   <Avatar
                     key={organization.id}
                     alt={organization.name}
