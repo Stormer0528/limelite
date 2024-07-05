@@ -206,12 +206,16 @@ class Report::BalanceSheetByResource < ApplicationRecord
     report[:total_assets]      = aggregate_total report[:assets]
     report[:total_liabilities] = aggregate_total report[:liabilities]
     report[:total_equities]    = aggregate_total report[:equities]
-    report[:net_income_loss]   = @net_income_and_loss
+    
+    report[:net_income_loss]   = report[:total_assets].keys.each_with_object({}) do |code, ret| 
+      ret[code] = @net_income_and_loss[code]
+    end
 
     beginning_balance = report[:total_assets].keys.each_with_object({}) do |code, ret| 
-      # next(ret) if ["code", "description"].include? code.to_s
-      
-      total = parse_amount(report[:total_assets][code]) - parse_amount(report[:total_liabilities][code]) - parse_amount(report[:total_equities][code]) - parse_amount(report[:net_income_loss][code])
+      total = parse_amount(report[:total_assets][code]) - 
+        parse_amount(report[:total_liabilities][code]) - 
+        parse_amount(report[:total_equities][code]) - 
+        parse_amount(report[:net_income_loss][code])
 
       ret[code] = total.format
     end
