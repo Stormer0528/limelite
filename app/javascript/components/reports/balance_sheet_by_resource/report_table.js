@@ -248,7 +248,7 @@ const ReportRow = ({
           </TableCell>
         );
       })}
-      <TableCell className={classes.balanceCell}>{balance}</TableCell>
+      <TableCell className={classes.balanceCell}><BalanceCell balance={balance} /></TableCell>
     </TableRow>
   );
 };
