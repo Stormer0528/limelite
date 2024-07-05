@@ -52,7 +52,7 @@
             td.account-balance-cell = resource
           td.account-balance-cell Ending Balance
 
-        - report["liabilities"].select{|a| a["balance"] != "$0.00" }.each do |acc_obj|
+        - report["equities"].select{|a| a["balance"] != "$0.00" }.each do |acc_obj|
           = render "table_row", acc_obj: acc_obj
 
         = render "table_total_row", acc_obj: report["total_equities"], title: "Total Equities"
