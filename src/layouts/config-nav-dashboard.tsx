@@ -13,7 +13,7 @@ const icon = (name: string) => (
 const ICONS = {
   user: icon('ic_user'),
   school: icon('ic_school'),
-  account: icon('ic_account'),
+  account: icon('ic_account'), // uil:transaction
   bank: icon('ic_bank'), // hugeicons:bank
   creditCard: icon('ic_creditcard'), // hugeicons:credit-card
   customer: icon('ic_customer'), // octicon:people-16

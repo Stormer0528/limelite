@@ -65,21 +65,15 @@ export function OrganizationTitle({ userGroup: { organization, ...userGroup } }:
         {[
           {
             label: `16 accounts`,
-            icon: <Iconify icon="mdi:account-wrench-outline" width={16} sx={{ flexShrink: 0 }} />,
+            icon: <Iconify icon="uil:transaction" width={16} sx={{ flexShrink: 0 }} />,
           },
           {
             label: `2 bank accounts`,
-            icon: (
-              <Iconify
-                icon="fluent:building-bank-link-48-regular"
-                width={16}
-                sx={{ flexShrink: 0 }}
-              />
-            ),
+            icon: <Iconify icon="hugeicons:bank" width={16} sx={{ flexShrink: 0 }} />,
           },
           {
             label: `10 vendors`,
-            icon: <Iconify icon="mingcute:briefcase-line" width={16} sx={{ flexShrink: 0 }} />,
+            icon: <Iconify icon="hugeicons:service" width={16} sx={{ flexShrink: 0 }} />,
           },
           {
             label: `2 entries`,
