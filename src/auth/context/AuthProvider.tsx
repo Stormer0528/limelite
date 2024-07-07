@@ -38,6 +38,7 @@ const FETCH_ME_QUERY = gql(/* GraphQL */ `
           avatar {
             url
           }
+          createdAt
         }
         permissions {
           Account

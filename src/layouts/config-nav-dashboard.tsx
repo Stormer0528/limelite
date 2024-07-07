@@ -13,19 +13,33 @@ const icon = (name: string) => (
 const ICONS = {
   user: icon('ic_user'),
   school: icon('ic_school'),
+  account: icon('ic_account'),
+  bank: icon('ic_bank'), // hugeicons:bank
+  creditCard: icon('ic_creditcard'), // hugeicons:credit-card
+  customer: icon('ic_customer'), // octicon:people-16
+  report: icon('ic_report'), // carbon:report
+  vendor: icon('ic_vendor'), // hugeicons:service
+  upload: icon('ic_upload'), // iconamoon:cloud-upload
 };
 
 // ----------------------------------------------------------------------
 
-export const navData = [
+export const organizationNav = (slug: string) => [
   /**
    * Overview
    */
   {
-    subheader: 'Limelite Administration',
+    subheader: 'Management',
+
     items: [
-      { title: 'User', path: paths.dashboard.user.root, icon: ICONS.user },
-      { title: 'Organization', path: paths.dashboard.org.root, icon: ICONS.school },
+      { title: 'Home', path: paths.organization.root(slug), icon: ICONS.school, matchStrict: true },
+      { title: 'Accounts', path: paths.organization.accounts(slug), icon: ICONS.account },
+      { title: 'Banks', path: paths.organization.banks(slug), icon: ICONS.bank },
+      { title: 'Credit Cards', path: paths.organization.creditCards(slug), icon: ICONS.creditCard },
+      { title: 'Customers', path: paths.organization.customers(slug), icon: ICONS.customer },
+      { title: 'Reports', path: paths.organization.reports(slug), icon: ICONS.report },
+      { title: 'Vendors', path: paths.organization.vendors(slug), icon: ICONS.vendor },
+      { title: 'Uploads', path: paths.organization.uploads(slug), icon: ICONS.upload },
     ],
   },
 ];

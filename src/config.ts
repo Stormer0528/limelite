@@ -26,6 +26,6 @@ export const CONFIG: ConfigValue = {
   },
   SERVER_URL: import.meta.env.VITE_SERVER_URL ?? '',
   ASSET_URL: import.meta.env.VITE_ASSET_URL ?? '',
-  redirectPath: paths.dashboard.root,
+  redirectPath: paths.root,
   storageTokenKey: 'token',
 };

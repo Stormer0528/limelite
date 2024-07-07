@@ -1,11 +1,14 @@
 import type { SettingsState } from 'src/components/settings';
-import type { NavSectionProps } from 'src/components/nav-section';
 import type { Theme, SxProps, CSSObject, Breakpoint } from '@mui/material/styles';
 
 import { useMemo } from 'react';
 
+import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
 import { iconButtonClasses } from '@mui/material/IconButton';
+
+import { paths } from 'src/routes/paths';
+import { useParams, usePathname } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/useBoolean';
 
@@ -14,6 +17,8 @@ import { varAlpha, stylesMode } from 'src/theme/styles';
 import { bulletColor } from 'src/components/nav-section';
 import { useSettingsContext } from 'src/components/settings';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 import { Main } from './main';
 import { NavMobile } from './nav-mobile';
 import { layoutClasses } from '../classes';
@@ -21,22 +26,21 @@ import { NavVertical } from './nav-vertical';
 import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../config-nav-account';
 import { HeaderBase } from '../core/header-base';
-import { _workspaces } from '../config-nav-workspace';
 import { LayoutSection } from '../core/layout-section';
-import { navData as dashboardNavData } from '../config-nav-dashboard';
+import { organizationNav } from '../config-nav-dashboard';
 
 // ----------------------------------------------------------------------
 
 export type DashboardLayoutProps = {
   sx?: SxProps<Theme>;
   children: React.ReactNode;
-  data?: {
-    nav?: NavSectionProps['data'];
-  };
 };
 
-export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
+export function DashboardLayout({ sx, children }: DashboardLayoutProps) {
   const theme = useTheme();
+
+  const pathname = usePathname();
+  const params = useParams();
 
   const mobileNavOpen = useBoolean();
 
@@ -44,9 +48,9 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
 
   const navColorVars = useNavColorVars(theme, settings);
 
-  const layoutQuery: Breakpoint = 'lg';
+  const { user } = useAuthContext();
 
-  const navData = data?.nav ?? dashboardNavData;
+  const layoutQuery: Breakpoint = 'lg';
 
   const isNavMini = settings.navLayout === 'mini';
 
@@ -54,10 +58,37 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
 
   const isNavVertical = isNavMini || settings.navLayout === 'vertical';
 
+  const isRootPage = pathname === paths.root;
+
+  const rootPageNav = useMemo(
+    () => [
+      {
+        subheader: 'Organizations',
+        items:
+          user?.userGroups?.map((userGroup) => ({
+            title: userGroup.organization!.name,
+            shortTitle: userGroup.organization!.slug.toUpperCase(),
+            path: paths.organization.root(userGroup.organization!.slug),
+            icon: (
+              <Avatar
+                alt={userGroup.organization!.name}
+                src={userGroup.organization!.avatar?.url ?? undefined}
+                variant="rounded"
+                sx={{ width: 24, height: 24 }}
+              />
+            ),
+          })) ?? [],
+      },
+    ],
+    [user]
+  );
+
+  const organizationPageNav = useMemo(() => organizationNav(params.slug!), [params.slug]);
+
   return (
     <>
       <NavMobile
-        data={navData}
+        data={isRootPage ? rootPageNav : organizationPageNav}
         open={mobileNavOpen.value}
         onClose={mobileNavOpen.onFalse}
         cssVars={navColorVars.section}
@@ -73,14 +104,13 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
             disableElevation={isNavVertical}
             onOpenNav={mobileNavOpen.onTrue}
             data={{
-              nav: navData,
+              nav: isRootPage ? rootPageNav : organizationPageNav,
               account: _account,
-              workspaces: _workspaces,
             }}
             slots={{
               bottomArea: isNavHorizontal ? (
                 <NavHorizontal
-                  data={navData}
+                  data={isRootPage ? rootPageNav : organizationPageNav}
                   layoutQuery={layoutQuery}
                   cssVars={navColorVars.section}
                 />
@@ -125,6 +155,7 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
                 },
               },
             }}
+            slotsDisplay={{ workspaces: !isRootPage }}
           />
         }
         /** **************************************
@@ -133,7 +164,7 @@ export function DashboardLayout({ sx, children, data }: DashboardLayoutProps) {
         sidebarSection={
           isNavHorizontal ? null : (
             <NavVertical
-              data={navData}
+              data={isRootPage ? rootPageNav : organizationPageNav}
               isNavMini={isNavMini}
               layoutQuery={layoutQuery}
               cssVars={navColorVars.section}

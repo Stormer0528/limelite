@@ -38,6 +38,7 @@ export type NavItemStateProps = {
 export type NavItemBaseProps = {
   path: string;
   title: string;
+  shortTitle?: string;
   children?: any;
   caption?: string;
   roles?: string[];
@@ -46,6 +47,7 @@ export type NavItemBaseProps = {
   slotProps?: NavItemSlotProps;
   icon?: string | React.ReactNode;
   info?: string[] | React.ReactNode;
+  matchStrict?: boolean;
 };
 
 export type NavItemProps = ButtonBaseProps & NavItemStateProps & NavItemBaseProps;

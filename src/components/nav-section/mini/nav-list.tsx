@@ -32,7 +32,7 @@ export function NavList({
 
   const navItemRef = useRef<HTMLButtonElement | null>(null);
 
-  const active = useActiveLink(data.path);
+  const active = useActiveLink(data.path, !data.matchStrict);
 
   const [openMenu, setOpenMenu] = useState(false);
 
@@ -61,7 +61,7 @@ export function NavList({
       path={data.path}
       icon={data.icon}
       info={data.info}
-      title={data.title}
+      title={data.shortTitle ?? data.title}
       caption={data.caption}
       // state
       depth={depth}

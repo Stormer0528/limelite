@@ -31,11 +31,11 @@ import { groupItems, applyFilter, getAllItems } from './utils';
 
 // ----------------------------------------------------------------------
 
-export type SearchbarProps = BoxProps & {
+export type SearchBarProps = BoxProps & {
   data?: NavSectionProps['data'];
 };
 
-export function Searchbar({ data: navItems = [], sx, ...other }: SearchbarProps) {
+export function SearchBar({ data: navItems = [], sx, ...other }: SearchBarProps) {
   const theme = useTheme();
 
   const router = useRouter();

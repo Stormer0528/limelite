@@ -6,7 +6,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import { Logo } from 'src/components/logo';
 
 import { HeaderSection } from './header-section';
-import { Searchbar } from '../components/searchbar';
+import { SearchBar } from '../components/SearchBar';
 import { MenuButton } from '../components/menu-button';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
@@ -14,7 +14,6 @@ import { WorkspacesPopover } from '../components/workspaces-popover';
 
 import type { HeaderSectionProps } from './header-section';
 import type { AccountDrawerProps } from '../components/account-drawer';
-import type { WorkspacesPopoverProps } from '../components/workspaces-popover';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +49,6 @@ export type HeaderBaseProps = HeaderSectionProps & {
   data?: {
     nav?: NavSectionProps['data'];
     account?: AccountDrawerProps['data'];
-    workspaces?: WorkspacesPopoverProps['data'];
   };
   slots?: {
     navMobile?: {
@@ -129,8 +127,8 @@ export function HeaderBase({
                 gap: { xs: 1, sm: 1.5 },
               }}
             >
-              {/* -- Searchbar -- */}
-              {searchbar && <Searchbar data-slot="searchbar" data={data?.nav} />}
+              {/* -- SearchBar -- */}
+              {searchbar && <SearchBar data-slot="searchbar" data={data?.nav} />}
 
               {/* -- Settings button -- */}
               {settings && <SettingsButton data-slot="settings" />}
