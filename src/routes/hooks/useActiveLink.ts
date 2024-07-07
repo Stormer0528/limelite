@@ -1,4 +1,4 @@
-import { usePathname } from './use-pathname';
+import { usePathname } from './usePathname';
 import { hasParams, removeParams, isExternalLink, removeLastSlash } from '../utils';
 
 // ----------------------------------------------------------------------

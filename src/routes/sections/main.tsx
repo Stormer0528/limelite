@@ -1,22 +1,50 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { SplashScreen } from 'src/components/loading-screen';
+import { DashboardLayout } from 'src/layouts/dashboard';
+
+import { LoadingScreen } from 'src/components/loading-screen';
+
+import { AuthGuard } from 'src/auth/guard';
 
 // ----------------------------------------------------------------------
 
-// Error
-const Page404 = lazy(() => import('src/pages/error/404'));
+const Home = lazy(() => import('src/pages/Home'));
 
 // ----------------------------------------------------------------------
 
 export const mainRoutes = [
   {
+    path: '/',
     element: (
-      <Suspense fallback={<SplashScreen />}>
-        <Outlet />
-      </Suspense>
+      <AuthGuard>
+        <DashboardLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </DashboardLayout>
+      </AuthGuard>
     ),
-    children: [{ path: '404', element: <Page404 /> }],
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: ':slug',
+        children: [
+          { index: true, element: <div>I am organization</div> },
+          { path: 'accounts', element: <div>I am accounts</div> },
+          // { path: 'new', element: <UserCreatePage /> },
+          // {
+          //   path: ':id',
+          //   children: [
+          //     { index: true, element: <Navigate to="general" replace /> },
+          //     {
+          //       path: ':tab',
+          //       element: <UserEditPage />,
+          //     },
+          //   ],
+          // },
+        ],
+      },
+    ],
   },
 ];
