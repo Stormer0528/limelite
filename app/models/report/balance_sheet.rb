@@ -148,11 +148,11 @@ class Report::BalanceSheet < ApplicationRecord
 
     data[:net_income_loss_by_account_funds] = net_income_loss_by_account_funds.transform_values(&:format)
 
-    # ALL OF THE OBJECTS 9792..9799
+    # ALL OF THE OBJECTS 9700..9799, excluding 9791 as it is for beginning balance
     nine_thousands = []
     nine_thousands_account_fund_totals = account_fun_obj
 
-    organization.account_objects.where(code: 9792..9799).map do |acc_obj|
+    organization.account_objects.where(code: 9700..9799).where.not(code: 9791).map do |acc_obj|
       data[:account_funds].each do |fund|
         bal = acc_obj.bs_balance(start_date, end_date, account_search_params&.merge(fund_code: fund.code))
         nine_thousands << bal
