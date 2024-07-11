@@ -22,7 +22,15 @@ const MuiTabs: Components<Theme>['MuiTabs'] = {
       ...(ownerState.variant !== 'fullWidth' && {
         gap: '24px',
         [theme.breakpoints.up('sm')]: {
-          gap: '40px',
+          gap: ownerState.orientation === 'vertical' ? '16px' : '40px',
+        },
+      }),
+
+      ...(ownerState.orientation === 'vertical' && {
+        [`>.${tabClasses.root}`]: {
+          padding: theme.spacing(0, 1),
+          justifyContent: 'right',
+          minHeight: 32,
         },
       }),
     }),
