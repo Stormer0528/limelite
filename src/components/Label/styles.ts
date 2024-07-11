@@ -93,7 +93,7 @@ export const StyledLabel = styled(Box)(({
     height: 24,
     minWidth: 24,
     lineHeight: 0,
-    cursor: 'default',
+    cursor: 'inherit',
     alignItems: 'center',
     whiteSpace: 'nowrap',
     display: 'inline-flex',
