@@ -1,5 +1,7 @@
+import type { RouteObject } from 'react-router-dom';
+
 import { lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 
 import { DashboardLayout } from 'src/layouts/dashboard';
 
@@ -11,9 +13,14 @@ import { AuthGuard } from 'src/auth/guard';
 
 const Home = lazy(() => import('src/pages/Home'));
 
+const OrganizationProvider = lazy(() => import('src/libs/Organization'));
+const OrganizationHome = lazy(() => import('src/pages/Organization/Home'));
+
+const AccountWrapper = lazy(() => import('src/pages/Account'));
+
 // ----------------------------------------------------------------------
 
-export const mainRoutes = [
+export const mainRoutes: RouteObject[] = [
   {
     path: '/',
     element: (
@@ -29,9 +36,34 @@ export const mainRoutes = [
       { index: true, element: <Home /> },
       {
         path: ':slug',
+        element: (
+          <OrganizationProvider>
+            <Outlet />
+          </OrganizationProvider>
+        ),
         children: [
-          { index: true, element: <div>I am organization</div> },
-          { path: 'accounts', element: <div>I am accounts</div> },
+          { index: true, element: <OrganizationHome /> },
+          {
+            path: 'accounts',
+            element: (
+              <AccountWrapper>
+                <Suspense fallback={<LoadingScreen />}>
+                  <Outlet />
+                </Suspense>
+              </AccountWrapper>
+            ),
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              { path: 'list', element: <div>I am account</div> },
+              { path: 'funds', element: <div>I am funds</div> },
+              { path: 'resources', element: <div>I am resources</div> },
+              { path: 'years', element: <div>I am years</div> },
+              { path: 'goals', element: <div>I am goals</div> },
+              { path: 'functions', element: <div>I am functions</div> },
+              { path: 'objects', element: <div>I am objects</div> },
+              { path: 'schools', element: <div>I am schools</div> },
+            ],
+          },
           // { path: 'new', element: <UserCreatePage /> },
           // {
           //   path: ':id',

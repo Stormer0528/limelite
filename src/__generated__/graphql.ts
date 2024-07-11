@@ -22,6 +22,210 @@ export type Scalars = {
   JSONObject: { input: any; output: any; }
 };
 
+export type Account = {
+  __typename?: 'Account';
+  budgetCurrency?: Maybe<Scalars['String']['output']>;
+  budgetInCents?: Maybe<Scalars['Int']['output']>;
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  function?: Maybe<AccountFunction>;
+  fund?: Maybe<AccountFund>;
+  goal?: Maybe<AccountGoal>;
+  id?: Maybe<Scalars['ID']['output']>;
+  location?: Maybe<AccountLocation>;
+  object?: Maybe<AccountObject>;
+  organization?: Maybe<Organization>;
+  resource?: Maybe<AccountResource>;
+  slug: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  year?: Maybe<AccountYear>;
+};
+
+export type AccountCreateInput = {
+  accountFunctionId: Scalars['String']['input'];
+  accountFundId: Scalars['String']['input'];
+  accountGoalId: Scalars['String']['input'];
+  accountLocationId: Scalars['String']['input'];
+  accountObjectId: Scalars['String']['input'];
+  accountResourceId: Scalars['String']['input'];
+  accountYearId: Scalars['String']['input'];
+  budgetCurrency?: InputMaybe<Scalars['String']['input']>;
+  budgetInCents?: InputMaybe<Scalars['Int']['input']>;
+  organizationId: Scalars['String']['input'];
+};
+
+export type AccountFunction = {
+  __typename?: 'AccountFunction';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountFunctionsResponse = {
+  __typename?: 'AccountFunctionsResponse';
+  accountFunctions?: Maybe<Array<Maybe<AccountFunction>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountFund = {
+  __typename?: 'AccountFund';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountFundsResponse = {
+  __typename?: 'AccountFundsResponse';
+  accountFunds?: Maybe<Array<Maybe<AccountFund>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountGoal = {
+  __typename?: 'AccountGoal';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountGoalsResponse = {
+  __typename?: 'AccountGoalsResponse';
+  accountGoals?: Maybe<Array<Maybe<AccountGoal>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountLocation = {
+  __typename?: 'AccountLocation';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountLocationsResponse = {
+  __typename?: 'AccountLocationsResponse';
+  accountLocations?: Maybe<Array<Maybe<AccountLocation>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountObject = {
+  __typename?: 'AccountObject';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  normalBalance: NormalBalance;
+  objectType: AccountObjectType;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountObjectCreateInput = {
+  code: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  normalBalance: NormalBalance;
+  objectType: AccountObjectType;
+  organizationId: Scalars['String']['input'];
+};
+
+export enum AccountObjectType {
+  Asset = 'Asset',
+  Equity = 'Equity',
+  Expense = 'Expense',
+  Liability = 'Liability',
+  Revenue = 'Revenue'
+}
+
+export type AccountObjectUpdateInput = {
+  code: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  normalBalance?: InputMaybe<NormalBalance>;
+  objectType?: InputMaybe<AccountObjectType>;
+};
+
+export type AccountObjectsResponse = {
+  __typename?: 'AccountObjectsResponse';
+  accountObjects?: Maybe<Array<Maybe<AccountObject>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountResource = {
+  __typename?: 'AccountResource';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isRestricted?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountResourcesResponse = {
+  __typename?: 'AccountResourcesResponse';
+  accountResources?: Maybe<Array<Maybe<AccountResource>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountUpdateInput = {
+  accountFunctionId: Scalars['String']['input'];
+  accountFundId: Scalars['String']['input'];
+  accountGoalId: Scalars['String']['input'];
+  accountLocationId: Scalars['String']['input'];
+  accountObjectId: Scalars['String']['input'];
+  accountResourceId: Scalars['String']['input'];
+  accountYearId: Scalars['String']['input'];
+  budgetCurrency?: InputMaybe<Scalars['String']['input']>;
+  budgetInCents?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['ID']['input'];
+};
+
+export type AccountYear = {
+  __typename?: 'AccountYear';
+  accounts: Array<Account>;
+  code: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  organization: Organization;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type AccountYearsResponse = {
+  __typename?: 'AccountYearsResponse';
+  accountYears?: Maybe<Array<Maybe<AccountYear>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AccountsResponse = {
+  __typename?: 'AccountsResponse';
+  accounts?: Maybe<Array<Maybe<Account>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type Address = {
   __typename?: 'Address';
   attention?: Maybe<Scalars['String']['output']>;
@@ -71,6 +275,18 @@ export enum AddressableType {
 export type AssignUserInput = {
   userGroupId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
+};
+
+export type BaseCreateInput = {
+  code: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  organizationId: Scalars['String']['input'];
+};
+
+export type BaseUpdateInput = {
+  code: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateOrganizationInput = {
@@ -136,16 +352,40 @@ export type Mutation = {
   __typename?: 'Mutation';
   activateUser: SuccessResponse;
   assignUser: SuccessResponse;
+  createAccount: Account;
+  createAccountFunction: AccountFunction;
+  createAccountFund: AccountFund;
+  createAccountGoal: AccountGoal;
+  createAccountLocation: AccountLocation;
+  createAccountObject: AccountObject;
+  createAccountResource: AccountResource;
+  createAccountYear: AccountYear;
   createAddress: Address;
   createOrganization: Organization;
   createUser: User;
   createUserGroup: UserGroup;
   deactivateUser: SuccessResponse;
+  deleteAccount: SuccessResponse;
+  deleteAccountFunction: SuccessResponse;
+  deleteAccountFund: SuccessResponse;
+  deleteAccountGoal: SuccessResponse;
+  deleteAccountLocation: SuccessResponse;
+  deleteAccountObject: SuccessResponse;
+  deleteAccountResource: SuccessResponse;
+  deleteAccountYear: SuccessResponse;
   login: LoginResponse;
   manageUserGroups: SuccessResponse;
   removeAddress: SuccessResponse;
   removeUserGroup: SuccessResponse;
   resetPassword: SuccessResponse;
+  updateAccount: Account;
+  updateAccountFunction: AccountFunction;
+  updateAccountFund: AccountFund;
+  updateAccountGoal: AccountGoal;
+  updateAccountLocation: AccountLocation;
+  updateAccountObject: AccountObject;
+  updateAccountResource: AccountResource;
+  updateAccountYear: AccountYear;
   updateAddress: Address;
   updateOrganization: Organization;
   updatePassword: User;
@@ -161,6 +401,46 @@ export type MutationActivateUserArgs = {
 
 export type MutationAssignUserArgs = {
   data: AssignUserInput;
+};
+
+
+export type MutationCreateAccountArgs = {
+  data: AccountCreateInput;
+};
+
+
+export type MutationCreateAccountFunctionArgs = {
+  data: BaseCreateInput;
+};
+
+
+export type MutationCreateAccountFundArgs = {
+  data: BaseCreateInput;
+};
+
+
+export type MutationCreateAccountGoalArgs = {
+  data: BaseCreateInput;
+};
+
+
+export type MutationCreateAccountLocationArgs = {
+  data: BaseCreateInput;
+};
+
+
+export type MutationCreateAccountObjectArgs = {
+  data: AccountObjectCreateInput;
+};
+
+
+export type MutationCreateAccountResourceArgs = {
+  data: BaseCreateInput;
+};
+
+
+export type MutationCreateAccountYearArgs = {
+  data: BaseCreateInput;
 };
 
 
@@ -189,6 +469,46 @@ export type MutationDeactivateUserArgs = {
 };
 
 
+export type MutationDeleteAccountArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountFunctionArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountFundArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountGoalArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountLocationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountObjectArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountResourceArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteAccountYearArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationLoginArgs = {
   data: LoginInput;
 };
@@ -211,6 +531,46 @@ export type MutationRemoveUserGroupArgs = {
 
 export type MutationResetPasswordArgs = {
   data: EntityId;
+};
+
+
+export type MutationUpdateAccountArgs = {
+  data: AccountUpdateInput;
+};
+
+
+export type MutationUpdateAccountFunctionArgs = {
+  data: BaseUpdateInput;
+};
+
+
+export type MutationUpdateAccountFundArgs = {
+  data: BaseUpdateInput;
+};
+
+
+export type MutationUpdateAccountGoalArgs = {
+  data: BaseUpdateInput;
+};
+
+
+export type MutationUpdateAccountLocationArgs = {
+  data: BaseUpdateInput;
+};
+
+
+export type MutationUpdateAccountObjectArgs = {
+  data: AccountObjectUpdateInput;
+};
+
+
+export type MutationUpdateAccountResourceArgs = {
+  data: BaseUpdateInput;
+};
+
+
+export type MutationUpdateAccountYearArgs = {
+  data: BaseUpdateInput;
 };
 
 
@@ -238,8 +598,15 @@ export type MutationUpdateUserGroupArgs = {
   data: UpdateUserGroupInput;
 };
 
+/** Credit or Debit type of account object */
+export enum NormalBalance {
+  Credit = 'Credit',
+  Debit = 'Debit'
+}
+
 export type Organization = {
   __typename?: 'Organization';
+  accountStats?: Maybe<Scalars['JSONObject']['output']>;
   addresses?: Maybe<Array<Address>>;
   avatar?: Maybe<File>;
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -265,12 +632,124 @@ export type OrganizationsResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  account?: Maybe<Account>;
+  accountFunction?: Maybe<AccountFunction>;
+  accountFunctions: AccountFunctionsResponse;
+  accountFund?: Maybe<AccountFund>;
+  accountFunds: AccountFundsResponse;
+  accountGoal?: Maybe<AccountGoal>;
+  accountGoals: AccountGoalsResponse;
+  accountLocation?: Maybe<AccountLocation>;
+  accountLocations: AccountLocationsResponse;
+  accountObject?: Maybe<AccountObject>;
+  accountObjects: AccountObjectsResponse;
+  accountResource?: Maybe<AccountResource>;
+  accountResources: AccountResourcesResponse;
+  accountYear?: Maybe<AccountYear>;
+  accountYears: AccountYearsResponse;
+  accounts: AccountsResponse;
   addresses: Array<Address>;
   me: User;
   organizations: OrganizationsResponse;
   userGroupUsers: UserGroupUserResponse;
   userGroups: Array<UserGroup>;
   users: UsersResponse;
+};
+
+
+export type QueryAccountArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountFunctionArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountFunctionsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountFundArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountFundsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountGoalArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountGoalsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountLocationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountLocationsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountObjectArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountObjectsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountResourceArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountResourcesArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountYearArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAccountYearsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryAccountsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -442,6 +921,13 @@ export type FetchMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchMeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, name: string, email: string, avatar?: { __typename?: 'File', url: string } | null, userGroups?: Array<{ __typename?: 'UserGroup', id: string, name: string, organization?: { __typename?: 'Organization', id: string, name: string, slug: string, createdAt?: any | null, avatar?: { __typename?: 'File', url: string } | null } | null, permissions: { __typename?: 'UserGroupPermission', Account: UserGroupRole, ApprovalAmount: number, BankAccount: UserGroupRole, BatchUpload: UserGroupRole, CreditCard: UserGroupRole, Customer: UserGroupRole, Report: UserGroupRole, Vendor: UserGroupRole } }> | null } };
 
+export type OrganizationQueryVariables = Exact<{
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+}>;
+
+
+export type OrganizationQuery = { __typename?: 'Query', organizations: { __typename?: 'OrganizationsResponse', organizations?: Array<{ __typename?: 'Organization', id: string, name: string, slug: string, accountStats?: any | null }> | null } };
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
@@ -451,4 +937,5 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 
 
 export const FetchMeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FetchMe"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"userGroups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"organization"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Account"}},{"kind":"Field","name":{"kind":"Name","value":"ApprovalAmount"}},{"kind":"Field","name":{"kind":"Name","value":"BankAccount"}},{"kind":"Field","name":{"kind":"Name","value":"BatchUpload"}},{"kind":"Field","name":{"kind":"Name","value":"CreditCard"}},{"kind":"Field","name":{"kind":"Name","value":"Customer"}},{"kind":"Field","name":{"kind":"Name","value":"Report"}},{"kind":"Field","name":{"kind":"Name","value":"Vendor"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FetchMeQuery, FetchMeQueryVariables>;
+export const OrganizationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Organization"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"JSONObject"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"organizations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"organizations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"accountStats"}}]}}]}}]}}]} as unknown as DocumentNode<OrganizationQuery, OrganizationQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
