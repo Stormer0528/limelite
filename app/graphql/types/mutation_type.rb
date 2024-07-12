@@ -1203,7 +1203,8 @@ Types::MutationType = GraphQL::ObjectType.define do
         org_policy = OrganizationPolicy.new ctx[:auth_ctx], ctx[:current_org]
         raise GraphQL::ExecutionError.new "Not Authorized to edit users" unless org_policy.update_users?
 
-        users = args[:userIds].map {|id| ctx[:current_org].users.find(id) }
+        # Exclude admin@iconsm.com user (236) which is hardcoded to be in this list
+        users = args[:userIds].reject {|id| id.to_i == 236} .map {|id| ctx[:current_org].users.find(id) }
 
         # Remove old associations
         fund.user_school_assignments.map(&:mark_for_destruction)
