@@ -1068,6 +1068,7 @@ Types::MutationType = GraphQL::ObjectType.define do
 
         # remove from organizations
         user.organization_assignments.map(&:destroy)
+        user.user_school_assignments.map(&:destroy)
 
         # mark as locked/archived
         return {success: true} if user.update_columns(locked_at: DateTime.now, archived: true)
