@@ -108,6 +108,11 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
         boxShadow: 'none',
         backgroundColor: varAlpha(theme.vars.palette.primary.mainChannel, 0.08),
       },
+      '&--textRight': {
+        // Assume that right aligned cells are numeric
+        fontVariantNumeric: 'tabular-nums',
+        letterSpacing: '-1px',
+      },
     }),
     /**
      * Toolbar
