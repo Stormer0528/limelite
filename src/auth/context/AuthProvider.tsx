@@ -1,3 +1,5 @@
+import type { User } from 'src/__generated__/graphql';
+
 import { useLazyQuery } from '@apollo/client';
 import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
@@ -59,12 +61,25 @@ const FETCH_ME_QUERY = gql(/* GraphQL */ `
 const initialToken = getSession();
 
 export function AuthProvider({ children }: Props) {
+  const [user, setUser] = useState<User | null>();
+  const [error, setError] = useState<Error | null>(null);
+
   const [token, setToken] = useState<string | undefined | null>(initialToken);
   const timeToLive = useMemo(() => getTimeToLive(token), [token]);
-  const router = useRouter();
   const timerId = useRef<NodeJS.Timeout | undefined>();
 
-  const [fetchMe, { data, loading, error }] = useLazyQuery(FETCH_ME_QUERY);
+  const router = useRouter();
+
+  const [fetchMe, { loading }] = useLazyQuery(FETCH_ME_QUERY, {
+    onCompleted: (data) => {
+      setUser(data.me);
+      setError(null);
+    },
+    onError: (err) => {
+      setError(err);
+      setUser(null);
+    },
+  });
 
   const expireToken = useCallback(() => {
     setToken(null);
@@ -112,9 +127,7 @@ export function AuthProvider({ children }: Props) {
     return () => {
       clearTimeout(timerId.current);
     };
-  }, [timeToLive, error, expireToken]);
-
-  const user = useMemo(() => (error ? null : data?.me), [data, error]);
+  }, [timeToLive, error, loading, expireToken]);
 
   const memoizedValue: AuthContextValue = useMemo(
     () => ({ user, token, isAuthenticated: !!token, loading, signIn, signOut }),
