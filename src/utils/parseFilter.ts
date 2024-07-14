@@ -8,6 +8,8 @@ export function parseFilter(curFilter: any = {}, filter?: GridFilterModel) {
     if (value !== undefined) {
       if (operator === '=' || operator === 'equals') {
         filterObj[field] = value;
+      } else if (operator === 'is') {
+        filterObj[field] = value === 'true';
       } else if (operator === '>') {
         filterObj[field] = { gt: value };
       } else if (operator === '>=') {
