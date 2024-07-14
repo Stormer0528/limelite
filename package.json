@@ -62,6 +62,7 @@
     "react-dropzone": "^14.2.3",
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.51.5",
+    "react-imask": "^7.6.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-lazy-load-image-component": "^1.6.0",
     "react-organizational-chart": "^2.2.1",
