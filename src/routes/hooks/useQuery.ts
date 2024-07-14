@@ -1,17 +1,13 @@
+import type { GridSortModel } from '@mui/x-data-grid';
+
 import { parse, stringify } from 'qs';
 import { useMemo, useCallback } from 'react';
 import { useSearchParams as _useSearchParams } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
-export type SortOrder = 'asc' | 'desc';
-
-interface OrderBy {
-  [key: string]: SortOrder;
-}
-
 interface QueryParams<FilterType = any> {
-  sort?: OrderBy; // define the type for sort
+  sort?: GridSortModel; // define the type for sort
   page?: { page: number; pageSize: number };
   filter?: FilterType; // TODO: This will be used for prisma filter
   [key: string]: any;
@@ -23,6 +19,8 @@ export function useQuery<FilterType>(): [
     setQueryParams: (params: QueryParams<FilterType>) => void;
     setPage: (page: number) => void;
     setPageSize: (pageSize: number) => void;
+    setSort: (sort: GridSortModel) => void;
+    setFilter: (filter: FilterType) => void;
   },
 ] {
   const [searchParams, setSearchParams] = _useSearchParams();
@@ -32,11 +30,12 @@ export function useQuery<FilterType>(): [
     const result: QueryParams = { ...rest, filter };
 
     if (rawSort) {
-      result.sort = (rawSort as string).split(',').reduce((prev, field) => {
-        const order: SortOrder = field.startsWith('-') ? 'desc' : 'asc';
-        prev[field.replace('-', '')] = order;
-        return prev;
-      }, {} as OrderBy);
+      result.sort = (rawSort as string).split(',').map((sortStr) => {
+        const sort = sortStr.startsWith('-') ? 'desc' : 'asc';
+        const field = sortStr.replace('-', '');
+
+        return { field, sort };
+      });
     }
 
     if (rawPage) {
@@ -52,8 +51,8 @@ export function useQuery<FilterType>(): [
       const queryObject = { ...rest };
 
       if (sort) {
-        queryObject.sort = Object.entries(sort)
-          .map(([key, value]) => `${value === 'asc' ? '' : '-'}${key}`)
+        queryObject.sort = sort
+          .map(({ field, sort: order }) => `${order === 'asc' ? '' : '-'}${field}`)
           .join(',');
       }
 
@@ -86,8 +85,22 @@ export function useQuery<FilterType>(): [
     [queryParams, setQueryParams]
   );
 
+  const setSort = useCallback(
+    (sort: GridSortModel) => {
+      setQueryParams({ ...queryParams, sort });
+    },
+    [queryParams, setQueryParams]
+  );
+
+  const setFilter = useCallback(
+    (filter: FilterType) => {
+      setQueryParams({ ...queryParams, filter });
+    },
+    [queryParams, setQueryParams]
+  );
+
   return useMemo(
-    () => [queryParams, { setQueryParams, setPage, setPageSize }],
-    [queryParams, setQueryParams, setPage, setPageSize]
+    () => [queryParams, { setQueryParams, setPage, setPageSize, setSort, setFilter }],
+    [queryParams, setQueryParams, setPage, setPageSize, setSort, setFilter]
   );
 }
