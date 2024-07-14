@@ -25,10 +25,9 @@ import { useOrganizationContext } from 'src/libs/Organization';
 
 import { Iconify } from 'src/components/Iconify';
 import { EmptyContent } from 'src/components/EmptyContent';
-import { DataGridSkeleton } from 'src/components/DataGrid/Skeleton';
+import { DataGridSkeleton, DataGridPagination } from 'src/components/DataGrid/';
 
 import { useFetchAccounts } from './useApollo';
-import { TablePagination } from './TablePagination';
 import { AccountTableToolBar } from './TableToolBar';
 
 const HIDE_COLUMNS_TOGGLABLE = ['actions'];
@@ -248,7 +247,7 @@ export const AccountListView = () => {
         toolbar: AccountTableToolBar as GridSlots['toolbar'],
         noRowsOverlay: () => <EmptyContent />,
         noResultsOverlay: () => <EmptyContent title="No accounts found" />,
-        pagination: TablePagination,
+        pagination: DataGridPagination,
         loadingOverlay: DataGridSkeleton,
       }}
       slotProps={{

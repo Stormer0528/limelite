@@ -29,6 +29,6 @@ function CustomPagination({
   );
 }
 
-export function TablePagination(props: any) {
+export function DataGridPagination(props: any) {
   return <GridPagination ActionsComponent={CustomPagination} {...props} />;
 }
