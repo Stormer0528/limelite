@@ -69,7 +69,7 @@ export const AccountFundView = () => {
     () => [
       {
         field: 'code',
-        headerName: 'Code',
+        headerName: 'Fund Code',
         width: 200,
         ...numberColumnType,
       },
