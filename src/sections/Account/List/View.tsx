@@ -20,6 +20,7 @@ import {
 import { useQuery } from 'src/routes/hooks';
 
 import { debounce } from 'src/utils/debounce';
+import { parseFilter } from 'src/utils/parseFilter';
 
 import { useOrganizationContext } from 'src/libs/Organization';
 
@@ -48,27 +49,10 @@ export const AccountListView = () => {
   const [query, { setPage, setPageSize, setSort, setFilter }] = useQuery<GridFilterModel>();
   const { page = { page: 1, pageSize: 50 }, sort, filter } = query;
 
-  const graphQueryFilter = useMemo(() => {
-    const filterObj: any = { organizationId: organization?.id };
-    (filter?.items ?? []).forEach((item) => {
-      if (item.operator === '=') {
-        filterObj[item.field] = item.value;
-      } else if (item.operator === '>') {
-        filterObj[item.field] = { gt: item.value };
-      } else if (item.operator === '>=') {
-        filterObj[item.field] = { gte: item.value };
-      } else if (item.operator === '<=') {
-        filterObj[item.field] = { lte: item.value };
-      } else if (item.operator === '<') {
-        filterObj[item.field] = { lt: item.value };
-      } else if (item.operator === '!=') {
-        filterObj[item.field] = { ne: item.value };
-      } else if (item.operator === 'isAnyOf') {
-        filterObj[item.field] = { in: item.value };
-      }
-    });
-    return filterObj;
-  }, [filter, organization]);
+  const graphQueryFilter = useMemo(
+    () => parseFilter({ organizationId: organization?.id }, filter),
+    [filter, organization]
+  );
 
   const graphQuerySort = useMemo(() => {
     if (!sort) return undefined;
@@ -199,7 +183,7 @@ export const AccountListView = () => {
 
   const onFilterChange = useCallback(
     (filterModel: GridFilterModel) => {
-      debouncedFilterChange(filterModel);
+      debouncedFilterChange(filterModel.items?.[0]?.value !== undefined ? filterModel : {});
     },
     [debouncedFilterChange]
   );

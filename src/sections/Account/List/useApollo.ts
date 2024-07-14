@@ -53,7 +53,7 @@ const FETCH_ACCOUNTS = gql(/* GraphQL */ `
 
 // ----------------------------------------------------------------------
 interface FetchAccountsArgs {
-  filter: any;
+  filter?: any;
   page?: string;
   sort?: string;
 }
