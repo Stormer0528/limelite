@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import Stack from '@mui/material/Stack';
+import Card from '@mui/material/Card';
 
 import { CONFIG } from 'src/config';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -16,7 +16,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function AccountHome({ children }: Props) {
+export default function AccountWrapper({ children }: Props) {
   const { organization, loading } = useOrganizationContext();
 
   return (
@@ -25,7 +25,7 @@ export default function AccountHome({ children }: Props) {
         <title>{`${CONFIG.site.name} : Accounts - ${organization?.name}`}</title>
       </Helmet>
 
-      <DashboardContent>
+      <DashboardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         {loading ? (
           <BreadCrumbSkeleton />
         ) : (
@@ -41,10 +41,18 @@ export default function AccountHome({ children }: Props) {
             }}
           />
         )}
-        <Stack spacing={2} direction="row">
+        <Card
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            height: 2,
+            p: 2,
+            overflow: 'hidden',
+          }}
+        >
           <AccountTab />
           {children}
-        </Stack>
+        </Card>
       </DashboardContent>
     </>
   );

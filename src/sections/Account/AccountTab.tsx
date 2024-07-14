@@ -39,7 +39,7 @@ export const AccountTab = () => {
         router.push(newTab);
       }}
       sx={{
-        minWidth: 120,
+        minWidth: 130,
         borderRight: 1,
         borderColor: 'divider',
       }}
