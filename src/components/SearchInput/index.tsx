@@ -1,10 +1,11 @@
-import debounce from 'lodash/debounce';
 import { useState, useEffect, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+
+import { debounce } from 'src/utils/debounce';
 
 import { Iconify } from 'src/components/Iconify';
 
