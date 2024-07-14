@@ -60,7 +60,7 @@ export function useQuery<FilterType>(): [
         queryObject.page = `${page.page},${page.pageSize}`;
       }
 
-      setSearchParams(stringify(queryObject));
+      setSearchParams(stringify(queryObject, { allowEmptyArrays: true }));
     },
     [setSearchParams]
   );

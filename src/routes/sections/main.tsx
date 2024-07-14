@@ -18,6 +18,7 @@ const OrganizationHome = lazy(() => import('src/pages/Organization/Home'));
 
 const AccountWrapper = lazy(() => import('src/pages/Account/Wrapper'));
 const AccountList = lazy(() => import('src/pages/Account/List'));
+const AccountFund = lazy(() => import('src/pages/Account/Fund'));
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +57,7 @@ export const mainRoutes: RouteObject[] = [
             children: [
               { index: true, element: <Navigate to="list" replace /> },
               { path: 'list', element: <AccountList /> },
-              { path: 'funds', element: <div>I am funds</div> },
+              { path: 'funds', element: <AccountFund /> },
               { path: 'resources', element: <div>I am resources</div> },
               { path: 'years', element: <div>I am years</div> },
               { path: 'goals', element: <div>I am goals</div> },
