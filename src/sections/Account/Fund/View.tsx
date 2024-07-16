@@ -28,7 +28,7 @@ import { EmptyContent } from 'src/components/EmptyContent';
 import { DataGridSkeleton, DataGridPagination } from 'src/components/DataGrid/';
 
 import { useFetchAccountFunds } from './useApollo';
-import { AccountTableToolBar } from './TableToolBar';
+import { AccountFundTableToolBar } from './TableToolBar';
 
 const HIDE_COLUMNS_TOGGLABLE = ['actions'];
 const numberColumnType: GridColTypeDef = {
@@ -122,7 +122,12 @@ export const AccountFundView = () => {
 
   const onFilterChange = useCallback(
     (filterModel: GridFilterModel) => {
-      debouncedFilterChange(filterModel.items?.[0]?.value !== undefined ? filterModel : {});
+      debouncedFilterChange(
+        ['isEmpty', 'isNotEmpty'].includes(filterModel.items?.[0]?.operator) ||
+          filterModel.items?.[0]?.value !== undefined
+          ? filterModel
+          : {}
+      );
     },
     [debouncedFilterChange]
   );
@@ -167,7 +172,7 @@ export const AccountFundView = () => {
       columnVisibilityModel={columnVisibilityModel}
       onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
       slots={{
-        toolbar: AccountTableToolBar as GridSlots['toolbar'],
+        toolbar: AccountFundTableToolBar as GridSlots['toolbar'],
         noRowsOverlay: () => <EmptyContent />,
         noResultsOverlay: () => <EmptyContent title="No accounts found" />,
         pagination: DataGridPagination,
