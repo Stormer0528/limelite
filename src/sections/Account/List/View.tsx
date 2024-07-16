@@ -183,7 +183,12 @@ export const AccountListView = () => {
 
   const onFilterChange = useCallback(
     (filterModel: GridFilterModel) => {
-      debouncedFilterChange(filterModel.items?.[0]?.value !== undefined ? filterModel : {});
+      debouncedFilterChange(
+        ['isEmpty', 'isNotEmpty'].includes(filterModel.items?.[0]?.operator) ||
+          filterModel.items?.[0]?.value !== undefined
+          ? filterModel
+          : {}
+      );
     },
     [debouncedFilterChange]
   );
