@@ -84,6 +84,7 @@ export function AuthProvider({ children }: Props) {
   const expireToken = useCallback(() => {
     setToken(null);
     setSession(null);
+    setError(null);
     toast.error('Your session has expired. Please login again.');
     router.push(paths.signIn);
 
