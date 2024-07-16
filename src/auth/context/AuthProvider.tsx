@@ -127,7 +127,7 @@ export function AuthProvider({ children }: Props) {
     return () => {
       clearTimeout(timerId.current);
     };
-  }, [timeToLive, error, loading, expireToken]);
+  }, [timeToLive, error, expireToken]);
 
   const memoizedValue: AuthContextValue = useMemo(
     () => ({ user, token, isAuthenticated: !!token, loading, signIn, signOut }),
