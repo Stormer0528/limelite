@@ -1,3 +1,4 @@
+import type { AccountFund } from 'src/__generated__/graphql';
 import type {
   GridSlots,
   GridColDef,
@@ -27,6 +28,7 @@ import { Iconify } from 'src/components/Iconify';
 import { EmptyContent } from 'src/components/EmptyContent';
 import { DataGridSkeleton, DataGridPagination } from 'src/components/DataGrid/';
 
+import { FundFormModal } from './FundFormModal';
 import { useFetchAccountFunds } from './useApollo';
 import { AccountFundTableToolBar } from './TableToolBar';
 
@@ -42,6 +44,8 @@ const numberColumnType: GridColTypeDef = {
 export const AccountFundView = () => {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>();
   const [filterButtonEl, setFilterButtonEl] = useState<HTMLButtonElement | null>(null);
+
+  const [selectedFund, setSelectedFund] = useState<AccountFund | null>(null);
 
   const { organization } = useOrganizationContext();
 
@@ -90,16 +94,12 @@ export const AccountFundView = () => {
         disableColumnMenu: true,
         getActions: (params) => [
           <GridActionsCellItem
-            showInMenu
-            icon={<Iconify icon="solar:eye-bold" />}
-            label="View"
-            // onClick={() => handleViewRow(params.row.id)}
-          />,
-          <GridActionsCellItem
-            showInMenu
-            icon={<Iconify icon="solar:pen-bold" />}
+            icon={<Iconify icon="solar:pen-bold" sx={{ fontSize: 'inherit' }} />}
             label="Edit"
-            // onClick={() => handleEditRow(params.row.id)}
+            onClick={() => {
+              // TODO: This is not fired every time.
+              setSelectedFund(params.row as AccountFund);
+            }}
           />,
         ],
       },
@@ -142,48 +142,62 @@ export const AccountFundView = () => {
   const paginationModel = useMemo(() => ({ page: page.page - 1, pageSize: page.pageSize }), [page]);
 
   return (
-    <DataGrid
-      disableRowSelectionOnClick
-      rows={funds}
-      columns={columns}
-      loading={loading}
-      rowHeight={22}
-      // Filter Props
-      filterMode="server"
-      onFilterModelChange={onFilterChange}
-      initialState={{ filter: { filterModel: filter } }}
-      // Sort Props
-      sortModel={sort}
-      onSortModelChange={onSortChange}
-      // Pagination props
-      rowCount={rowCount}
-      paginationMode="server"
-      pageSizeOptions={[10, 25, 50, 100]}
-      paginationModel={paginationModel}
-      onPaginationModelChange={({ page: newPage, pageSize }) => {
-        if (newPage + 1 !== page.page) {
-          setPage(newPage + 1);
-        }
-        if (pageSize !== page.pageSize) {
-          setPageSize(pageSize);
-        }
-      }}
-      // Visibility props
-      columnVisibilityModel={columnVisibilityModel}
-      onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-      slots={{
-        toolbar: AccountFundTableToolBar as GridSlots['toolbar'],
-        noRowsOverlay: () => <EmptyContent />,
-        noResultsOverlay: () => <EmptyContent title="No accounts found" />,
-        pagination: DataGridPagination,
-        loadingOverlay: DataGridSkeleton,
-      }}
-      slotProps={{
-        panel: { anchorEl: filterButtonEl },
-        toolbar: { setFilterButtonEl },
-        columnsManagement: { getTogglableColumns },
-      }}
-      sx={{ [`& .${gridClasses.cell}`]: { alignItems: 'center', display: 'inline-flex' } }}
-    />
+    <>
+      <DataGrid
+        disableRowSelectionOnClick
+        rows={funds}
+        columns={columns}
+        loading={loading}
+        rowHeight={22}
+        // Filter Props
+        filterMode="server"
+        onFilterModelChange={onFilterChange}
+        initialState={{ filter: { filterModel: filter } }}
+        // Sort Props
+        sortModel={sort}
+        onSortModelChange={onSortChange}
+        // Pagination props
+        rowCount={rowCount}
+        paginationMode="server"
+        pageSizeOptions={[10, 25, 50, 100]}
+        paginationModel={paginationModel}
+        onPaginationModelChange={({ page: newPage, pageSize }) => {
+          if (newPage + 1 !== page.page) {
+            setPage(newPage + 1);
+          }
+          if (pageSize !== page.pageSize) {
+            setPageSize(pageSize);
+          }
+        }}
+        // Visibility props
+        columnVisibilityModel={columnVisibilityModel}
+        onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+        slots={{
+          toolbar: AccountFundTableToolBar as GridSlots['toolbar'],
+          noRowsOverlay: () => <EmptyContent />,
+          noResultsOverlay: () => <EmptyContent title="No accounts found" />,
+          pagination: DataGridPagination,
+          loadingOverlay: DataGridSkeleton,
+        }}
+        slotProps={{
+          panel: { anchorEl: filterButtonEl },
+          toolbar: {
+            setFilterButtonEl,
+            onNewFundClick: () => {
+              setSelectedFund({} as AccountFund);
+            },
+          },
+          columnsManagement: { getTogglableColumns },
+        }}
+        sx={{ [`& .${gridClasses.cell}`]: { alignItems: 'center', display: 'inline-flex' } }}
+      />
+      <FundFormModal
+        fund={selectedFund}
+        open={selectedFund !== null}
+        onClose={() => {
+          setSelectedFund(null);
+        }}
+      />
+    </>
   );
 };

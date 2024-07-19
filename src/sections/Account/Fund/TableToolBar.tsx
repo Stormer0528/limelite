@@ -11,9 +11,13 @@ import { Iconify } from 'src/components/Iconify';
 
 interface AccountTableToolBarProps {
   setFilterButtonEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
+  onNewFundClick: () => void;
 }
 
-export function AccountFundTableToolBar({ setFilterButtonEl }: AccountTableToolBarProps) {
+export function AccountFundTableToolBar({
+  setFilterButtonEl,
+  onNewFundClick,
+}: AccountTableToolBarProps) {
   return (
     <GridToolbarContainer>
       {/* <GridToolbarQuickFilter /> */}
@@ -24,6 +28,9 @@ export function AccountFundTableToolBar({ setFilterButtonEl }: AccountTableToolB
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}
           size="small"
+          onClick={() => {
+            onNewFundClick();
+          }}
         >
           New fund
         </Button>
