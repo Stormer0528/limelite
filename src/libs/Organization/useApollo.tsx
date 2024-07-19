@@ -6,14 +6,12 @@ import { gql } from 'src/__generated__/gql';
 // ----------------------------------------------------------------------
 
 const FETCH_ORGANIZATION = gql(/* GraphQL */ `
-  query Organization($filter: JSONObject) {
-    organizations(filter: $filter) {
-      organizations {
-        id
-        name
-        slug
-        accountStats
-      }
+  query Organization($slug: String!) {
+    organization(slug: $slug) {
+      id
+      name
+      slug
+      accountStats
     }
   }
 `);
@@ -22,8 +20,9 @@ const FETCH_ORGANIZATION = gql(/* GraphQL */ `
 
 export function useFetchOrganization(slug: string) {
   const { data, loading } = useQuery(FETCH_ORGANIZATION, {
-    variables: { filter: { slug } },
+    variables: { slug },
   });
 
-  return { organization: data?.organizations.organizations?.[0] ?? ({} as Organization), loading };
+  // TODO: If the organization is not found, redirect to 404 page
+  return { organization: data?.organization ?? ({} as Organization), loading };
 }
