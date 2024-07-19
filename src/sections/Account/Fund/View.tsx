@@ -45,7 +45,7 @@ export const AccountFundView = () => {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>();
   const [filterButtonEl, setFilterButtonEl] = useState<HTMLButtonElement | null>(null);
 
-  const [selectedFund, setSelectedFund] = useState<AccountFund | null>(null);
+  const [selectedFund, setSelectedFund] = useState<AccountFund | null | undefined>();
 
   const { organization } = useOrganizationContext();
 
@@ -184,7 +184,7 @@ export const AccountFundView = () => {
           toolbar: {
             setFilterButtonEl,
             onNewFundClick: () => {
-              setSelectedFund({} as AccountFund);
+              setSelectedFund(null);
             },
           },
           columnsManagement: { getTogglableColumns },
@@ -193,9 +193,9 @@ export const AccountFundView = () => {
       />
       <FundFormModal
         fund={selectedFund}
-        open={selectedFund !== null}
+        open={selectedFund !== undefined}
         onClose={() => {
-          setSelectedFund(null);
+          setSelectedFund(undefined);
         }}
       />
     </>

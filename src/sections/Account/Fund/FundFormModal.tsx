@@ -57,7 +57,8 @@ export function FundFormModal({ fund, onClose, open, ...other }: Props) {
 
   useEffect(() => {
     if (open) {
-      reset(FundSchema.parse(fund || {}));
+      const defaultValues = fund ? { code: fund.code!, name: fund.name! } : { code: '', name: '' };
+      reset(defaultValues);
     }
   }, [reset, open, fund]);
 
