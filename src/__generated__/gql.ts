@@ -15,9 +15,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query FetchMe {\n    me {\n      id\n      name\n      email\n      avatar {\n        url\n      }\n      userGroups {\n        id\n        name\n        organization {\n          id\n          name\n          slug\n          avatar {\n            url\n          }\n          createdAt\n        }\n        permissions {\n          Account\n          ApprovalAmount\n          BankAccount\n          BatchUpload\n          CreditCard\n          Customer\n          Report\n          Vendor\n        }\n      }\n    }\n  }\n": types.FetchMeDocument,
     "\n  query Organization($slug: String!) {\n    organization(slug: $slug) {\n      id\n      name\n      slug\n      accountStats\n    }\n  }\n": types.OrganizationDocument,
-    "\n  query AccountFunds($filter: JSONObject, $page: String, $sort: String) {\n    accountFunds(filter: $filter, page: $page, sort: $sort) {\n      accountFunds {\n        id\n        name\n        code\n      }\n      total\n    }\n  }\n": types.AccountFundsDocument,
+    "\n  query AccountFunds($filter: JSONObject, $page: String, $sort: String) {\n    accountFunds(filter: $filter, page: $page, sort: $sort) {\n      accountFunds {\n        id\n        name\n        code\n        accountCount\n      }\n      total\n    }\n  }\n": types.AccountFundsDocument,
     "\n  mutation CreateAccountFund($data: BaseCreateInput!) {\n    createAccountFund(data: $data) {\n      id\n      name\n      code\n    }\n  }\n": types.CreateAccountFundDocument,
     "\n  mutation UpdateAccountFund($data: BaseUpdateInput!) {\n    updateAccountFund(data: $data) {\n      id\n      name\n      code\n    }\n  }\n": types.UpdateAccountFundDocument,
+    "\n  mutation RemoveAccountFund($fundId: String!) {\n    removeAccountFund(id: $fundId) {\n      success\n    }\n  }\n": types.RemoveAccountFundDocument,
     "\n                fragment NewFund on AccountFund {\n                  id\n                  name\n                  code\n                }\n              ": types.NewFundFragmentDoc,
     "\n  query Accounts($filter: JSONObject, $page: String, $sort: String) {\n    accounts(filter: $filter, page: $page, sort: $sort) {\n      accounts {\n        id\n        fund\n        resource\n        year\n        goal\n        function\n        object\n        location\n        slug\n        accountFunction {\n          code\n          name\n        }\n        accountFund {\n          code\n          name\n        }\n        accountGoal {\n          code\n          name\n        }\n        accountLocation {\n          code\n          name\n        }\n        accountObject {\n          code\n          name\n        }\n        accountResource {\n          code\n          name\n        }\n        accountYear {\n          code\n          name\n        }\n      }\n      total\n    }\n  }\n": types.AccountsDocument,
     "\n  query AccountResources($filter: JSONObject, $page: String, $sort: String) {\n    accountResources(filter: $filter, page: $page, sort: $sort) {\n      accountResources {\n        id\n        name\n        isRestricted\n        code\n      }\n      total\n    }\n  }\n": types.AccountResourcesDocument,
@@ -49,7 +50,7 @@ export function gql(source: "\n  query Organization($slug: String!) {\n    organ
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query AccountFunds($filter: JSONObject, $page: String, $sort: String) {\n    accountFunds(filter: $filter, page: $page, sort: $sort) {\n      accountFunds {\n        id\n        name\n        code\n      }\n      total\n    }\n  }\n"): (typeof documents)["\n  query AccountFunds($filter: JSONObject, $page: String, $sort: String) {\n    accountFunds(filter: $filter, page: $page, sort: $sort) {\n      accountFunds {\n        id\n        name\n        code\n      }\n      total\n    }\n  }\n"];
+export function gql(source: "\n  query AccountFunds($filter: JSONObject, $page: String, $sort: String) {\n    accountFunds(filter: $filter, page: $page, sort: $sort) {\n      accountFunds {\n        id\n        name\n        code\n        accountCount\n      }\n      total\n    }\n  }\n"): (typeof documents)["\n  query AccountFunds($filter: JSONObject, $page: String, $sort: String) {\n    accountFunds(filter: $filter, page: $page, sort: $sort) {\n      accountFunds {\n        id\n        name\n        code\n        accountCount\n      }\n      total\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -58,6 +59,10 @@ export function gql(source: "\n  mutation CreateAccountFund($data: BaseCreateInp
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateAccountFund($data: BaseUpdateInput!) {\n    updateAccountFund(data: $data) {\n      id\n      name\n      code\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateAccountFund($data: BaseUpdateInput!) {\n    updateAccountFund(data: $data) {\n      id\n      name\n      code\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemoveAccountFund($fundId: String!) {\n    removeAccountFund(id: $fundId) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation RemoveAccountFund($fundId: String!) {\n    removeAccountFund(id: $fundId) {\n      success\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

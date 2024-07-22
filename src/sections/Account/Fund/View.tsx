@@ -30,6 +30,7 @@ import { DataGridSkeleton, DataGridPagination } from 'src/components/DataGrid/';
 
 import { FundFormModal } from './FundFormModal';
 import { useFetchAccountFunds } from './useApollo';
+import { FundRemoveModal } from './FundRemoveModal';
 import { AccountFundTableToolBar } from './TableToolBar';
 
 const HIDE_COLUMNS_TOGGLABLE = ['actions'];
@@ -46,6 +47,7 @@ export const AccountFundView = () => {
   const [filterButtonEl, setFilterButtonEl] = useState<HTMLButtonElement | null>(null);
 
   const [selectedFund, setSelectedFund] = useState<AccountFund | null | undefined>();
+  const [removalFund, setRemovalFund] = useState<string | null | undefined>();
 
   const { organization } = useOrganizationContext();
 
@@ -100,6 +102,15 @@ export const AccountFundView = () => {
               // TODO: This is not fired every time.
               setSelectedFund(params.row as AccountFund);
             }}
+          />,
+          <GridActionsCellItem
+            icon={<Iconify icon="solar:trash-bin-trash-bold" />}
+            label="Delete"
+            disabled={params.row.accountCount > 0}
+            onClick={async () => {
+              setRemovalFund(params.row.id);
+            }}
+            sx={{ color: 'error.main' }}
           />,
         ],
       },
@@ -196,6 +207,14 @@ export const AccountFundView = () => {
         open={selectedFund !== undefined}
         onClose={() => {
           setSelectedFund(undefined);
+        }}
+      />
+
+      <FundRemoveModal
+        fundId={removalFund ?? ''}
+        open={!!removalFund}
+        onClose={() => {
+          setRemovalFund(null);
         }}
       />
     </>

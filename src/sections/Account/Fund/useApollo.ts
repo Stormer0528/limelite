@@ -11,6 +11,7 @@ const FETCH_ACCOUNT_FUNDS = gql(/* GraphQL */ `
         id
         name
         code
+        accountCount
       }
       total
     }
@@ -33,6 +34,14 @@ const UPDATE_ACCOUNT_FUND = gql(/* GraphQL */ `
       id
       name
       code
+    }
+  }
+`);
+
+const REMOVE_ACCOUNT_FUND = gql(/* GraphQL */ `
+  mutation RemoveAccountFund($fundId: String!) {
+    removeAccountFund(id: $fundId) {
+      success
     }
   }
 `);
@@ -106,4 +115,13 @@ export function useUpdateAccountFunds() {
     refetchQueries: ['AccountFunds'],
   });
   return { submitFundUpdate, error };
+}
+
+export function useRemoveAccountFunds() {
+  const [submitFundRemove, { loading, error }] = useMutation(REMOVE_ACCOUNT_FUND, {
+    awaitRefetchQueries: true,
+    refetchQueries: ['Organization', 'AccountFunds'],
+  });
+
+  return { submitFundRemove, loading, error };
 }
