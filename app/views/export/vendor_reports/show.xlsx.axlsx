@@ -20,36 +20,78 @@ wb.styles do |s|
                   style: [title_cell]
     sheet.merge_cells("A2:D2")
     sheet.add_row
-    sheet.add_row [
-      "Fund Code",
-      "Vendor Name",
-      "Phone Number",
-      "Vendor Number",
-      "Amount",
-      "Address"
-    ], style: header_border_cell
-
-    @report.vendors.each do |vendor|
-      address = vendor.dig("address")
-      address_combined = [
-        address&.dig("attention"),
-        address&.dig("department"),
-        address&.dig("line1"),
-        address&.dig("line2"),
-        "#{address&.dig('city')}, #{address&.dig('state')} #{address&.dig('zip')}"
-      ].filter {|e| e.present? }.join("\n")
-
+    
+    if @current_org.id == 20
       sheet.add_row [
-        vendor["code"],
-        vendor["vendor_name"],
-        vendor["phone"],
-        vendor["vendor_number"],
-        parse_num(vendor["amount"]),
-        address_combined
-      ],
-                    style: [default_cell, default_cell, default_cell, default_cell, currency_with_sign, wrap_text_cell],
-                    types: [:string, :string, :string, :string, :float, :string]
+        "Fund Code",
+        "Vendor Name",
+        "Phone Number",
+        "Vendor Number",
+        "Amount",
+        "Street Address",
+        "City",
+        "State",
+        "Zip Code"
+      ], style: header_border_cell
+
+      @report.vendors.each do |vendor|
+        address = vendor.dig("address")
+        address_combined = [
+          address&.dig("attention"),
+          address&.dig("department"),
+          address&.dig("line1"),
+          address&.dig("line2")
+        ].filter {|e| e.present? }.join("\n")
+
+        sheet.add_row [
+          vendor["code"],
+          vendor["vendor_name"],
+          vendor["phone"],
+          vendor["vendor_number"],
+          parse_num(vendor["amount"]),
+          address_combined,
+          address&.dig('city'),
+          address&.dig('state'),
+          address&.dig('zip')
+        ],
+                      style: [default_cell, default_cell, default_cell, default_cell, currency_with_sign, wrap_text_cell],
+                      types: [:string, :string, :string, :string, :float, :string]
+      end
+    else
+      sheet.add_row [
+        "Fund Code",
+        "Vendor Name",
+        "Phone Number",
+        "Vendor Number",
+        "Amount",
+        "Address"
+      ], style: header_border_cell
+
+      @report.vendors.each do |vendor|
+        address = vendor.dig("address")
+        address_combined = [
+          address&.dig("attention"),
+          address&.dig("department"),
+          address&.dig("line1"),
+          address&.dig("line2"),
+          "#{address&.dig('city')}, #{address&.dig('state')} #{address&.dig('zip')}"
+        ].filter {|e| e.present? }.join("\n")
+
+        sheet.add_row [
+          vendor["code"],
+          vendor["vendor_name"],
+          vendor["phone"],
+          vendor["vendor_number"],
+          parse_num(vendor["amount"]),
+          address_combined
+        ],
+                      style: [default_cell, default_cell, default_cell, default_cell, currency_with_sign, wrap_text_cell],
+                      types: [:string, :string, :string, :string, :float, :string]
+      end
     end
+    
+
+    
 
     sheet.column_info.first.width = 15
   end
