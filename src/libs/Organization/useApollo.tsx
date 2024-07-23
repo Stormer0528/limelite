@@ -1,5 +1,3 @@
-import type { Organization } from 'src/__generated__/graphql';
-
 import { useQuery } from '@apollo/client';
 
 import { gql } from 'src/__generated__/gql';
@@ -24,5 +22,5 @@ export function useFetchOrganization(slug: string) {
   });
 
   // TODO: If the organization is not found, redirect to 404 page
-  return { organization: data?.organization ?? ({} as Organization), loading };
+  return { organization: data?.organization, loading };
 }

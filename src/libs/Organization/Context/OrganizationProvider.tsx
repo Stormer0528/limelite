@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
+import { Navigate } from 'react-router';
 
+import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useFetchOrganization } from '../useApollo';
@@ -21,6 +23,10 @@ export function OrganizationProvider({ children }: Props) {
     () => ({ organization, loading }),
     [organization, loading]
   );
+
+  if (!loading && !organization) {
+    return <Navigate to={paths.notFound} />;
+  }
 
   return (
     <OrganizationContext.Provider value={memoizedValue}>{children}</OrganizationContext.Provider>
