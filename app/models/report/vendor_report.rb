@@ -84,9 +84,6 @@ class Report::VendorReport < ApplicationRecord
     data[:fund_code] = funds.join(', ')
     data[:funds] = funds
 
-    puts 'HERE'
-    puts funds.inspect
-
     should_continue = false
     data[:vendors] = get_vendors.map do |vendor|
       next if should_continue
