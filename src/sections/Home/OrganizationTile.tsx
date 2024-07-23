@@ -13,6 +13,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { fDate } from 'src/utils/format-time';
+import { fNumber } from 'src/utils/formatNumber';
 
 import { Iconify } from 'src/components/Iconify';
 
@@ -64,7 +65,7 @@ export function OrganizationTitle({ userGroup: { organization, ...userGroup } }:
       <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
         {[
           {
-            label: `${organization?.accountStats?.accounts} accounts`,
+            label: `${fNumber(organization?.accountStats?.accounts ?? 0)} accounts`,
             icon: <Iconify icon="uil:transaction" width={16} sx={{ flexShrink: 0 }} />,
           },
           {
