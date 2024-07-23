@@ -60,7 +60,7 @@ export const AccountFundView = () => {
   );
 
   const graphQuerySort = useMemo(() => {
-    if (!sort) return undefined;
+    if (!sort) return '-createdAt';
 
     return sort.map(({ field, sort: order }) => `${order === 'asc' ? '' : '-'}${field}`).join(',');
   }, [sort]);
