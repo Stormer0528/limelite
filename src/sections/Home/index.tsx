@@ -38,19 +38,35 @@ export function HomeView() {
             title="Organizations"
             total={user?.userGroups!.length ?? 0}
             icon={<BookingIllustration />}
+            loading={loading}
           />
         </Grid>
 
         <Grid xs={12} sm={6} xl={3}>
-          <SummaryTile title="Accounts" total={totalAccounts} icon={<CheckInIllustration />} />
+          <SummaryTile
+            title="Accounts"
+            total={totalAccounts}
+            icon={<CheckInIllustration />}
+            loading={loading}
+          />
         </Grid>
 
         <Grid xs={12} sm={6} xl={3}>
-          <SummaryTile title="Vendors" total={124000} icon={<CheckoutIllustration />} />
+          <SummaryTile
+            title="Vendors"
+            total={124000}
+            icon={<CheckoutIllustration />}
+            loading={loading}
+          />
         </Grid>
 
         <Grid xs={12} sm={6} xl={3}>
-          <SummaryTile title="Entries" total={124000} icon={<CheckoutIllustration />} />
+          <SummaryTile
+            title="Entries"
+            total={124000}
+            icon={<CheckoutIllustration />}
+            loading={loading}
+          />
         </Grid>
       </Grid>
 

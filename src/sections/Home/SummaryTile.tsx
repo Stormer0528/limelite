@@ -2,6 +2,7 @@ import type { CardProps } from '@mui/material/Card';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Skeleton from '@mui/material/Skeleton';
 
 import { fShortenNumber } from 'src/utils/formatNumber';
 
@@ -10,11 +11,11 @@ import { fShortenNumber } from 'src/utils/formatNumber';
 type Props = CardProps & {
   title: string;
   total: number;
-
   icon: React.ReactElement;
+  loading?: boolean;
 };
 
-export function SummaryTile({ title, total, icon, sx, ...other }: Props) {
+export function SummaryTile({ title, total, icon, loading, sx, ...other }: Props) {
   return (
     <Card
       sx={{
@@ -28,7 +29,9 @@ export function SummaryTile({ title, total, icon, sx, ...other }: Props) {
     >
       <Box sx={{ flexGrow: 1 }}>
         <Box sx={{ color: 'text.secondary', typography: 'subtitle2' }}>{title}</Box>
-        <Box sx={{ my: 1.5, typography: 'h3' }}>{fShortenNumber(total)}</Box>
+        <Box sx={{ my: 1.5, typography: 'h3' }}>
+          {loading ? <Skeleton variant="text" width="50%" /> : fShortenNumber(total)}
+        </Box>
       </Box>
 
       <Box
