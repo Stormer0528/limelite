@@ -64,7 +64,7 @@ export function OrganizationTitle({ userGroup: { organization, ...userGroup } }:
       <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
         {[
           {
-            label: `16 accounts`,
+            label: `${organization?.accountStats?.accounts} accounts`,
             icon: <Iconify icon="uil:transaction" width={16} sx={{ flexShrink: 0 }} />,
           },
           {

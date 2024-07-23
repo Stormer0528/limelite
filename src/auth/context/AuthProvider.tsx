@@ -37,6 +37,7 @@ const FETCH_ME_QUERY = gql(/* GraphQL */ `
           id
           name
           slug
+          accountStats
           avatar {
             url
           }

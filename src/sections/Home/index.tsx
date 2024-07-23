@@ -14,7 +14,7 @@ import { SummaryTile } from './SummaryTile';
 import { OrganizationTitle } from './OrganizationTile';
 // ----------------------------------------------------------------------
 
-export function OverviewAnalyticsView() {
+export function HomeView() {
   const { user } = useAuthContext();
   return (
     <DashboardContent maxWidth="xl">

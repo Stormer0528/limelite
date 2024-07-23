@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config';
 
-import { OverviewAnalyticsView } from 'src/sections/Home';
+import { HomeView } from 'src/sections/Home';
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ export default function Page() {
         <title> {metadata.title}</title>
       </Helmet>
 
-      <OverviewAnalyticsView />
+      <HomeView />
     </>
   );
 }
