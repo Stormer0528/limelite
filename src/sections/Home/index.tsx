@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
@@ -15,7 +17,16 @@ import { OrganizationTitle } from './OrganizationTile';
 // ----------------------------------------------------------------------
 
 export function HomeView() {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
+  const totalAccounts = useMemo(
+    () =>
+      user?.userGroups?.reduce(
+        (prev, { organization }) => prev + (organization?.accountStats?.accounts ?? 0),
+        0
+      ) ?? 0,
+
+    [user]
+  );
   return (
     <DashboardContent maxWidth="xl">
       <Typography variant="h5" sx={{ mb: { xs: 3, md: 5 } }}>
@@ -31,7 +42,7 @@ export function HomeView() {
         </Grid>
 
         <Grid xs={12} sm={6} xl={3}>
-          <SummaryTile title="Accounts" total={3112} icon={<CheckInIllustration />} />
+          <SummaryTile title="Accounts" total={totalAccounts} icon={<CheckInIllustration />} />
         </Grid>
 
         <Grid xs={12} sm={6} xl={3}>
