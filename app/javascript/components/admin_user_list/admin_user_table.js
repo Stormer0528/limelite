@@ -152,11 +152,12 @@ const AdminUserTable = ({
               <SearchableTable
                 className={`${classes.root}`}
                 data={orgUsers}
-                headers={["Admin", "Name", "Email", "Type", "", ""]}
+                headers={["Admin", "Name", "Email", "UserGroup", "Type", "", ""]}
                 cells={[
                   AdminCell,
                   LinkRow,
                   "email",
+                  UserGroupCell,
                   TypeCell(organization, setUserType),
                   ViewLinksColumn({
                     pathProperty: "url",
@@ -300,7 +301,7 @@ export default withStyles(styles)(AdminUserTable);
 // TABLE ROWS
 //------------------------------------------------------------------------------
 const LinkRow = LinkRenderer("fullName", "url");
-LinkRow.customSortFunc = textSearch("name");
+LinkRow.customSortFunc = textSearch("fullName");
 LinkRow.columnWidth = 135;
 LinkRow.flexGrow = 0;
 
@@ -331,6 +332,21 @@ AdminCell.propTypes = {
 
 AdminCell.columnWidth = 70;
 AdminCell.flexGrow = 0;
+
+const UserGroupCell = ({rowData: {userGroups}}) => {
+  return (
+    <div>
+      {userGroups && userGroups.length > 0 ? userGroups[0].name : ""}
+    </div>
+  );
+};
+
+UserGroupCell.propTypes = {
+  rowData: PropTypes.shape({
+    userGroups: PropTypes.array,
+  }),
+};
+UserGroupCell.customSortFunc = textSearch("userGroups.0.name");
 
 const RoleCell = (org_id, setUserRole) => {
   const Cell = ({rowData: {id, organizationAssignments = []}}) => {

@@ -29,6 +29,10 @@ query users(
     archived
     url
     editUrl
+    userGroups {
+      id
+      name
+    }
     organizationAssignments {
       id
       organizationId

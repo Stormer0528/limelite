@@ -122,6 +122,7 @@ function sortedData({column, direction, data, customSortFunc}) {
   if (isNil(column) || column === "") {
     return data;
   }
+  console.log("sortedData", column, direction, data, customSortFunc);
   const sortFunc = customSortFunc ? [customSortFunc] : [column];
 
   const newData = sortBy(data, sortFunc);
