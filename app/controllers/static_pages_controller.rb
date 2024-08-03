@@ -31,6 +31,6 @@ class StaticPagesController < ApplicationController
   end
 
   def set_organizations
-    @organizations = policy_scope(Organization).unarchived.dependent.order("LOWER(name)")
+    @organizations = policy_scope(Organization).unarchived.order("LOWER(name)")
   end
 end

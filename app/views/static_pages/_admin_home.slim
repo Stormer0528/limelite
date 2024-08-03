@@ -54,7 +54,7 @@ h2 style="padding-bottom: .15em; border-bottom: 1px solid #E0E0E0;"
                     = class_icon "Organization"
                     = "AP"
 
-      - if "archived clients" < org.name.downcase and !rendered[:archived_clients]
+      - if @current_user.super_admin? and !rendered[:archived_clients]
         - rendered[:archived_clients] = true
 
         .card
@@ -65,7 +65,7 @@ h2 style="padding-bottom: .15em; border-bottom: 1px solid #E0E0E0;"
                     = class_icon "Organization"
                     = "Archived Clients"
 
-      - if "independent clients" <  org.name.downcase and !rendered[:independent_clients]
+      - if org.independent? and !rendered[:independent_clients]
         - rendered[:independent_clients] = true
 
         .card
@@ -86,12 +86,13 @@ h2 style="padding-bottom: .15em; border-bottom: 1px solid #E0E0E0;"
                     = class_icon "Organization"
                     = "Admin"
 
-    .card
-      .card-content
-        span.card-title
-          - org_path = Rails.env.production? ?  "https://#{org.subdomain}.limeliteds.com" : "#{request.protocol}#{org.subdomain}.#{request.host_with_port}"
-          = link_to org_path do
-            = class_icon "Organization"
-            = org&.alias&.present? ? org.alias : org.name.truncate(35)
-        - if org&.alias&.present?
-          h5.subtitle = org.name
+    - if !local_assigns[:home] or !org.independent
+      .card
+        .card-content
+          span.card-title
+            - org_path = Rails.env.production? ?  "https://#{org.subdomain}.limeliteds.com" : "#{request.protocol}#{org.subdomain}.#{request.host_with_port}"
+            = link_to org_path do
+              = class_icon "Organization"
+              = org&.alias&.present? ? org.alias : org.name.truncate(35)
+          - if org&.alias&.present?
+            h5.subtitle = org.name
