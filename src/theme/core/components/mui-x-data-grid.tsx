@@ -112,6 +112,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
         fontVariantNumeric: 'tabular-nums',
         letterSpacing: '-1px',
       },
+      '&:focus': { outline: 'none' },
     }),
     /**
      * Toolbar
