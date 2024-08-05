@@ -291,6 +291,36 @@ export type AssignUserInput = {
   userId: Scalars['ID']['input'];
 };
 
+export type BankAccount = {
+  __typename?: 'BankAccount';
+  accountObject?: Maybe<AccountObject>;
+  bankName?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  edpNumber?: Maybe<Scalars['String']['output']>;
+  endedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  fractionalNumber?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  number?: Maybe<Scalars['String']['output']>;
+  organization?: Maybe<Organization>;
+  pseudo?: Maybe<Scalars['String']['output']>;
+  routingNumber?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  startedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  startingBalanceCurrency?: Maybe<Scalars['String']['output']>;
+  startingBalanceInCents?: Maybe<Scalars['Int']['output']>;
+  stateAccountNumber?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type BankAccountsResponse = {
+  __typename?: 'BankAccountsResponse';
+  bankAccounts?: Maybe<Array<Maybe<BankAccount>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type BaseCreateInput = {
   code: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
@@ -301,6 +331,25 @@ export type BaseUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateBankAccountInput = {
+  accountObjectId: Scalars['String']['input'];
+  bankName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  edpNumber?: InputMaybe<Scalars['String']['input']>;
+  endedAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  fractionalNumber?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  number?: InputMaybe<Scalars['String']['input']>;
+  organizationId: Scalars['String']['input'];
+  pseudo?: InputMaybe<Scalars['String']['input']>;
+  routingNumber?: InputMaybe<Scalars['String']['input']>;
+  slug: Scalars['String']['input'];
+  startedAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  startingBalanceCurrency?: InputMaybe<Scalars['String']['input']>;
+  startingBalanceInCents?: InputMaybe<Scalars['Int']['input']>;
+  stateAccountNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateOrganizationInput = {
@@ -375,6 +424,7 @@ export type Mutation = {
   createAccountResource: AccountResource;
   createAccountYear: AccountYear;
   createAddress: Address;
+  createBankAccount: BankAccount;
   createOrganization: Organization;
   createUser: User;
   createUserGroup: UserGroup;
@@ -390,6 +440,7 @@ export type Mutation = {
   removeAccountResource: SuccessResponse;
   removeAccountYear: SuccessResponse;
   removeAddress: SuccessResponse;
+  removeBankAccount: SuccessResponse;
   removeUserGroup: SuccessResponse;
   resetPassword: SuccessResponse;
   updateAccount: Account;
@@ -401,6 +452,7 @@ export type Mutation = {
   updateAccountResource: AccountResource;
   updateAccountYear: AccountYear;
   updateAddress: Address;
+  updateBankAccount: BankAccount;
   updateOrganization: Organization;
   updatePassword: User;
   updateUser: User;
@@ -460,6 +512,11 @@ export type MutationCreateAccountYearArgs = {
 
 export type MutationCreateAddressArgs = {
   data: AddressInputWithPolymorphic;
+};
+
+
+export type MutationCreateBankAccountArgs = {
+  data: CreateBankAccountInput;
 };
 
 
@@ -538,6 +595,11 @@ export type MutationRemoveAddressArgs = {
 };
 
 
+export type MutationRemoveBankAccountArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationRemoveUserGroupArgs = {
   data: EntityId;
 };
@@ -590,6 +652,11 @@ export type MutationUpdateAccountYearArgs = {
 
 export type MutationUpdateAddressArgs = {
   data: UpdateAddressInput;
+};
+
+
+export type MutationUpdateBankAccountArgs = {
+  data: UpdateBankAccountInput;
 };
 
 
@@ -663,6 +730,7 @@ export type Query = {
   accountYears: AccountYearsResponse;
   accounts: AccountsResponse;
   addresses: Array<Address>;
+  bankAccounts: BankAccountsResponse;
   me: User;
   organization?: Maybe<Organization>;
   organizations: OrganizationsResponse;
@@ -774,6 +842,13 @@ export type QueryAddressesArgs = {
 };
 
 
+export type QueryBankAccountsArgs = {
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryOrganizationArgs = {
   slug: Scalars['String']['input'];
 };
@@ -820,6 +895,25 @@ export type UpdateAddressInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   state: Scalars['String']['input'];
   zip: Scalars['String']['input'];
+};
+
+export type UpdateBankAccountInput = {
+  accountObjectId?: InputMaybe<Scalars['String']['input']>;
+  bankName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  edpNumber?: InputMaybe<Scalars['String']['input']>;
+  endedAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  fractionalNumber?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  number?: InputMaybe<Scalars['String']['input']>;
+  pseudo?: InputMaybe<Scalars['String']['input']>;
+  routingNumber?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  startedAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
+  startingBalanceCurrency?: InputMaybe<Scalars['String']['input']>;
+  startingBalanceInCents?: InputMaybe<Scalars['Int']['input']>;
+  stateAccountNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateOrganizationInput = {
@@ -998,6 +1092,15 @@ export type AccountResourcesQueryVariables = Exact<{
 
 export type AccountResourcesQuery = { __typename?: 'Query', accountResources: { __typename?: 'AccountResourcesResponse', total?: number | null, accountResources?: Array<{ __typename?: 'AccountResource', id?: string | null, name?: string | null, isRestricted?: boolean | null, code: string } | null> | null } };
 
+export type BankAccountsQueryVariables = Exact<{
+  filter?: InputMaybe<Scalars['JSONObject']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type BankAccountsQuery = { __typename?: 'Query', bankAccounts: { __typename?: 'BankAccountsResponse', total?: number | null, bankAccounts?: Array<{ __typename?: 'BankAccount', id: string, name?: string | null, number?: string | null, description?: string | null, accountObject?: { __typename?: 'AccountObject', name?: string | null, code: string } | null } | null> | null } };
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
@@ -1014,4 +1117,5 @@ export const UpdateAccountFundDocument = {"kind":"Document","definitions":[{"kin
 export const RemoveAccountFundDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveAccountFund"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fundId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeAccountFund"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fundId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<RemoveAccountFundMutation, RemoveAccountFundMutationVariables>;
 export const AccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Accounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"JSONObject"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accounts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fund"}},{"kind":"Field","name":{"kind":"Name","value":"resource"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"goal"}},{"kind":"Field","name":{"kind":"Name","value":"function"}},{"kind":"Field","name":{"kind":"Name","value":"object"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"accountFunction"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"accountFund"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"accountGoal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"accountLocation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"accountObject"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"accountResource"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"accountYear"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]} as unknown as DocumentNode<AccountsQuery, AccountsQueryVariables>;
 export const AccountResourcesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AccountResources"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"JSONObject"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accountResources"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accountResources"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isRestricted"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]} as unknown as DocumentNode<AccountResourcesQuery, AccountResourcesQueryVariables>;
+export const BankAccountsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"BankAccounts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"JSONObject"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bankAccounts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bankAccounts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"number"}},{"kind":"Field","name":{"kind":"Name","value":"accountObject"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]} as unknown as DocumentNode<BankAccountsQuery, BankAccountsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
