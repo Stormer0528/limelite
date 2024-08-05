@@ -71,7 +71,7 @@ module.exports = {
       {
         order: 'asc',
         type: 'line-length',
-        'newlines-between': 'always',
+        newlinesBetween: 'always',
         groups: [
           'style',
           'type',
@@ -90,7 +90,7 @@ module.exports = {
           'object',
           'unknown',
         ],
-        'custom-groups': {
+        customGroups: {
           value: {
             ['custom-mui']: '@mui/**',
             ['custom-auth']: 'src/auth/**',
@@ -102,7 +102,7 @@ module.exports = {
             ['custom-components']: 'src/components/**',
           },
         },
-        'internal-pattern': ['src/**'],
+        internalPattern: ['src/**'],
       },
     ],
   },
