@@ -303,7 +303,7 @@ Types::MutationType = GraphQL::ObjectType.define do
         end
       end
 
-      deposit.save if args[:stateAction] == "save_draft"
+      deposit.save if ['save_draft', 'send_for_approval'].include?(args[:stateAction])
 
       if deposit.persisted? && args[:stateAction] != "save_draft"
         deposit.send(args[:stateAction], user_id: current_user.id, user_group_id: ctx[:current_user_group]&.id,

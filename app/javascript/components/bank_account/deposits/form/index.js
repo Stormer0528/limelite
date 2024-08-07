@@ -17,7 +17,7 @@ import {withStyles} from "@material-ui/core/styles";
 import {RecoilRoot} from "recoil";
 import {EntryFormProvider} from "../../../entries/form/entry_form_context";
 import Api from "../../api";
-import { useState } from "react";
+import {useState} from "react";
 
 defaultEntryState.entryType = "Revenue";
 
@@ -66,7 +66,7 @@ const FormikForm = ({
         >
           {({
             values,
-            values: {number, memo, fileUrl, entry, aasmState},
+            values: {number, memo, fileUrl, entry, aasmState, creatorId},
             errors,
             touched,
             handleBlur,
@@ -115,18 +115,24 @@ const FormikForm = ({
                           disabled={false}
                           onChange={(url) => {
                             if (readOnly) {
-                              if (window.confirm(`Are you sure you want to ${url ? 'add file' : 'delete file'}?`)) {
+                              if (
+                                window.confirm(
+                                  `Are you sure you want to ${
+                                    url ? "add file" : "delete file"
+                                  }?`
+                                )
+                              ) {
                                 Api.updateDepositFile({
                                   id: deposit.id,
-                                  fileUrl: url
+                                  fileUrl: url,
                                 }).then(() => {
                                   window.location.reload();
-                                })
+                                });
                               } else {
-                                setKey(key+1);
+                                setKey(key + 1);
                               }
 
-                              return ;
+                              return;
                             }
 
                             handleChange({
@@ -193,7 +199,7 @@ const FormikForm = ({
                           disabled: formDisabled,
                           readOnly,
                           isSubmitting,
-                          disableUpload: true
+                          disableUpload: true,
                         }}
                       />
                     )}
@@ -201,6 +207,7 @@ const FormikForm = ({
                     {!hideSubmissionBar && (
                       <SubmissionBar
                         {...{
+                          isOwner: creatorId === `${window.initial_data.currentUserId}`,
                           aasmState,
                           handleSubmit,
                           isSubmitting,

@@ -17,6 +17,7 @@ import DeleteIcon from "@material-ui/icons/DeleteForever";
 const SubmissionBar = ({
   handleSubmit = function () {},
   handleDelete = function () {},
+  isOwner = false,
   isSubmitting = false,
   aasmState = "draft",
   hideDraft = false,
@@ -45,6 +46,7 @@ const SubmissionBar = ({
         </h5>
         <div className={classes.stateBtns}>
           <StateBtns
+            isOwner={isOwner}
             createSubmitHandler={submitHandler}
             permissions={permissions}
             disabled={disabled}
@@ -71,6 +73,7 @@ const SubmissionBar = ({
 };
 
 SubmissionBar.propTypes = {
+  isOwner: PropTypes.bool,
   aasmState: PropTypes.string,
   check: PropTypes.bool,
   disabled: PropTypes.bool,

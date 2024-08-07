@@ -31,7 +31,8 @@
         canCreateDeposit: #{{policy(@bank_account_for_auth).create?}},
         canCreateAccountTransfer: #{{policy(@bank_account_for_auth).create?}},
         canPrintChecks: #{{policy(@bank_account_for_auth).edit?}},
-      }
+      },
+      currentUserId: #{{@current_user.id}}
     };
 
   = javascript_pack_tag 'render_bank_account_page', defer: true, charset: 'utf-8'

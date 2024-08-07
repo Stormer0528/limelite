@@ -1,4 +1,4 @@
-import {useCallback, useState, Fragment} from "react";
+import {useCallback, useState, Fragment, useMemo} from "react";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/core/styles";
 
@@ -15,6 +15,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import VoidIcon from "@material-ui/icons/Block";
 
 const StateBtns = ({
+  isOwner = false,
   aasmState = "draft",
   permissions = {},
   valid = true,
@@ -45,6 +46,38 @@ const StateBtns = ({
     [submitHandler]
   );
 
+  const sendForApprovalOrSave = useMemo(() => {
+    if (!permissions.send_for_approval) {
+      return null;
+    }
+
+    let btnText = "";
+    if (["draft", "needs_revision"].includes(aasmState)) {
+      btnText = "Send for Approval";
+    }
+
+    if (isOwner && ["needs_approval", "needsApproval"].includes(aasmState)) {
+      btnText = "Save";
+    }
+
+    if (!btnText) {
+      return null;
+    }
+
+    return (
+      <Button
+        startIcon={<SendForApprovalIcon />}
+        variant="outlined"
+        fullWidth
+        onClick={submitHandler("send_for_approval")}
+        disabled={!valid}
+        className={classes.sendForApprovalBtn}
+      >
+        {btnText}
+      </Button>
+    );
+  });
+
   return (
     <div className={classes.root}>
       <DenialModal
@@ -68,7 +101,8 @@ const StateBtns = ({
             Save&nbsp;Draft
           </Button>
         )}
-      {["needs_approval", "needsApproval"].includes(aasmState) &&
+      {!isOwner &&
+        ["needs_approval", "needsApproval"].includes(aasmState) &&
         permissions.approve && (
           <Button
             variant="outlined"
@@ -82,20 +116,10 @@ const StateBtns = ({
           </Button>
         )}
       <div style={{height: ".5rem"}}>&nbsp;</div>
-      {["draft", "needs_revision"].includes(aasmState) &&
-        permissions.send_for_approval && (
-          <Button
-            startIcon={<SendForApprovalIcon />}
-            variant="outlined"
-            fullWidth
-            onClick={submitHandler("send_for_approval")}
-            disabled={!valid}
-            className={classes.sendForApprovalBtn}
-          >
-            Send&nbsp;for&nbsp;Approval
-          </Button>
-        )}
-      {["needs_approval", "needsApproval"].includes(aasmState) &&
+
+      {sendForApprovalOrSave}
+
+      {!isOwner && ["needs_approval", "needsApproval"].includes(aasmState) &&
         permissions.deny && (
           <Button
             variant="outlined"
@@ -160,6 +184,7 @@ const StateBtns = ({
 
 StateBtns.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  isOwner: PropTypes.bool,
   check: PropTypes.bool /* show check specific buttons */,
   aasmState: PropTypes.string,
   permissions: PropTypes.shape({
