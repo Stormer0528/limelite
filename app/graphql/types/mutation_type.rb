@@ -170,7 +170,7 @@ Types::MutationType = GraphQL::ObjectType.define do
         end
       end
 
-      check.save if args[:stateAction] == "save_draft"
+      check.save if ['save_draft', 'send_for_approval'].include?(args[:stateAction])
 
       if check.persisted? && args[:stateAction] != "save_draft"
         check.send(args[:stateAction], user_id: current_user.id, user_group_id: ctx[:current_user_group]&.id,
@@ -392,7 +392,7 @@ Types::MutationType = GraphQL::ObjectType.define do
 
       account_transfer.assign_attributes args[:accountTransfer].to_h
 
-      account_transfer.save if args[:stateAction] == "save_draft"
+      account_transfer.save if ['save_draft', 'send_for_approval'].include?(args[:stateAction])
 
       if account_transfer.persisted? && args[:stateAction] != "save_draft"
         account_transfer.send(args[:stateAction], user_id: current_user.id, user_group_id: ctx[:current_user_group]&.id,
@@ -483,7 +483,7 @@ Types::MutationType = GraphQL::ObjectType.define do
         end
       end
 
-      payment.save if args[:stateAction] == "save_draft"
+      payment.save if ['save_draft', 'send_for_approval'].include?(args[:stateAction])
 
       if payment.persisted? && args[:stateAction] != "save_draft"
         payment.send(args[:stateAction], user_id: current_user.id, user_group_id: ctx[:current_user_group]&.id,
@@ -569,7 +569,7 @@ Types::MutationType = GraphQL::ObjectType.define do
         end
       end
 
-      charge.save if args[:stateAction] == "save_draft"
+      charge.save if ['save_draft', 'send_for_approval'].include?(args[:stateAction])
 
       if charge.persisted? && args[:stateAction] != "save_draft"
         charge.send(args[:stateAction], user_id: current_user.id, user_group_id: ctx[:current_user_group]&.id,
@@ -629,7 +629,7 @@ Types::MutationType = GraphQL::ObjectType.define do
       po.purchase_order_items.each(&:mark_for_destruction)
       po.assign_attributes args[:purchaseOrder].to_h
 
-      po.save if args[:stateAction] == "save_draft"
+      po.save if ['save_draft', 'send_for_approval'].include?(args[:stateAction])
 
       if po.valid? && args[:stateAction] != "save_draft"
         po.send(args[:stateAction], user_id: current_user.id,

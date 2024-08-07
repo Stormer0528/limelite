@@ -8,6 +8,7 @@ import API from "../../api";
 const SubmissionBarData = ({
   setFieldValue = function () {},
   handleSubmit = function () {},
+  isOwner=false,
   isSubmitting = false,
   aasmState = "draft",
   hideDraft = false,
@@ -54,6 +55,7 @@ const SubmissionBarData = ({
         hideDelete,
         disabled,
         permissions,
+        isOwner,
       }}
     />
   );
@@ -61,6 +63,7 @@ const SubmissionBarData = ({
 
 SubmissionBarData.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
+  isOwner: PropTypes.bool,
   aasmState: PropTypes.string,
   disabled: PropTypes.bool,
   hideDraft: PropTypes.bool,

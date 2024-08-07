@@ -69,6 +69,7 @@ const FormikForm = ({
               fileUrl,
               entry,
               aasmState,
+              creatorId,
             },
             errors,
             touched,
@@ -280,6 +281,7 @@ const FormikForm = ({
                   {!hideSubmissionBar && (
                     <SubmissionBar
                       {...{
+                        isOwner: creatorId === `${window.initial_data.currentUserId}`,
                         aasmState,
                         handleSubmit,
                         isSubmitting,

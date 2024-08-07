@@ -81,6 +81,7 @@ const FormikForm = ({
               aasmState,
               printed,
               addressId,
+              creatorId,
             },
             errors,
             touched,
@@ -261,6 +262,7 @@ const FormikForm = ({
                     {!hideSubmissionBar && (
                       <SubmissionBar
                         {...{
+                          isOwner: creatorId === `${window.initial_data.currentUserId}`,
                           aasmState,
                           handleSubmit,
                           isSubmitting,

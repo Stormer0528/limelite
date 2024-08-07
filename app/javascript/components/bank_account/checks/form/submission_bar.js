@@ -7,6 +7,7 @@ import SubmissionBar from "@shared/submission_bar";
 const SubmissionBarData = ({
   setFieldValue = function () {},
   handleSubmit = function () {},
+  isOwner = false,
   isSubmitting = false,
   aasmState = "draft",
   hideDraft = false,
@@ -54,6 +55,7 @@ const SubmissionBarData = ({
         disabled,
         permissions,
         check: true,
+        isOwner,
       }}
     />
   );
@@ -62,6 +64,7 @@ const SubmissionBarData = ({
 SubmissionBarData.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
   aasmState: PropTypes.string,
+  isOwner: PropTypes.bool,
   disabled: PropTypes.bool,
   hideDraft: PropTypes.bool,
   hideDelete: PropTypes.bool,
