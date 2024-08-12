@@ -3,6 +3,7 @@ class StandardPolicy < ApplicationPolicy
   # to all objects within an organization and without approval path rules
 
   def index?
+    return false if @current_user.upload_only?
     has_viewer_permission?
   end
 

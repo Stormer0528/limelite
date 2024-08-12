@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_28_131738) do
+ActiveRecord::Schema.define(version: 2024_08_11_144953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -944,6 +944,7 @@ ActiveRecord::Schema.define(version: 2023_09_28_131738) do
     t.boolean "archived"
     t.jsonb "preferences", default: {"email_notifications"=>"summary"}
     t.boolean "ap", default: false, null: false
+    t.boolean "upload_only", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

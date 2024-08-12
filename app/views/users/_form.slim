@@ -47,8 +47,11 @@
 
           .col.s3
             = f.input :ap, as: :boolean, label: "AP User  ", readonly: local_assigns[:readonly]
+          
+          .col.s3
+            = f.input :upload_only, as: :boolean, label: "Upload Only", readonly: local_assigns[:readonly]
 
-        .col.s6
+        .col.s3
           = f.input :confirmed, as: :boolean, label: "Confirm User  ", readonly: local_assigns[:readonly]
 
     - unless local_assigns[:readonly]

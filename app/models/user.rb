@@ -30,6 +30,9 @@
 #  slug                   :string
 #  archived               :boolean
 #  preferences            :jsonb
+#  ap                     :boolean          default(FALSE)
+#  upload_only            :boolean          default(FALSE)
+#
 #
 # Indexes
 #

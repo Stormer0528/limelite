@@ -81,7 +81,7 @@ class Admin::UsersController < ApplicationController
   def user_params
     params.require(:user).permit(
       :id, :first_name, :last_name, :email, :back_office, :confirmed,
-      :avatar_url, :password, :password_confirmation, :organization_role, :ap
+      :avatar_url, :password, :password_confirmation, :organization_role, :ap, :upload_only
     )
   end
 
