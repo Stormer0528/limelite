@@ -3,7 +3,7 @@ import { RHFSlider } from './RHFSlider';
 import { RHFTextField } from './RHFTextField';
 import { RHFRadioGroup } from './RHFAudioGroup';
 import { RHFPhoneInput } from './RHFPhoneInput';
-import { RHFAutocomplete } from './RHFAtocomplete';
+import { RHFAutocomplete } from './RHFAutocomplete';
 import { RHFSwitch, RHFMultiSwitch } from './RHFSwitch';
 import { RHFSelect, RHFMultiSelect } from './RHFSelect';
 import { RHFCheckbox, RHFMultiCheckbox } from './RHFCheckbox';

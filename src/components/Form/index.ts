@@ -24,4 +24,4 @@ export * from './RHFPhoneInput';
 
 export * from './RHFDatePicker';
 
-export * from './RHFAtocomplete';
+export * from './RHFAutocomplete';
