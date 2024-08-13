@@ -62,7 +62,6 @@ export function SignInView() {
       const token = response.data?.login.accessToken ?? '';
       signIn(token);
     } catch (error) {
-      console.error(error);
       setErrorMsg(error instanceof Error ? error.message : error);
     }
   });
