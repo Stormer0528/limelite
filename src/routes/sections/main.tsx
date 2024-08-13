@@ -22,6 +22,7 @@ const AccountFund = lazy(() => import('src/pages/Account/Fund'));
 const AccountResource = lazy(() => import('src/pages/Account/Resource'));
 
 const BankList = lazy(() => import('src/pages/Bank/List'));
+const BankCreate = lazy(() => import('src/pages/Bank/Create'));
 
 // ----------------------------------------------------------------------
 
@@ -78,6 +79,7 @@ export const mainRoutes: RouteObject[] = [
             ),
             children: [
               { index: true, element: <BankList /> },
+              { path: 'new', element: <BankCreate /> },
               { path: ':id', element: <div>I am bank details</div> },
             ],
           },

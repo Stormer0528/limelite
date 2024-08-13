@@ -21,7 +21,9 @@ const documents = {
     "\n  mutation RemoveAccountFund($fundId: String!) {\n    removeAccountFund(id: $fundId) {\n      success\n    }\n  }\n": types.RemoveAccountFundDocument,
     "\n                fragment NewFund on AccountFund {\n                  id\n                  name\n                  code\n                }\n              ": types.NewFundFragmentDoc,
     "\n  query Accounts($filter: JSONObject, $page: String, $sort: String) {\n    accounts(filter: $filter, page: $page, sort: $sort) {\n      accounts {\n        id\n        fund\n        resource\n        year\n        goal\n        function\n        object\n        location\n        slug\n        accountFunction {\n          code\n          name\n        }\n        accountFund {\n          code\n          name\n        }\n        accountGoal {\n          code\n          name\n        }\n        accountLocation {\n          code\n          name\n        }\n        accountObject {\n          code\n          name\n        }\n        accountResource {\n          code\n          name\n        }\n        accountYear {\n          code\n          name\n        }\n      }\n      total\n    }\n  }\n": types.AccountsDocument,
+    "\n  query AccountObjects($filter: JSONObject, $page: String, $sort: String) {\n    accountObjects(filter: $filter, page: $page, sort: $sort) {\n      accountObjects {\n        id\n        name\n        code\n      }\n      total\n    }\n  }\n": types.AccountObjectsDocument,
     "\n  query AccountResources($filter: JSONObject, $page: String, $sort: String) {\n    accountResources(filter: $filter, page: $page, sort: $sort) {\n      accountResources {\n        id\n        name\n        isRestricted\n        code\n      }\n      total\n    }\n  }\n": types.AccountResourcesDocument,
+    "\n  mutation CreateBankAccount($data: CreateBankAccountInput!) {\n    createBankAccount(data: $data) {\n      id\n    }\n  }\n": types.CreateBankAccountDocument,
     "\n  query BankAccounts($filter: JSONObject, $page: String, $sort: String) {\n    bankAccounts(filter: $filter, page: $page, sort: $sort) {\n      bankAccounts {\n        id\n        name\n        number\n        accountObject {\n          name\n          code\n        }\n        description\n      }\n      total\n    }\n  }\n": types.BankAccountsDocument,
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n    }\n  }\n": types.LoginDocument,
 };
@@ -75,7 +77,15 @@ export function gql(source: "\n  query Accounts($filter: JSONObject, $page: Stri
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query AccountObjects($filter: JSONObject, $page: String, $sort: String) {\n    accountObjects(filter: $filter, page: $page, sort: $sort) {\n      accountObjects {\n        id\n        name\n        code\n      }\n      total\n    }\n  }\n"): (typeof documents)["\n  query AccountObjects($filter: JSONObject, $page: String, $sort: String) {\n    accountObjects(filter: $filter, page: $page, sort: $sort) {\n      accountObjects {\n        id\n        name\n        code\n      }\n      total\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  query AccountResources($filter: JSONObject, $page: String, $sort: String) {\n    accountResources(filter: $filter, page: $page, sort: $sort) {\n      accountResources {\n        id\n        name\n        isRestricted\n        code\n      }\n      total\n    }\n  }\n"): (typeof documents)["\n  query AccountResources($filter: JSONObject, $page: String, $sort: String) {\n    accountResources(filter: $filter, page: $page, sort: $sort) {\n      accountResources {\n        id\n        name\n        isRestricted\n        code\n      }\n      total\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateBankAccount($data: CreateBankAccountInput!) {\n    createBankAccount(data: $data) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateBankAccount($data: CreateBankAccountInput!) {\n    createBankAccount(data: $data) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
